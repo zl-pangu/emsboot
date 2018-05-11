@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.demo.SalaryP2pEmpMapper">
+
+	<resultMap id="ResultMap" type="com.zhph.model.SalaryP2pEmp">
+		<id column="pri_number" property="priNumber" jdbcType="INTEGER" />
+		<result column="emp_no" property="empNo" jdbcType="VARCHAR" />
+		<result column="emp_name" property="empName" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+	</resultMap>
+	
+ 	<!-- 通过编号查询 -->
+	<select id="getAll"  resultMap="ResultMap">
+           SELECT * FROM crf_salary_p2p_emp T  ORDER BY create_date desc
+	</select>
+	
+		<insert id="insert" parameterType="com.zhph.model.SalaryP2pEmp" >
+		
+		  <selectKey keyProperty="keywordId" resultType="int" order="BEFORE">  
+		    select CONFIG_KEYWORD_GATHER_SEQ.NEXTVAL from dual  
+	 	  </selectKey>  
+		 	
+			insert into crf_salary_p2p_emp (
+			pri_number,
+			emp_no, 
+			emp_name,
+			sex,
+			create_date
+			)
+			values (
+			${keywordId},
+			#{t.empNo},
+			#{t.empName},
+			#{t.sex},
+			to_char(sysdate,'yyyy-MM-dd HH24:mi:ss')
+			)
+	</insert>
+   
+</mapper>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="renderer" content="webkit" /><!-- 让部分国产浏览器默认采用高速模式渲染页面 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>长虹[联合运营平台后台管理系统]</title>
+        <!-- 全局CSS 开始-->
+        <link href="../css/global/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/global/font-awesome.min.css" rel="stylesheet" />
+        <link href="../css/global/simple-line-icons.css" rel="stylesheet" />
+        <link href="../css/global/animate.css" rel="stylesheet">
+        <link href="../css/global/style.css" rel="stylesheet">
+        <link href="../js/plugins/pace/pace.css" rel="stylesheet">
+        <!-- 全局CSS 结束-->
+        <!-- 页面CSS 开始-->
+        <!-- 页面CSS 结束-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../js/bootstrap/html5shiv.min.js"></script>
+        <script src="../js/bootstrap/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="wrapper wrapper-content animated fadeInUp">
+            <div class="row page-heading">
+                <h4><i class="fa fa-flask"></i>  UI组件 / 面板及tab切换</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>标准面板 <small class="mlm">This is custom panel</small></h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <h2>
+                            这是最常用的<span class="text-primary">ibox</span>标准面板
+                            </h2>
+<pre>
+&lt;div class="ibox float-e-margins"&gt;
+    &lt;div class="ibox-title"&gt;
+        &lt;h5&gt;标准面板 &lt;small class="mlm"&gt;This is custom panel&lt;/small&gt;&lt;/h5&gt;
+        &lt;div class="ibox-tools"&gt;
+            &lt;a class="collapse-link"&gt;
+                &lt;i class="fa fa-chevron-up"&gt;&lt;/i&gt;
+            &lt;/a&gt;
+            &lt;a class="close-link"&gt;
+                &lt;i class="fa fa-times"&gt;&lt;/i&gt;
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="ibox-content"&gt;
+        &lt;h2&gt;
+            这是最常用的标准面板
+        &lt;/h2&gt; 
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel blank-panel">
+                        <div class="panel-heading">
+                            <div class="panel-title m-b-md"><h4>背景为空的面板+文字tab</h4></div>
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab-1">Tab1</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-2">Tab2</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane active">
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
+                                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine.</p>
+                                    <p>I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When.</p>
+                                </div>
+                                <div id="tab-2" class="tab-pane">
+                                    <strong>Donec quam felis</strong>
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>ibox面板+icon tab</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-4"><i class="fa fa-laptop"></i>tab1</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-5"><i class="fa fa-desktop"></i>tab2</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-6"><i class="fa fa-signal"></i>tab3</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-7"><i class="fa fa-bar-chart-o"></i>tab4</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab-4" class="tab-pane active">
+                                    <strong>Donec quam felis</strong>
+                                    <p>Who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee </p>
+                                    <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, </p>
+                                </div>
+                                <div id="tab-5" class="tab-pane">
+                                    <strong>One morning, when Gregor Samsa.</strong>
+                                    <p>Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. Two driven jocks help fax my big quiz. Quick, Baz, get my woven flax jodhpurs! "Now fax quiz Jack!" my brave ghost pled. Five quacking zephyrs jolt my wax bed. Flummoxed by job, kvetching W. zaps Iraq. Cozy sphinx waves quart jug of bad milk. </p>
+                                    <p>The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright vixens jump; dozy fowl quack. Quick wafting zephyrs vex bold Jim. Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. </p>
+                                </div>
+                                <div id="tab-6" class="tab-pane">
+                                    <strong>Lorem ipsum dolor sit</strong>
+                                    <p>Quick brown dogs jump over the lazy fox. The jay, pig, fox, zebra, and my wolves quack! Blowzy red vixens fight for a quick jump. Joaquin Phoenix was gazed by MTV for luck. A wizard’s job is to vex chumps quickly in fog. Watch "Jeopardy!", Alex Trebek's fun TV quiz game. Woven silk pyjamas exchanged for blue quartz. Brawny gods just </p>
+                                    <p>Who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee </p>
+                                </div>
+                                <div id="tab-7" class="tab-pane">
+                                    <strong>Aenean imperdiet</strong>
+                                    <p>The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright vixens jump; dozy fowl quack. Quick wafting zephyrs vex bold Jim. Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. </p>
+                                    <p>Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. Two driven jocks help fax my big quiz. Quick, Baz, get my woven flax jodhpurs! "Now fax quiz Jack!" my brave ghost pled. Five quacking zephyrs jolt my wax bed. Flummoxed by job, kvetching W. zaps Iraq. Cozy sphinx waves quart jug of bad milk. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-primary panel-nav">
+                        <div class="panel-heading panel-nav-heading">
+                            <ul class="nav nav-tabs nav-justified-all">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#tab8">两端</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#tab9">对齐</a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#tab10">的导航</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab8">
+                                    <h4>
+                                    两端对齐的panel-heading顶部导航
+                                    </h4>
+                                    <p>Voluptatem ut neque aliquid quo aspernatur illo repellendus dolor non et sed corporis laudantium ut. quidem dolor nesciunt autem voluptate quis quae dolorem et. dicta sapiente voluptatem in sequi esse aut repellat dolorem pariatur quia. est deserunt ipsa omnis qui adipisci omnis laborum vitae voluptas voluptatem</p>
+                                </div>
+                                <div class="tab-pane" id="tab9">
+                                    <p>Enim eos sequi est enim facilis quo laudantium aut aut. laboriosam recusandae fuga consequuntur ipsam sint sed quia qui omnis debitis et. autem consequatur ducimus sunt voluptatibus est delectus beatae consectetur qui nulla maiores. debitis dicta nihil sed esse nulla aliquam aut est sed doloremque nulla vitae similique. et et sint quia quis et ut eveniet dolores reiciendis distinctio laboriosam error dicta. nihil hic eligendi officia molestiae quos amet tenetur repudiandae ab. sit omnis et fugiat</p>
+                                    <p>Occaecati accusamus doloribus dolorem minima dolor perferendis nam omnis et aperiam repellendus nesciunt et alias. doloremque esse accusantium aliquam hic facere illum harum. fuga quae et eum ut voluptatem repellat molestiae quis et</p>
+                                </div>
+                                <div class="tab-pane" id="tab10">
+                                    <p>Dolores voluptas delectus dolor ex labore laborum quos voluptatibus voluptatem omnis suscipit dolorum. cupiditate quam ad praesentium. consequuntur cum fugiat autem atque adipisci architecto officia</p>
+                                    <p>Ipsum aliquid sit nulla qui veniam vitae exercitationem alias totam. harum ut et dolores aut ullam consectetur nesciunt nihil consectetur et. rem qui incidunt fugit quisquam mollitia provident possimus suscipit necessitatibus accusantium quam atque voluptatibus</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-success panel-nav">
+                        <div class="panel-heading">
+                            两端对齐的底部导航
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab11">
+                                    <h4>
+                                    两端对齐的panel-footer导航
+                                    </h4>
+                                    <p>Voluptatem ut neque aliquid quo aspernatur illo repellendus dolor non et sed corporis laudantium ut. quidem dolor nesciunt autem voluptate quis quae dolorem et. dicta sapiente voluptatem in sequi esse aut repellat dolorem pariatur quia. est deserunt ipsa omnis qui adipisci omnis laborum vitae voluptas voluptatem</p>
+                                </div>
+                                <div class="tab-pane" id="tab12">
+                                    <h4>
+                                    两端对齐的panel-footer导航
+                                    </h4>
+                                    <p>Enim eos sequi est enim facilis quo laudantium aut aut. laboriosam recusandae fuga consequuntur ipsam sint sed quia qui omnis debitis et. autem consequatur ducimus sunt voluptatibus est delectus beatae consectetur qui nulla maiores. debitis dicta nihil sed esse nulla aliquam aut est sed doloremque nulla vitae similique. </p>
+                                </div>
+                                <div class="tab-pane" id="tab13">
+                                    <h4>
+                                    两端对齐的panel-footer导航
+                                    </h4>
+                                    <p>Ipsum aliquid sit nulla qui veniam vitae exercitationem alias totam. harum ut et dolores aut ullam consectetur nesciunt nihil consectetur et. rem qui incidunt fugit quisquam mollitia provident possimus suscipit necessitatibus accusantium quam atque voluptatibus</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer panel-nav-footer">
+                            <ul class="nav nav-tabs nav-justified-all">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#tab11">
+                                        <i class="icon-playlist"></i>两端
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#tab12">
+                                        <i class="icon-pie-chart"></i>对齐
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a data-toggle="tab" href="#tab13">
+                                        <i class="icon-rocket"></i>底部导航
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>常用标签切换</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <article class="widget widget-tabbed">
+                                <div class="tabs ui-edit-tabs">
+                                    <input type="radio" name="t" id="tab1" checked=""/>
+                                    <label for="tab1" class="tabs-tab">tab1</label>
+                                    <input type="radio" name="t" id="tab2"/>
+                                    <label for="tab2" class="tabs-tab">tab2</label>
+                                    <div class="tabs-content">
+                                        <div class="tabs-content-1">
+                                            <strong>Donec quam felis</strong>
+                                            <p>Who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee </p>
+                                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, </p>
+                                        </div>
+                                        <div class="tabs-content-2">
+                                            <strong>One morning, when Gregor Samsa.</strong>
+                                            <p>Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. Two driven jocks help fax my big quiz. Quick, Baz, get my woven flax jodhpurs! "Now fax quiz Jack!" my brave ghost pled. Five quacking zephyrs jolt my wax bed. Flummoxed by job, kvetching W. zaps Iraq. Cozy sphinx waves quart jug of bad milk. </p>
+                                            <p>The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright vixens jump; dozy fowl quack. Quick wafting zephyrs vex bold Jim. Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. </p>
+                                        </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>Bootstrap 带有背景颜色的面板 <small>Custom background colors.</small></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            Default Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            Primary Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            Success Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Info Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-warning"></i> Warning Panel
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading">
+                                            Danger Panel with Footer
+                                        </div>
+                                        <div class="panel-body">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
+                                        <div class="panel-footer">
+                                            Panel Footer
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>收缩切换的面板  <small><a href="http://v3.bootcss.com/javascript/#collapse">Collaps panels</a></small></h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="panel-body">
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h5 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Collapsible Group Item #1</a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Collapsible Group Item #2</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseTwo" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Collapsible Group Item #3</a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapseThree" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="jumbotron">
+                        <h1>巨幕  <small>Jumbotron</small></h1>
+                        <p>这是一个轻量、灵活的组件，它能延伸至整个浏览器视口来展示网站上的关键内容。</p>
+                        <p><a role="button" class="btn btn-primary btn-lg" href="http://v3.bootcss.com/components/#jumbotron">点击详情</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 全局js 开始-->
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/bootstrap/bootstrap.min.js"></script>
+        <script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="../js/custom/custom.js"></script>
+        <script src="../js/plugins/pace/pace.min.js"></script>
+        <!-- 全局js 结束-->
+        <!-- 页面js 开始-->
+        <!-- iframeResizer -->
+        <!-- <script src="../js/plugins/iframeResizer/iframeResizer.contentWindow.min.js"></script> -->
+        <!-- 页面js 结束-->
+    </body>
+</html>

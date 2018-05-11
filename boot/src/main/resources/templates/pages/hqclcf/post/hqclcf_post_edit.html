@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<@compress single_line=true></@compress>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" />
+    <style>
+        #addshowForm .layui-inline{
+            width : 320px;
+            margin-left : 10px;
+            display: inline;
+        }
+        #addshowForm .layui-form-label{
+            width : 120px !important;
+            padding: 4px 15px;
+        }
+        #addshowForm .layui-required-span{
+            color: red;
+            float: left;
+            padding: 9px 0px;
+        }
+        #addshowForm .layui-form-item{
+            margin-bottom : 0px;
+        }
+        #addshowForm .layui-input:hover {
+            border-color: #ffa946 !important;
+        }
+        .layui-layer-hui .layui-layer-content {
+            padding: 7px 25px;
+            margin-top: 1px;
+            text-align: center;
+            background-color: black;
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3//jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+
+<body>
+<div class="wrapper wrapper-content animated fadeInUp" style="padding: 0px" >
+    <div class="container-fluid" style="padding: 0px;" style="position: relative;z-index: 1;">
+        <div class="ibox-content form">
+            <div class="form-body" style="height: 360px">
+                <div class="container-fluid">
+                    <div class="row layui-form">
+                        <form id="addshowForm">
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">职位编号</label>
+                                    <div class="layui-input-inline">
+                                        <input name="postNo" id="deptCode" type="hidden" value="${post.postNo}"/>
+                                        <input type="text" readonly="true" value="${post.postNo}" class="layui-input" style="background-color:#F8F8F8" >
+                                    </div>
+                                    <span class="layui-required-span">*</span>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="width: auto;">职位名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="postName" id="deptName" class="layui-input" value="${post.postName}" placeholder="请输入岗位名称" >
+                                    </div>
+                                    <span class="layui-required-span" id="testID">*</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">所在部门</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" id="pid" name="deptNo" value="${post.deptNo}">
+                                        <input id="pidName" value="" class="layui-input" readonly   onclick="showActionTypeTree()" />
+                                        <input type="hidden" id="actionTypeId" value="${post.deptNo}"/>
+                                    </div>
+                                    <span class="layui-required-span">*</span>
+
+
+                                    <label class="layui-form-label" style="width: auto;">&nbsp;&nbsp;业务条线</label>
+                                    <div class="layui-input-inline">
+                                        <select name="businessLine" id="businessLine"  lay-filter="blSelect">
+                                            <option></option>
+                                            <#list  businessLineList as bl>
+                                                <option value="${bl.sysValue!}" <#if bl.sysValue==post.businessLine>selected</#if> >${(bl.sysName)!}</option>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                    <span class="layui-required-span" >*</span>
+
+
+                                    <!--actionTypeTree-->
+
+                                    <div id="actionTreeContent"  style="width: 300px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                        <ul id="actionTypeTree"  class="ztree" style="margin-top:0;height: 200px;overflow: auto;"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">上级岗位</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" id="actionPostId" value="${superPost.priNumber?c}" name="postPid">
+                                        <input type="text" id="postPid" value="${superPost.postName!}" class="layui-input" style="background-color:#F8F8F8" readonly onclick="showActionPostTree()">
+                                    </div>
+                                    <span class="layui-required-span">&nbsp;</span>
+
+                                    <!--actionPostTree-->
+                                    <div id="actionPostContent"  style="width: 300px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                        <ul id="actionPostTree"  class="ztree" style="margin-top:0;height: 200px;overflow: auto;"></ul>
+                                    </div>
+
+                                    <label class="layui-form-label"  style="width: auto;">职务</label>
+                                    <div class="layui-input-inline" >
+                                        <select name="rankNo" id="rankNo">
+                                            <option></option>
+                                            <#list businesses as bs>
+                                                <option value="${bs.posCode}" <#if bs.posCode==post.rankNo!>selected</#if> style="position: relative;z-index: 99999;">${(bs.posName)!}</option>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                    <span class="layui-required-span">*</span>
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">编制</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="organizat" id="organizat" value="${post.organizat}"  class="layui-input" placeholder="请输入编制数" >
+                                    </div>
+                                    <span class="layui-required-span">*</span>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">状态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="status" id="status" lay-filter="statusListener">
+                                            <option></option>
+                                            <option value="1" <#if post.status=='1'>selected</#if>>启用</option>
+                                            <option value="0" <#if post.status=='0'>selected</#if>>禁用</option>
+                                        </select>
+                                    </div>
+                                    <span class="layui-required-span">*</span>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">备注</label>
+                                    <div class="layui-input-inline">
+                                        <textarea placeholder="请输入备注内容" class="layui-textarea" name="description" style="width: 450px;" ><#if post.postNo!="">${post.description!}</#if></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['table','form'],function () {
+        table = layui.table;
+        form = layui.form;
+        form.render();
+    })
+
+    var setting = {
+        view: {
+            dblClickExpand: false,
+            showLine:false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey:"id",
+                pIdKey:"pid"
+            }
+        },
+        callback: {
+            onClick:onClick
+        }
+    };
+
+    var table;
+    var form;
+    getDeptInfo();
+    layui.use(['table','form'],function () {
+        table=layui.table;
+        form = layui.form;
+        form.render();
+
+        /*状态监听*/
+        form.on('select(statusListener)',function(data){
+
+            $.ajax({
+                url:'${ctx}/hqclcf/hqclcfPost/status',
+                dataType:'json',
+                data:{
+                    code:$("#deptCode").val(),
+                    value:data.value
+                },
+                method:'post',
+                success:function(res){
+                    if(res.code =='501'){
+                        document.getElementById("status").value = 0;
+                        form.render();
+                        layer.msg("此岗位存在禁用状态的上级岗位无法启用，请开启岗位后重试",{icon:2,time:2000});
+
+                    }else if(res.code=='502'){
+                        document.getElementById("status").value = 1;
+                        form.render();
+                        layer.msg("此岗位存在启用状态的下级岗位无法禁用，请禁用岗位后重试",{icon:2,time:2000});
+
+                    }else if(res.code=='503'){
+                        document.getElementById("status").value = 1;
+                        form.render();
+                        layer.msg("此岗位正在被使用中",{icon:2,time:2000});
+
+                    }
+                }
+
+            })
+
+        })
+
+        form.on('select(blSelect)', function(data){
+            $("#deptTypeAdd").empty();
+            if(data.value!=''){
+                $.ajax({
+                    url:'${ctx}/hqclcf/hqclcfdept/getDeptType',
+                    data:{"businessLine":data.value},
+                    type:'post',
+                    async:false,
+                    success:function (data) {
+                        var html='<option></option>';
+                        $.each(data,function (index,value) {
+                            html+='<option value='+value.sysValue+'>'+value.sysName+'</option>'
+                        });
+                        $("#deptTypeAdd").append(html);
+                        form.render();
+                    }
+                });
+            }
+        });
+    });
+
+    /*联动1*/
+    function onClick(e, treeId, treeNode) {
+
+        console.log();
+
+        var nodes = ztreeObj.getSelectedNodes();
+        if(nodes[0].id==0){
+            /*console.log("岗位结构无业务条线");*/
+            return;
+        }
+
+        /*获取业务条线*/
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfPost/dept/businessLine',
+            type: 'POST',
+            data:{
+                id:nodes[0].pid
+            },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if( data!=null ){
+                    $("div").find("#businessLine option").each(function (index,n) {
+                        if($(n).val() == data.businessLine){
+                            $(this).attr("selected",true);
+                            form.render('select');
+                        }
+                    })
+                }
+            }
+        });
+        if(treeId == 'actionPostTree'){
+            $("#actionPostId").val("" + nodes[0].id + "");
+            $("#postPid").val(""+nodes[0].name+"");
+        }else{
+            $("#pid").val(nodes[0].id);
+            $("#pidName").val("" + nodes[0].name + "");
+        }
+        $("#actionTypeId").val(treeNode.id);
+        $("#selectActionType").val(treeNode.text);
+    }
+
+    /*父页面调用子页面的方法*/
+    function validateEditPost() {
+        var flag = true;
+        var re = /^[0-9]*[1-9][0-9]*$/ ;
+        if ( $("#deptName").val() == '') {
+            validateEditPostTips('职位名称', '不能为空');
+            flag = false;
+            return flag;
+        }
+
+        if ( $("#postName").val() == '') {
+            validateEditPostTips('职位名称', '不能为空');
+            flag = false;
+            return flag;
+        }
+
+        if ( $("#pidName").val() == '') {
+            validateEditPostTips('部门名称', '不能为空');
+            flag = false;
+            return flag;
+        }
+        var businessLine = $("#businessLine").val();
+        if (businessLine == '') {
+            validateEditPostTips('业务条线', '不能为空');
+            flag = false;
+            return flag;
+        }
+
+        if ( $("#rankNo").val() == '') {
+            validateEditPostTips('职务名称', '不能为空');
+            flag = false;
+            return flag;
+        }
+        var organizat = $("#organizat").val();
+        if (organizat== '') {
+            validateEditPostTips('编制', '不能为空');
+            flag = false;
+            return flag;
+        }
+        if(!re.test(organizat)){
+            validateEditPostTips('编制', '必须为正整数');
+            flag = false;
+            return flag;
+        }
+        if ($("#status").val() == '') {
+            validateEditPostTips('岗位状态', '不能为空');
+            flag = false;
+            return flag;
+        }
+        return flag;
+    }
+
+    /*Tips*/
+    function validateEditPostTips(filedName,msg){
+        layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+            anim:6,
+        });
+    }
+
+    function showActionTypeTree() {
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfPost/dept/tree',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                ztreeObj = $.fn.zTree.init($("#actionTypeTree"), setting, data);
+                var deptOffset = $("#pidName").offset();
+                $("#actionTreeContent").css({
+                    left: deptOffset.left - 680 + "px",
+                    top: deptOffset.top -61+ "px"
+                }).slideDown("fast");
+                var zTree = $.fn.zTree.getZTreeObj("actionTypeTree");
+                var node = zTree.getNodeByParam("id", $('#actionTypeId').val(), null);
+                zTree.selectNode(node);
+                $("body").bind("mousedown", onBodyDownByActionType);
+            }
+        });
+    }
+
+
+    function  showActionPostTree() {
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfPost/tree?id=2',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                ztreeObj = $.fn.zTree.init($("#actionPostTree"), setting, data);
+                var postOffset = $("#postPid").offset();
+                $("#actionPostContent").css({
+                    left: postOffset.left - 680 + "px",
+                    top: postOffset.top -61+ "px"
+                }).slideDown("fast");
+                var zTree = $.fn.zTree.getZTreeObj("actionPostTree");
+                var node = zTree.getNodeByParam("id", $('#actionPostId').val(), null);
+                zTree.selectNode(node);
+                $("body").bind("mousedown", onBodyDownByActionType);
+            }
+        });
+    }
+
+    /*回显部门*/
+    function getDeptInfo() {
+        if($("#deptCode").val()!=null){
+            $.ajax({
+                url: '${ctx}/hqclcf/hqclcfPost/dept/businessLine',
+                data:{
+                    id:$("#pid").val()
+                },
+                type: 'POST',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if(data==null){
+                        $("#pidName").val("部门未使用");
+                    }else{
+                        $("#pidName").val(data.deptName);
+                    }
+
+                }
+            });
+        }
+
+        
+    }
+    
+    /*
+     * Body鼠标按下事件回调函数
+     */
+    function onBodyDownByActionType(event) {
+        if (event.target.id.indexOf('switch') == -1&&event.target.id!='actionTypeTree') {
+            hideActionTypeMenu();
+        }
+    }
+
+    /*
+     * 隐藏点击事件Tree
+     */
+    function hideActionTypeMenu() {
+        $("#actionTreeContent").fadeOut("fast");
+        $("#actionPostContent").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDownByActionType);
+    }
+
+
+</script>
+
+</html>
+

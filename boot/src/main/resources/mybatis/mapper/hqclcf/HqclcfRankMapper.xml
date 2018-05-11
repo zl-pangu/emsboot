@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfRankMapper">
+  <resultMap id="BaseResultMap" type="com.zhph.model.hqclcf.HqclcfRank">
+    <id column="priNumber" jdbcType="VARCHAR" property="prinumber" />
+    <result column="no" jdbcType="VARCHAR" property="no" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_date" jdbcType="VARCHAR" property="createDate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="comments" jdbcType="VARCHAR" property="comments" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    priNumber, no, name, status, create_date, create_name, comments
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hqclcf_rank_scheduled
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </select>
+
+  <select id="checkRankName" parameterType="com.zhph.model.hqclcf.HqclcfRank" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from hqclcf_rank_scheduled
+    <where>
+      <if test="name!=null and name!='' ">
+        and name = #{name}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from hqclcf_rank_scheduled
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zhph.model.hqclcf.HqclcfRank">
+    insert into hqclcf_rank_scheduled (priNumber, no, name, 
+      status, create_date, create_name, 
+      comments)
+    values (SQ_ZHPH_HQCLCF_RANK.NEXTVAL, #{no,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{createName,jdbcType=VARCHAR}, 
+      #{comments,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhph.model.hqclcf.HqclcfRank">
+    insert into hqclcf_rank_scheduled
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prinumber != null">
+        priNumber,
+      </if>
+      <if test="no != null">
+        no,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="comments != null">
+        comments,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+    SQ_ZHPH_HQCLCF_RANK.NEXTVAL,
+      <if test="no != null">
+        #{no,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhph.model.hqclcf.HqclcfRank">
+    update hqclcf_rank_scheduled
+    <set>
+      <if test="no != null">
+        no = #{no,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        comments = #{comments,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhph.model.hqclcf.HqclcfRank">
+    update hqclcf_rank_scheduled
+    set no = #{no,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=VARCHAR},
+      create_name = #{createName,jdbcType=VARCHAR},
+      comments = #{comments,jdbcType=VARCHAR}
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 手动添加 -->
+   <select id="getRankByCondition" parameterType="com.zhph.model.hqclcf.HqclcfRank" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HQCLCF_RANK_SCHEDULED
+        <where>
+            <if test="no!=null and no!=''">
+                no like '%${no}%'
+            </if>
+            <if test="name!=null and name!=''">
+                AND name like '%${name}%'
+            </if>
+
+        </where>
+        ORDER BY create_date desc
+    </select>
+
+
+  <select id="getRankByRankCodes" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HQCLCF_RANK_SCHEDULED
+    <where>
+      <if test="rankCode!=null and rankCode.size!=0 ">
+        AND NO IN
+        <foreach collection="rankCode" item="rank" index="index" open="(" close=")" separator=",">
+          #{rank}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="getLatestRank" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from hqclcf_rank_scheduled
+    ORDER BY create_date desc
+  </select>
+  
+   <select id="getRankByNo" parameterType="Object" resultMap="BaseResultMap">
+    select * from hqclcf_rank_scheduled where no = #{no,jdbcType=VARCHAR}
+  </select>
+</mapper>

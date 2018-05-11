@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <title>修改员工审批管理</title>
+        <style>
+            #empEditForm .table > tbody > tr > td, .table > tfoot > tr > td {
+                border-top: 1px solid #ddd;
+                line-height: 1.88888;
+                vertical-align: middle;
+            }
+            #empEditForm .container-fluid {
+                padding-top: 25px;
+                padding-right: 50px;
+                padding-left: 50px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            #empEditForm .layui-input-block, .layui-input-inline {
+                margin-left: 10px;
+                float: left;
+                position: relative;
+            }
+            #empEditForm .layui-form-select dl dd.layui-this {
+                background-color: #777;
+                color: #fff;
+            }
+
+            #empEditForm .layui-form-select .layui-input {
+                padding-right: 0px;
+                cursor: pointer;
+            }
+            #empEditForm .a-Col{
+                color: #2196f3;
+            }
+            .thumb {
+                width: 100%;
+                position: absolute;
+                left: 0px;
+                top: 0;
+                height: 100%;
+            }
+            #prevModal {width:100%; height:100%; text-align:center; display:none;}
+            #img_prev {max-width:98%; max-height:98%; margin: 10px auto}
+
+            #empEditForm .layui-btn {
+                background-color: #607d8b;
+            }
+            .layui-layer-hui .layui-layer-content {
+                padding: 7px 25px;
+                margin-top: 1px;
+                text-align: center;
+                background-color: black;
+            }
+        </style>
+        </head>
+<body >
+<div class="wrapper wrapper-content animated fadeInUp">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">基础管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+            <font>新增员工审批管理-新增</font>
+        </li>
+    </ol>
+
+    <div class="ibox float-e-margins">
+        <div class="ibox-content" style="min-height: 800px">
+            <form id="empEditForm"  method="post" enctype="multipart/form-data" class="layui-form" lay-filter="form">
+                <input type="hidden" id="id" name="id" value="${emp.id?c}"/>
+                <div class="container-fluid">
+                    <!--table-hover-->
+                    <table class="table  table-condensed table-bordered text-center" style="margin: 0px; min-width: 1000px;">
+                        <tbody>
+                        <tr>
+                            <td class="active" width="150px;">员工编码</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text"  name="empNo" id="empNo" value="${emp.empNo!}" style="background-color:#F8F8F8" class="layui-input input-required" readonly>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;" rowspan="9">
+                                <div class="active">员工照片</div>
+                                <div class="ibox-content" style=" height: 300px; text-align: center;box-sizing: border-box;" >
+                                    <div class='' id='empImage' name="empImage" style="width: 100%;height:100%;position: relative;"   title=''></div>
+                                </div>
+                            </td>
+                            <td width="200px;" rowspan="9">
+                                <button type="button" class="layui-btn" id="empImgPoto">
+                                    <i class="layui-icon"></i>选择图片
+                                </button>
+                                <div id='prevModal'>
+                                    <img id='img_prev'/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">员工姓名</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <input type="text"  onblur="empNameCheck()" value="${emp.empName!}" name="empName" id="empName" placeholder="请输入员工姓名" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">员工身份证姓名</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="idcardName" id="idcardName" value="${emp.idcardName!}" onblur="idcardNameCheck()"  id="idcardName" placeholder="请输入员工身份证姓名" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">性别</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <select name="sex" placeholder="性别" lay-search  id="sex" lay-filter="">
+                                        <option value=""></option>
+                                        <#list  sexList as sex>
+                                           <#if sex.sysValue==emp.sex>
+                                               <option value="${sex.sysValue!}" selected>${sex.sysName!}</option>
+                                               <#else>
+                                                   <option value="${sex.sysValue!}">${sex.sysName!}</option>
+                                           </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">婚姻状况</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <select name="marriage" id="marriage" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list  marriageList as marriage>
+                                            <#if marriage.sysValue==emp.marriage>
+                                                <option value="${marriage.sysValue!}" selected>${marriage.sysName!}</option>
+                                                <#else>
+                                                    <option value="${marriage.sysValue!}">${marriage.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">户籍性质</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <select name="nativeType" id="nativeType" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#if emp.nativeType??>
+                                        <#list  nativeTypeList as nativeType>
+                                            <#if nativeType.sysValue==emp.nativeType>
+                                                <option value="${nativeType.sysValue!}" selected>${nativeType.sysName!}</option>
+                                                <#else>
+                                                    <option value="${nativeType.sysValue!}">${nativeType.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                        </#if>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">证件类型</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <select name="idType" id="idType" lay-search  lay-filter="idTypeFilter">
+                                        <option value=""></option>
+                                        <#list  idTypeList as idType>
+                                            <#if (idType.sysValue == emp.idType)>
+                                                <option value="${idType.sysValue!}" selected>${idType.sysName!}</option>
+                                                <#else>
+                                                    <option value="${idType.sysValue!}" >${idType.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">证件号码</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="idCard" id="idCard" value="${emp.idCard!}" placeholder="请输入证件号码" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active">民族</td>
+                            <td>
+                                <div class="layui-input-inline">
+                                    <select name="nation" lay-filter="nation" lay-search>
+                                        <option value=""></option>
+                                        <#list  nationList as nation>
+                                            <#if emp.nation??>
+                                                <#if nation.sysValue==emp.nation>
+                                                    <option value="${nation.sysValue!}" selected>${nation.sysName!}</option>
+                                                    <#else>
+                                                        <option value="${nation.sysValue!}" >${nation.sysName!}</option>
+                                                </#if>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">户籍地址</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <select name="hjProvince" id="hjProvince"  lay-search lay-filter="hjProvince">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="hjCity" id="hjCity" lay-search lay-filter="hjCity">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="hjArea"  id="hjArea" lay-search lay-filter="hjArea">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <label class="">详细地址</label>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="hjxjdz" id="hjxjdz" value="${emp.hjxjdz!}" style="width: 350px" placeholder="请输入详细地址" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">现居地址</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <select name="xjProvince" id="xjProvince" lay-search lay-filter="xjProvince">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="xjCity" id="xjCity" lay-search lay-filter="xjCity">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="xjArea" id="xjArea" lay-search lay-filter="xjArea">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <label class="">详细地址</label>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="xjxxdz" id="xjxxdz" value="${emp.xjxxdz!}" style="width: 350px" placeholder="请输入详细地址" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">手机号码</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mobilePhone" id="mobilePhone" value="${emp.mobilePhone}" onblur="mobilePhoneCheck()" placeholder="请输入手机号码" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">紧急联系人姓名</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                        <input type="text" name="urgency" id="urgency" value="${emp.urgency!}" placeholder="请输入紧急联系人姓名" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">紧急联系人电话</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="urgencyPhone"  id="urgencyPhone" value="${emp.urgencyPhone!}" onblur="urgencyPhoneCheck()" placeholder="请输入紧急联系人电话" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">紧急联系人关系</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="urgencyRelation" id="urgencyRelation" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list  urgencyRelationList as urgen>
+                                            <#if emp.urgencyRelation??>
+                                                <#if urgen.sysValue == emp.urgencyRelation!>
+                                                    <option value="${urgen.sysValue!}" selected>${urgen.sysName!}</option>
+                                                    <#else>
+                                                        <option value="${urgen.sysValue!}">${urgen.sysName!}</option>
+                                                </#if>
+                                                <#else>
+                                                    <option value="${urgen.sysValue!}">${urgen.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">个人邮箱</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="email" id="email" value="${emp.email!}" placeholder="请输入个人邮箱" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">公司邮箱</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="companyMailbox" id="companyMailbox" value="${emp.companyMailbox!}" placeholder="请输入公司邮箱" class="layui-input">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">毕业院校</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="schoolGraduation" id="schoolGraduation" value="${emp.schoolGraduation!}" placeholder="请输入毕业院校" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">学历</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="edu" id="edu" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list  eduList as edu>
+                                            <#if edu.sysValue==emp.edu>
+                                                <option value="${edu.sysValue!}" selected>${edu.sysName!}</option>
+                                                <#else>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">教育方式</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="eduType" id="eduType" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list eduTypeList as eduType>
+                                            <#if eduType.sysValue==emp.eduType>
+                                                <option value="${eduType.sysValue!}" selected>${eduType.sysName!}</option>
+                                                <#else>
+                                                    <option value="${eduType.sysValue!}">${eduType.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">员工主体</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="empSubject" id="empSubject" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list empSubjectList as empSubject>
+                                            <#if emp.empSubject??>
+                                            <#if empSubject.sysValue==emp.empSubject>
+                                                <option value="${empSubject.sysValue!}" selected>${empSubject.sysName!}</option>
+                                                <#else>
+                                                    <option value="${empSubject.sysValue!}">${empSubject.sysName!}</option>
+                                            </#if>
+                                                <#else>
+                                                    <option value="${empSubject.sysValue!}">${empSubject.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">入职时间</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="${(emp.enterDate?string('yyyy-MM-dd'))!}" name="enterDate" id="enterDate" placeholder="请输入入职时间">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">专业</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="specialty" id="specialty" value="${emp.specialty!}" placeholder="请输入专业" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">全日制合同开始日期</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="${(emp.fulltimeBeginDate?string('yyyy-MM-dd'))!}" name="fulltimeBeginDate" id="fulltimeBeginDate" placeholder="请输入全日制合同开始日期">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">利信入职日期</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="${(emp.lxEnterDate?string('yyyy-MM-dd'))!}" name="lxEnterDate" id="lxEnterDate" placeholder="请输入利信入职日期">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">部门</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input id="deptNo" name="deptNo" class="layui-input" value="${dept.deptName!}" placeholder="请选择部门" readonly onclick="showTree()"/>
+                                    <input type="hidden" id="deptHid" name="deptHid">
+                                </div>
+                                <div id="deptNoContent" style="width:15%;height:18%; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                    <ul id="deptNoTree" class="ztree" style="margin-top:0;height:100%;width:100%;overflow: auto;"></ul>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">全日制合同终止日期</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="${(emp.fulltimeEndDate?string('yyyy-MM-dd'))!}" name="fulltimeEndDate" id="fulltimeEndDate" readonly placeholder="请输入全日制合同终止日期">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">岗位</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input id="post" name="post" value="${post.postName!}"  class="layui-input" onclick="showPostTree()" placeholder="请选择岗位" readonly />
+                                    <input type="hidden" id="postHid" name="postHid">
+                                </div>
+                                <div id="postContent" style="width:15%;height:18%; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                    <ul id="postTree" class="ztree" style="margin-top:0;height:100%;width:100%;overflow: auto;"></ul>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">业务条线</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name="businessLineHid" id="businessLineHid">
+                                    <select name="businessLine" id="businessLine" disabled  lay-filter="">
+                                        <option value=""></option>
+                                        <#list  businessLineList as bl>
+                                            <#if bl.sysValue==emp.businessLine>
+                                                <option value="${bl.sysValue!}" selected>${bl.sysName!}</option>
+                                                <#else>
+                                                    <option value="${bl.sysValue!}" >${bl.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">职务</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="position" id="position" lay-search  placeholder="请选择职务" lay-filter="positionFilter">
+                                        <#list businessesList as position>
+                                            <#if emp.position==position.posCode>
+                                                <option value="${position.posCode!}" selected>${position.posName!}</option>
+                                                <#else>
+                                                    <option value="${position.posCode!}">${position.posName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">职级</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="rank" id="rank" lay-search lay-filter="">
+                                        <#list rankList as rank>
+                                            <#if emp.rank??>
+                                                <#if rank.no == emp.rank>
+                                                    <option value="${rank.no!}" selected>${rank.name!}</option>
+                                                    <#else>
+                                                        <option value="${rank.no!}" selected>${rank.name!}</option>
+                                                </#if>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">银行卡名称</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="pfBankCode" id="pfBankCode" lay-search  lay-filter="">
+                                        <option value="" ></option>
+                                        <#if emp.pfBankCode??>
+                                            <#list  bankList as bank>
+                                                <#if bank.bankCode==emp.pfBankCode>
+                                                    <option value="${bank.bankCode!}" selected>${bank.bankName!}</option>
+                                                    <#else>
+                                                        <option value="${bank.bankCode!}">${bank.bankName!}</option>
+                                                </#if>
+                                            </#list>
+                                        </#if>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">工作地</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="workOrgNo" id="workOrgNo" lay-search lay-filter="workspaceFilter">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">银行卡开户行</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <select name="bankProvince" id="bankProvince" lay-search lay-filter="bankProvince" class="">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="bankCity" id="bankCity" lay-search lay-filter="bankCity" class="">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <label class="">详细地址</label>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="bankxxdj" id="bankxxdj" value="${emp.bankxxdj!}" style="width: 350px"  placeholder="请输入详细地址" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">卡号</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="pfBankNo" id="pfBankNo" value="${emp.pfBankNo!}" onblur="pfBankNoCheck()" placeholder="请输入卡号" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">员工类型</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="empType" id="empType" lay-search lay-filter="">
+                                        <option value=""></option>
+                                        <#list  empTypeList as empType>
+                                            <#if (empType.sysValue == emp.empType)>
+                                                <option value="${empType.sysValue!}" selected >${empType.sysName!}</option>
+                                                <#else>
+                                                    <option value="${empType.sysValue!}">${empType.sysName!}</option>
+                                            </#if>
+                                        </#list>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">社保购买地</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <select name="socialSecurityOrgNo" lay-search id="socialSecurityOrgNo" lay-filter="">
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">个税编码</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="taxCode" value="${emp.taxCode!}" name="taxCode" placeholder="请输入个税编码" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">是否协议工资</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <#if emp.wagesNo=='1'>
+                                        <input type="radio" name="wagesNo" checked lay-filter="wagesNoFilter" value="1" title="是" >
+                                        <#else>
+                                            <input type="radio" name="wagesNo"  lay-filter="wagesNoFilter" value="1" title="是" >
+                                    </#if>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#if emp.wagesNo=='0'>
+                                        <input type="radio" name="wagesNo" lay-filter="wagesNoFilter" checked value="0" title="否">
+                                        <#else>
+                                            <input type="radio" name="wagesNo" lay-filter="wagesNoFilter" value="0" title="否">
+                                    </#if>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">协议工资金额</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="wagesNum" value="${emp.wagesNum!}" id="wagesNum" placeholder="请输入协议工资金额" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" width="150px;">推荐人姓名</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="referees" id="referees" value="${emp.referees!}" placeholder="请输入推荐人姓名" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                            <td class="active" width="150px;">推荐人编码</td>
+                            <td width="200px;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="refereesNo" id="refereesNo" value="${emp.refereesNo!}" placeholder="请输入推荐人编码" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--消分的附件 -->
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">面试申请表</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfmsspb"   >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==1>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">身份证正反面</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xfsfzzfm">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==2>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">离职证明/无业证明</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xflzzm">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==3>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">合同信息</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xfhtxx" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==4>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">体检报告</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xftjbg">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==5>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">学历证复印件</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xfxlzfyj">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==6>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">保密协议</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfbmxy" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==7>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">征信报告</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfzxbg" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==8>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">公司制度确认书</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfgszdqrs" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==9>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">入职确认表</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfrzspb" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==10>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">十大禁令</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfsdjl" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==11>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">销售人员行为规范</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfxsryxwgf" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==12>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">录用条件及岗位职责描述</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xflytjjgwzzms" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==13>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">目标责任书</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfmbzrs" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==14>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">其他附件</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xfqtfj" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==15>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-2' style="display: none">
+                            <td class="active" width="150px;">员工备注</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <textarea name="xjbz" placeholder="请输入员工备注" style="width:450px;" class="layui-textarea">${emp.comments!}</textarea>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--选择部门为信贷的时候展示这个tr -->
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">面试申请表</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xdmsspb">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==1>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">身份证正反面</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="xdsfzzfm">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==2>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">离职证明/无业证明</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdlzzm" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==3>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">合同信息</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdhtxx" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==4>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">体检报告</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdtjbg" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==5>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">学历证复印件</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdxlzfyj" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==6>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">保密协议</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdbmxy" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==7>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">征信报告</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdzxbg" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==8>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">公司制度确认书</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdgszdqrs"  >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==9>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">入职确认表</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdrzspb" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==10>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">十大禁令</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdsdjl" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==11>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">普惠销售确认书</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdxsqrs" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==13>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">其他附件</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="xdqtfj" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==12>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-3' style="display: none">
+                            <td class="active" width="150px;">员工备注</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <textarea name="xdbz" placeholder="请输入员工备注" style="width:450px;" class="layui-textarea">${emp.comments!}</textarea>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--选择总部的时候 展示这个tr -->
+                        <tr class='test-tr tr-index-1' style="display: none">
+                            <td class="active" width="150px;">面试申请表</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" data-file="${emp.empNo!}" id="zbmsspb">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==701>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-1' style="display: none">
+                            <td class="active" width="150px;">身份证正反面</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm" id="zbsfzzfm" >
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==702>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-1' style="display: none">
+                            <td class="active" width="150px;">其他附件</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn layui-btn-sm"  id="zbqtfj">
+                                        <i class="layui-icon"></i>选择文件
+                                    </button>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <#list files as file>
+                                        <#if file.fileType ==703>
+                                            <font color="red">已上传</font>&nbsp;&nbsp;
+                                            ${file.fileName!}
+                                            &nbsp;&nbsp;<a class="a-Col"  href="javascript:downloadHdsfFile('${file.empNo!}','${file.fileType!}');">下载</a>
+                                            &nbsp;&nbsp;<a class="a-Col" href="javascript:previewHdsfFile('${file.empNo!}','${file.fileType!}');">预览</a>
+                                            <#break>
+                                        </#if>
+                                    </#list>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class='test-tr tr-index-1' style="display: none">
+                            <td class="active" width="150px;">员工备注</td>
+                            <td width="200px;" colspan="3">
+                                <div class="layui-input-inline">
+                                    <textarea name="zbbz" placeholder="请输入员工备注" style="width:450px;" class="layui-textarea">${emp.comments!}</textarea>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <span style="color: red">*</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div style="text-align: center;">
+    <button class="btn btn-sm btn-warning" style="background-color: #607d8b;width: 5%" onclick="forReturn()">
+        <i class="fa fa-reply"></i>
+        <font>返回</font>
+    </button>
+    <button class="btn btn-sm btn-warning" style="background-color: #607d8b;width: 5%" id="submitForm" lay-submit onclick="submitForm()">
+        <i class="&#xe616;"></i>
+        <font>提交</font>
+    </button>
+</div>
+</div>
+</body>
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3//jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/PCASClass.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/custom/luhmCheck.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var imgobj = new Image();
+        imgobj.src = '${ctx}/hqclcf/hqclcfempapv/showImg.mvc?empNo=${emp.empNo!}&fileType=704&businessLine=${emp.businessLine!}';
+        imgobj.className = 'thumb';
+        $("#empImage").append(imgobj);
+
+        /*给全部的input框设置不能回车和空格*/
+        $("#empEditForm :input").on("keydown",function(e){
+            var keynum;
+            if (window.event) {
+                keynum = e.keyCode
+            }
+            else if (e.which) {
+                keynum = e.which
+            }
+            if (keynum == 32||keynum==13) {
+                return false;
+            }
+            return true;
+        });
+        $("#idCard").on('blur',function () {
+            idCardCheck();
+        });
+
+        new PCAS("hjProvince", "hjCity", "hjArea", "${(emp.hjProvince)!}", "${(emp.hjCity)!}", "${(emp.hjArea)!}");
+        new PCAS("xjProvince", "xjCity", "xjArea", "${(emp.xjProvince)!}", "${(emp.xjCity)!}", "${(emp.xjArea)!}");
+        new PCAS("bankProvince", "bankCity",  "${(emp.bankProvince)!}", "${(emp.bankCity)!}");
+
+       $("#deptHid").val("${dept.id!}");
+       $("#postHid").val("${post.priNumber!}");
+
+        var businessLine = "${emp.businessLine!}";
+        switch (businessLine){
+            case "1":
+                $('.test-tr').hide();
+                $('.tr-index-1').show();
+                break;
+            case "2":
+                $('.test-tr').hide();
+                $('.tr-index-2').show();
+                break;
+            case "3":
+                $('.test-tr').hide();
+                $('.tr-index-3').show();
+                break;
+        }
+
+       getPostTree();
+    });
+
+    function getPostTree(){
+        var obj=new Object();
+        obj.deptId="${dept.id!}";
+        obj.type="deptSelect";
+        $("#workOrgNo").empty();
+        $("#socialSecurityOrgNo").empty();
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{"data":JSON.stringify(obj)},
+            success: function (data) {
+                postTree = $.fn.zTree.init($("#postTree"),settingPost,data.postTree);
+                $("#businessLine").val(data.businessLine);
+                $("#businessLineHid").val(data.businessLine);
+                var html='<option></option>';
+                $.each(data.workspaceData,function (index,value) {
+                    if(value.areaCode=="${emp.workOrgNo}"){
+                        html+='<option selected value='+value.areaCode+'>'+value.area+'</option>'
+                    }else{
+                        html+='<option value='+value.areaCode+'>'+value.area+'</option>'
+                    }
+                });
+                $("#workOrgNo").append(html);
+                $("#socialSecurityOrgNo").append(html);
+            }
+        });
+    }
+
+
+    var table;
+    var form;
+    var laydate;
+    var treeObj;
+    var postTree;
+
+    layui.use(['table','form','laydate','upload','layer'],function () {
+        table=layui.table;
+        form = layui.form;
+        laydate= layui.laydate;
+        var upload = layui.upload, layer = layui.layer, $ = layui.jquery;
+        form.render();
+        /*入职日期*/
+        laydate.render({
+            elem: '#enterDate',
+            theme: '#393D49',
+            done: function(value, date, endDate){
+                var obj=new Object();
+                obj.type="enterDateCheck";
+                obj.enterDate=value;
+                $.ajax({
+                    url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+                    type: 'POST',
+                    dataType: "json",
+                    async: false,
+                    data:{"data":JSON.stringify(obj)},
+                    success: function (data) {
+                        if(!data.success){
+                            layer.tips(data.msg,'#enterDate', {
+                                tips: 2
+                            });
+                            $("#enterDate").val("");
+                        }else{
+                            /*全日制合同开始日期为入职日期*/
+                            $("#fulltimeBeginDate").val(value);
+                            /* 全日制合同终止日期*/
+                            $("#fulltimeEndDate").val(data.fulltimeEndDate);
+                        }
+                    }
+                });
+            }
+        });
+
+        /*全日制合同号开始日期*/
+        laydate.render({
+            elem: '#fulltimeBeginDate',
+            theme: '#393D49',
+            done: function (value, date, endDate) {
+                var obj = new Object();
+                obj.type = "fulltimeBeginDateClick";
+                obj.fulltimeBeginDate = value;
+                $.ajax({
+                    url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+                    type: 'POST',
+                    dataType: "json",
+                    async: false,
+                    data: {"data": JSON.stringify(obj)},
+                    success: function (data) {
+                        $("#fulltimeEndDate").val(data.fulltimeEndDate);
+                    }
+                });
+            }
+        });
+        /*利信入职时间*/
+        laydate.render({
+            elem:'#lxEnterDate',
+            theme: '#393D49'
+        });
+        /**员工照片*/
+        upload.render({
+            elem: '#empImgPoto',
+            auto:false,
+            accept: 'images',
+            field:'empImgPoto',
+            choose: function(obj){
+                obj.preview(function(index, file, result){
+                    var imgobj = new Image();
+                    imgobj.src = result;
+                    imgobj.className = 'thumb';
+                    imgobj.onclick = function(result) {
+                        img_prev.src = this.src;
+                        var w = $(window).width() - 42, h = $(window).height() - 42;
+                        layer.open({
+                            title: '预览',
+                            type: 1,
+                            area: [w, h],
+                            shade :0,
+                            content: $('#prevModal')
+                        });
+                    };
+                    $("#empImage").html('');
+                    $("#empImage").append(imgobj);
+                });
+            }
+        });
+        /* 面试申请表*/
+        upload.render({
+            elem: '#xfmsspb',
+            auto: false,
+            accept: 'file',
+            field: 'xfmsspb'
+        });
+        upload.render({
+            elem: '#xdmsspb',
+            auto: false,
+            accept: 'file',
+            field: 'xdmsspb'
+        });
+        upload.render({
+            elem: '#zbmsspb',
+            auto: false,
+            accept: 'file',
+            field: 'zbmsspb'
+        });
+        /* 身份证正反面*/
+        upload.render({
+            elem: '#xfsfzzfm',
+            auto: false,
+            accept: 'file',
+            field: 'xfsfzzfm'
+        });
+        upload.render({
+            elem: '#xdsfzzfm',
+            auto: false,
+            accept: 'file',
+            field: 'xdsfzzfm'
+        });
+        upload.render({
+            elem: '#zbsfzzfm',
+            auto: false,
+            accept: 'file',
+            field: 'zbsfzzfm'
+        });
+        /* 离职证明/无业证明*/
+        upload.render({
+            elem: '#xflzzm',
+            auto: false,
+            accept: 'file',
+            field: 'xflzzm'
+        });
+        upload.render({
+            elem: '#xdlzzm',
+            auto: false,
+            accept: 'file',
+            field: 'xdlzzm'
+        });
+        /*合同信息*/
+        upload.render({
+            elem: '#xfhtxx',
+            auto: false,
+            accept: 'file',
+            field: 'xfhtxx'
+        });
+        upload.render({
+            elem: '#xdhtxx',
+            auto: false,
+            accept: 'file',
+            field: 'xdhtxx'
+        });
+        /* 体检报告	*/
+        upload.render({
+            elem: '#xftjbg',
+            auto: false,
+            accept: 'file',
+            field: 'xftjbg'
+        });
+        upload.render({
+            elem: '#xdtjbg',
+            auto: false,
+            accept: 'file',
+            field: 'xdtjbg'
+        });
+        /* 学历证复印件	*/
+        upload.render({
+            elem: '#xfxlzfyj',
+            auto: false,
+            accept: 'file',
+            field: 'xfxlzfyj'
+        });
+        upload.render({
+            elem: '#xdxlzfyj',
+            auto: false,
+            accept: 'file',
+            field: 'xdxlzfyj'
+        });
+        /* 保密协议*/
+        upload.render({
+            elem: '#xfbmxy',
+            auto: false,
+            accept: 'file',
+            field: 'xfbmxy'
+        });
+        upload.render({
+            elem: '#xdbmxy',
+            auto: false,
+            accept: 'file',
+            field: 'xdbmxy'
+        });
+        /*征信报告	*/
+        upload.render({
+            elem: '#xfzxbg',
+            auto: false,
+            accept: 'file',
+            field: 'xfzxbg'
+        });
+        upload.render({
+            elem: '#xdzxbg',
+            auto: false,
+            accept: 'file',
+            field: 'xdzxbg'
+        });
+        /*公司制度确认书*/
+        upload.render({
+            elem: '#xfgszdqrs',
+            auto: false,
+            accept: 'file',
+            field: 'xfgszdqrs'
+        });
+        upload.render({
+            elem: '#xdgszdqrs',
+            auto: false,
+            accept: 'file',
+            field: 'xdgszdqrs'
+        });
+        /* 入职确认表*/
+        upload.render({
+            elem: '#xfrzspb',
+            auto: false,
+            accept: 'file',
+            field: 'xfrzspb'
+        });
+        upload.render({
+            elem: '#xdrzspb',
+            auto: false,
+            accept: 'file',
+            field: 'xdrzspb'
+        });
+        /*十大禁令*/
+        upload.render({
+            elem: '#xfsdjl',
+            auto: false,
+            accept: 'file',
+            field: 'xfsdjl'
+        });
+        upload.render({
+            elem: '#xdsdjl',
+            auto: false,
+            accept: 'file',
+            field: 'xdsdjl'
+        });
+        /*普惠销售确认书*/
+        upload.render({
+            elem: '#xdxsqrs',
+            auto: false,
+            accept: 'file',
+            field: 'xdxsqrs'
+        });
+        /*销售人员行为规范*/
+        upload.render({
+            elem: '#xfxsryxwgf',
+            auto: false,
+            accept: 'file',
+            field: 'xfxsryxwgf'
+        });
+        /* 录用条件及岗位职责描述*/
+        upload.render({
+            elem: '#xflytjjgwzzms',
+            auto: false,
+            accept: 'file',
+            field: 'xflytjjgwzzms'
+        });
+        /* 目标责任书*/
+        upload.render({
+            elem: '#xfmbzrs',
+            auto: false,
+            accept: 'file',
+            field: 'xfmbzrs'
+        });
+        /* 其他附件*/
+        upload.render({
+            elem: '#xfqtfj',
+            auto: false,
+            accept: 'file',
+            field: 'xfqtfj'
+        });
+        upload.render({
+            elem: '#xdqtfj',
+            auto: false,
+            accept: 'file',
+            field: 'xdqtfj'
+        });
+        upload.render({
+            elem: '#zbqtfj',
+            auto: false,
+            accept: 'file',
+            field: 'zbqtfj'
+        });
+        var hjprovince;
+        form.on('select(hjProvince)', function(data) {
+            hjprovince = data.value;
+            $("#hjProvince").html("");
+            $("#hjCity").html("");
+            $("#hjArea").html("");
+            var mypcas = new PCAS("hjProvince", "hjCity", "hjArea", hjprovince, "请选择城市", "请选择地区");
+            form.render('select');
+        });
+        form.on('select(hjCity)', function(data) {
+            $("#hjProvince").html("");
+            $("#hjCity").html("");
+            $("#hjArea").html("");
+            var mypcas = new PCAS("hjProvince", "hjCity", "hjArea", hjprovince, data.value, "请选择地区");
+            form.render('select');
+        });
+
+        var xjprovince;
+        form.on('select(xjProvince)', function(data) {
+            xjprovince = data.value;
+            $("#xjProvince").html("");
+            $("#xjCity").html("");
+            $("#xjArea").html("");
+            var mypcas = new PCAS("xjProvince", "xjCity", "xjArea", xjprovince, "请选择城市", "请选择地区");
+            form.render('select');
+        });
+        form.on('select(xjCity)', function(data) {
+            $("#xjProvince").html("");
+            $("#xjCity").html("");
+            $("#xjArea").html("");
+            var mypcas = new PCAS("xjProvince", "xjCity", "xjArea", xjprovince, data.value, "请选择地区");
+            form.render('select');
+        });
+
+
+        var  bankprovince;
+        form.on('select(bankProvince)', function(data) {
+            bankprovince=data.value;
+            $("#bankProvince").html("");
+            $("#bankCity").html("");
+            var mypcas = new PCAS("bankProvince", "bankCity", bankprovince, "请选择城市");
+            form.render('select');
+        });
+        form.on('select(bankCity)', function(data) {
+            $("#bankProvince").html("");
+            $("#bankCity").html("");
+            var mypcas = new PCAS("bankProvince", "bankCity", bankprovince, data.value);
+            form.render('select');
+        });
+
+        form.on('select(idTypeFilter)',function (data) {
+            if(data.value==1){
+                $("#idCard").on('blur',function () {
+                    idCardCheck();
+                });
+            }else{
+                $("#idCard").off();
+            }
+        });
+
+
+        form.on('select(testSelect)',function (data) {
+            $('.test-tr').hide();
+            $('.tr-index-' + data.value).show();
+        });
+
+
+        /*职务选择的时候*/
+        form.on('select(positionFilter)',function (data) {
+            var obj=new Object();
+            obj.type="zwSelect";
+            obj.businessCode=data.value;
+            $("#rank").empty();
+            $.ajax({
+                url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+                type: 'POST',
+                dataType: "json",
+                async: false,
+                data:{"data":JSON.stringify(obj)},
+                success: function (data) {
+                    var html='<option></option>';
+                    $.each(data.rankData,function (index,value) {
+                        html+='<option value='+value.no+'>'+value.name+'</option>'
+                    });
+                    $("#rank").append(html);
+                    form.render();
+                }
+            });
+        });
+
+        /*修改工作地选择的时候不更新员工编码*/
+        form.on('select(workspaceFilter)',function (data) {
+            $("#socialSecurityOrgNo").val(data.value);
+            form.render();
+        });
+    });
+
+    var settingPost={
+        view: {
+            dblClickExpand: false,
+            showLine:true
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey:"id",
+                pIdKey:"pid"
+            }
+        },
+        callback: {
+            onAsyncSuccess:function (event, treeId, treeNode, msg) {
+            },
+            onClick:function (event, treeId, treeNode) {
+                $("#postHid").val(treeNode.id);
+                $("#post").val(treeNode.name);
+                /* 选择岗位树的时候我们得关联出职务和职级*/
+                getBusinessByOnclick(treeNode);
+            }
+        }
+    };
+
+    var setting = {
+        async : {
+            dataFilter: function (id, pNode, res) {
+                if (res.code == 200) {
+                    if (res && res.data)
+                        return res.data;
+                } else {
+                    layer.alert("加载树失败："+res.msg, {
+                        icon : 5,
+                        title : "失败"
+                    });
+                    return [];
+                }
+            },
+            enable: true,
+            url:"${ctx}/hqclcf/hqclcfdept/buildTreeByUserbL",
+            autoParam:["id"],
+            otherParam:{}
+        },
+        view: {
+            dblClickExpand: false,
+            showLine:true
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey:"id",
+                pIdKey:"pid"
+            }
+        },
+        callback: {
+            onAsyncSuccess:function (event, treeId, treeNode, msg) {
+                var zTree = $.fn.zTree.getZTreeObj("deptNoTree");
+                var node = zTree.getNodeByParam("id",$("#deptHid").val(), null);
+                zTree.selectNode(node);
+                treeObj.expandAll(false);
+            },
+            onClick:function (event, treeId, treeNode) {
+                $("#deptHid").val(treeNode.id);
+                var check = checkDeptPrepare(treeNode);
+                if(check){
+                    $("#deptNo").val(treeNode.name);
+                    /*选择部门的时候清空岗位,职务的值*/
+                    $("#post").val("");
+                    $("#position").empty();
+                    $("#workOrgNo").val("");
+                    $("#rank").val("");
+                    $("#rank").empty();
+                    /*  根据部门获取业务条线、岗位、职务、职级*/
+                    getDataByDeptId(treeNode);
+                }else{
+                    $("#deptNo").val("");
+                }
+            }
+
+        }
+    };
+
+
+    function showTree() {
+        treeObj = $.fn.zTree.init($("#deptNoTree"), setting);
+        var deptOffset = $("#deptNo").offset();
+        $("#deptNoContent").css({
+            left: deptOffset.left  + "px",
+            top: deptOffset.top +28+ "px"
+        }).slideDown("fast");
+
+
+        $("body").bind("mousedown",function onBodyDown(event) {
+            var length = $(event.target).parents("#deptNoTree").length;
+            var id = event.target.id;
+            if(!(length==1||(length==0&&id=='deptNoTree'))){
+                $("#deptNoContent").fadeOut("fast");
+                $("body").unbind("mousedown", onBodyDown);
+            }
+        });
+    }
+
+    /*身份证验证*/
+    function idCardCheck() {
+        var $idCard = $("#idCard");
+        var obj = new Object();
+        obj.idCard = $idCard.val();
+        empCheckAjax(obj,$idCard);
+    }
+    /*员工姓名验证*/
+    function empNameCheck() {
+        var $empName = $("#empName");
+        var obj=new Object();
+        obj.empName=$empName.val();
+        empCheckAjax(obj,$empName);
+    }
+    /* 员工身份证姓名*/
+    function idcardNameCheck() {
+        var $idcardName = $("#idcardName");
+        var obj=new Object();
+        obj.idcardName=$idcardName.val();
+        empCheckAjax(obj,$idcardName);
+    }
+    /*卡号验证*/
+    function pfBankNoCheck() {
+        var $pfBankNo = $("#pfBankNo");
+        var bankno = $.trim($pfBankNo.val());
+        if(pfBankNoCheckJs(bankno)){
+            var obj=new Object();
+            obj.pfBankNo=$pfBankNo.val();
+            empCheckAjax(obj,$pfBankNo);
+        }
+    }
+    function pfBankNoCheckJs(bankno) {
+        if(bankno == "") {
+            layer.tips('录入失败：银行卡不能为空','#pfBankNo', {
+                tips: 2
+            });
+            $("#pfBankNo").val('');
+            return false;
+        }
+        if(!(bankno.length == 16 || bankno.length == 19)) {
+            layer.tips('录入失败：银行卡号长度必须为16位或则19位','#pfBankNo', {
+                tips: 2
+            });
+            $("#pfBankNo").val('');
+            return false;
+        }
+        var num = /^\d*$/;
+        if(!num.exec(bankno)) {
+            layer.tips('录入失败：银行卡号必须全为数字','#pfBankNo', {
+                tips: 2
+            });
+            $("#pfBankNo").val('');
+            return false;
+        }
+        var strBin = "10,18,30,35,37,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,58,60,62,65,68,69,84,87,88,94,95,98,99";
+        if(strBin.indexOf(bankno.substring(0, 2)) == -1) {
+            layer.tips('录入失败：银行卡号开头6位不符合规范','#pfBankNo', {
+                tips: 2
+            });
+            $("#pfBankNo").val('');
+            return false;
+        }
+        if(!luhmCheck(bankno)){
+            layer.tips('录入失败：银行卡卡号虚假,不符合官方luhm生成规则！','#pfBankNo', {
+                tips: 2
+            });
+            $("#pfBankNo").val('');
+            return false;
+        }
+        return true;
+    }
+
+    /* 验证手机号*/
+    function mobilePhoneCheck() {
+        var mobilePhone = $("#mobilePhone").val();
+        if(!(/^1[34578]\d{9}$/.test(mobilePhone))){
+            layer.tips('录入失败：手机号有误','#mobilePhone', {
+                tips: 2
+            });
+            $("#mobilePhone").val("");
+        }
+    }
+    /* 验证紧急联系人的手机号*/
+    function urgencyPhoneCheck() {
+        var urgencyPhone = $("#urgencyPhone").val();
+        if(!(/^1[34578]\d{9}$/.test(urgencyPhone))){
+            layer.tips('录入失败：紧急联系人手机号有误','#urgencyPhone', {
+                tips: 2
+            });
+            $("#urgencyPhone").val("");
+        }
+
+    }
+
+    /* 验证部门编制*/
+    function checkDeptPrepare(treeNode) {
+        var flag=true;
+        var id = treeNode.id;
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfdept/checkDeptPrepare',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{'id':id,'type':'add'},
+            success: function (data) {
+                if(!data.success){
+                    layer.tips('选择失败:'+data.msg,"#deptNo", {
+                        tips: 2
+                    });
+                    flag=false;
+                }
+            }
+        });
+        return flag;
+    }
+
+    function getDataByDeptId(treeNode) {
+        var obj=new Object();
+        obj.deptId=treeNode.id;
+        obj.type="deptSelect";
+        $("#workOrgNo").empty();
+        $("#socialSecurityOrgNo").empty();
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{"data":JSON.stringify(obj)},
+            success: function (data) {
+                postTree = $.fn.zTree.init($("#postTree"),settingPost,data.postTree);
+                $("#businessLine").val(data.businessLine);
+                $("#businessLineHid").val(data.businessLine);
+                var html='<option></option>';
+                $.each(data.workspaceData,function (index,value) {
+                    html+='<option value='+value.areaCode+'>'+value.area+'</option>'
+                });
+                $("#workOrgNo").append(html);
+                $("#socialSecurityOrgNo").append(html);
+                $('.test-tr').hide();
+                $('.tr-index-' + data.businessLine).show();
+                form.render('select');
+            }
+        });
+    }
+
+    function getBusinessByOnclick(treeNode) {
+        var obj=new Object();
+        obj.deptId=$("#deptHid").val();
+        obj.postId=treeNode.id;
+        obj.type="gwSelect";
+        /*清空之前append的值*/
+        $("#position").empty();
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfempapv/getSelectData',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{"data":JSON.stringify(obj)},
+            success: function (data) {
+                if(data.success){
+                    var html='<option></option>';
+                    $.each(data.businessData,function (index,value) {
+                        html+='<option value='+value.posCode+'>'+value.posName+'</option>'
+                    });
+                    $("#position").append(html);
+                }else{
+                    /*清空岗位的选择值*/
+                    $("#postHid").val("");
+                    $("#post").val("");
+                    layer.tips(data.msg,'#post', {
+                        tips: 2
+                    });
+                }
+                form.render();
+            }
+        });
+    }
+
+    function showPostTree() {
+        if(postTree!=null){
+            var zTree = $.fn.zTree.getZTreeObj("postTree");
+            var node = zTree.getNodeByParam("id",$("#postHid").val(), null);
+            zTree.selectNode(node);
+            postTree.expandAll(true);
+
+            var postOffset = $("#post").offset();
+            $("#postContent").css({
+                left: postOffset.left  + "px",
+                top: postOffset.top +28+ "px"
+            }).slideDown("fast");
+            $("body").bind("mousedown",function onBodyDown(event) {
+                var length = $(event.target).parents("#postTree").length;
+                var id = event.target.id;
+                if(!(length==1||(length==0&&id=='postTree'))){
+                    $("#postContent").fadeOut("fast");
+                    $("body").unbind("mousedown", onBodyDown);
+                }
+            });
+        }else{
+            layer.tips('请先选择部门！','#post', {
+                tips: 2
+            });
+        }
+    }
+
+    function empCheckAjax(obj,id) {
+        obj.operType="edit";
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfempapv/empCheck',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{'data':JSON.stringify(obj)},
+            success: function (data) {
+                if(!data.success){
+                    id.val("");
+                    layer.tips('录入失败:'+data.msg,id, {
+                        tips: 2
+                    });
+                }
+            }
+        });
+    }
+
+
+    function forReturn(){
+        var url ="${ctx}/hqclcf/hqclcfempapv/init.mvc";
+        window.location.href=url;
+    }
+
+    var index;
+    function submitForm() {
+        $( "#empEditForm" ).submit();
+    }
+
+    $(function() {
+        $('#empEditForm').form({
+            url : '${ctx}/hqclcf/hqclcfempapv/edit.mvc',
+            onSubmit : function() {
+                var flag = validateForm();
+                if(flag){
+                    index = layer.load(1, {shade: true});
+                }
+                return flag;
+            },
+            success : function(result) {
+                console.log(result);
+                layer.close(index);
+                data = $.parseJSON(result);
+                if(data.code==200){
+                    layer.msg("提交成功", {icon: 6});
+                    setTimeout(
+                        function() {
+                            var url ="${ctx}/hqclcf/hqclcfempapv/init.mvc";
+                            window.location.href=url;
+                        }, 1000);
+                }else{
+                    layer.msg("提交失败："+data.msg, {icon: 5});
+                }
+            }
+        });
+    });
+
+    function validateForm() {
+        var flag=true;
+        var a=$(".layui-input");
+        $.each(a,function (index,item) {
+            var dname = $(item).closest('td').prev();
+            var isVisible = $(dname).is(':visible');
+            if(!$(item).val().trim() && dname.text().trim() !== '公司邮箱' && isVisible&& dname.text().trim() !=='职级') {
+                validateAddDeptTips($(dname).text().trim(),"不能为空");
+                flag=false;
+                return false;
+            }
+        });
+
+        return flag;
+    }
+
+    function validateAddDeptTips(filedName,msg){
+        layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+            anim:6,
+        });
+    }
+
+    /*预览*/
+    function previewHdsfFile(empNo,fileType) {
+        if(checkIspreviewHdsfFile(empNo,fileType)){
+            window.open('${ctx}/hqclcf/hqclcfempapv/previewHdsfFile?empNo='+empNo+'&fileType='+fileType);
+        }else{
+            validateAddDeptTips("此格式","不支持预览！");
+        }
+
+    }
+
+    function checkIspreviewHdsfFile(empNo,fileType) {
+        var flag=true;
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfempapv/checkIspreviewHdsfFile',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data:{"empNo":empNo,"fileType":fileType},
+            success: function (data) {
+                if(data.code!=200){
+                    flag=false;
+                }
+            }
+        });
+        return flag;
+    }
+
+   /* 下载*/
+    function downloadHdsfFile(empNo,fileType) {
+        window.location='${ctx}/hqclcf/hqclcfempapv/downloadHdsfFile?empNo='+empNo+'&fileType='+fileType;
+    }
+</script>
+</html>
+

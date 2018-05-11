@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cf.TimeAutomatedMapper">
+
+	<!-- 1、配置返回结果Map和参数Map -->
+
+	<resultMap type="com.zhph.model.cf.TimeAutomated" id="baseTimeAutomatedResultMap">
+		<id property="priNumber" column="PRI_NUMBER"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="gzym" column="GZ_YM"/>
+		<result property="days" column="DAYS"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="creator" column="CREATOR"/>
+		<result property="updator" column="UPDATOR"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="one" column="ONE"/>
+		<result property="two" column="TWO"/>
+		<result property="three" column="THREE"/>
+		<result property="four" column="FOUR"/>
+		<result property="five" column="FIVE"/>
+		<result property="six" column="SIX"/>
+		<result property="seven" column="SEVEN"/>
+		<result property="eight" column="EIGHT"/>
+		<result property="nine" column="NINE"/>
+		<result property="ten" column="TEN"/>
+		<result property="eleven" column="ELEVEN"/>
+		<result property="twelve" column="TWELVE"/>
+		<result property="thirteen" column="THIRTEEN"/>
+		<result property="fourteen" column="FOURTEEN"/>
+		<result property="fifteen" column="FIFTEEN"/>
+		<result property="sixteen" column="SIXTEEN"/>
+		<result property="seventeen" column="SEVENTEEN"/>
+		<result property="eighteen" column="EIGHTEEN"/>
+		<result property="nineteen" column="NINETEEN"/>
+		<result property="twenty" column="TWENTY"/>
+		<result property="twentyOne" column="TWENTY_ONE"/>
+		<result property="twentyTwo" column="TWENTY_TWO"/>
+		<result property="twentyThree" column="TWENTY_THREE"/>
+		<result property="twentyFour" column="TWENTY_FOUR"/>
+		<result property="twentyFive" column="TWENTY_FIVE"/>
+		<result property="twentySix" column="TWENTY_SIX"/>
+		<result property="twentySeven" column="TWENTY_SEVEN"/>
+		<result property="twentyEight" column="TWENTY_EIGHT"/>
+		<result property="twentyNine" column="TWENTY_NINE"/>
+		<result property="thirty" column="THIRTY"/>
+		<result property="thirtyOne" column="THIRTY_ONE"/>
+	</resultMap>
+
+	<resultMap type="com.zhph.model.cf.TimeAutomated" id="timeAutomatedResultMap" extends="baseTimeAutomatedResultMap">
+	</resultMap>
+
+	<parameterMap type="com.zhph.model.cf.TimeAutomated" id="timeAutomatedParameterMap">
+		<parameter property="priNumber" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="empNo" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="gzym" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="days" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="createTime" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="updateTime" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="creator" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="updator" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="jobName" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="one" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="two" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="three" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="four" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="five" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="six" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="seven" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="eight" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="nine" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="ten" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="eleven" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twelve" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="thirteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="fourteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="fifteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="sixteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="seventeen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="eighteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="nineteen" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twenty" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyOne" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyTwo" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyThree" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyFour" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyFive" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentySix" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentySeven" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyEight" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="twentyNine" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="thirty" javaType="int"  jdbcType="INTEGER"/>
+		<parameter property="thirtyOne" javaType="int"  jdbcType="INTEGER"/>
+	</parameterMap>
+
+
+	<!-- 2、各个SeqID -->
+
+	<insert id="add" parameterMap="timeAutomatedParameterMap">
+			<selectKey order="BEFORE" keyProperty="priNumber" resultType="long">SELECT SQ_CF_TIMEAUTOMATED.NEXTVAL FROM DUAL</selectKey>
+		INSERT INTO CF_TIMEAUTOMATED (PRI_NUMBER, EMP_NO, GZ_YM, DAYS, CREATE_TIME, UPDATE_TIME, CREATOR, UPDATOR, JOB_NAME, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN, SIXTEEN, SEVENTEEN, EIGHTEEN, NINETEEN, TWENTY, TWENTY_ONE, TWENTY_TWO, TWENTY_THREE, TWENTY_FOUR, TWENTY_FIVE, TWENTY_SIX, TWENTY_SEVEN, TWENTY_EIGHT, TWENTY_NINE, THIRTY, THIRTY_ONE) VALUES (
+			#{priNumber, jdbcType=INTEGER}, 
+			#{empNo, jdbcType=VARCHAR}, 
+			#{gzym, jdbcType=VARCHAR}, 
+			#{days, jdbcType=INTEGER}, 
+			#{createTime, jdbcType=VARCHAR}, 
+			#{updateTime, jdbcType=VARCHAR}, 
+			#{creator, jdbcType=VARCHAR}, 
+			#{updator, jdbcType=VARCHAR}, 
+			#{jobName, jdbcType=VARCHAR}, 
+			#{one, jdbcType=INTEGER}, 
+			#{two, jdbcType=INTEGER}, 
+			#{three, jdbcType=INTEGER}, 
+			#{four, jdbcType=INTEGER}, 
+			#{five, jdbcType=INTEGER}, 
+			#{six, jdbcType=INTEGER}, 
+			#{seven, jdbcType=INTEGER}, 
+			#{eight, jdbcType=INTEGER}, 
+			#{nine, jdbcType=INTEGER}, 
+			#{ten, jdbcType=INTEGER}, 
+			#{eleven, jdbcType=INTEGER}, 
+			#{twelve, jdbcType=INTEGER}, 
+			#{thirteen, jdbcType=INTEGER}, 
+			#{fourteen, jdbcType=INTEGER}, 
+			#{fifteen, jdbcType=INTEGER}, 
+			#{sixteen, jdbcType=INTEGER}, 
+			#{seventeen, jdbcType=INTEGER}, 
+			#{eighteen, jdbcType=INTEGER}, 
+			#{nineteen, jdbcType=INTEGER}, 
+			#{twenty, jdbcType=INTEGER}, 
+			#{twentyOne, jdbcType=INTEGER}, 
+			#{twentyTwo, jdbcType=INTEGER}, 
+			#{twentyThree, jdbcType=INTEGER}, 
+			#{twentyFour, jdbcType=INTEGER}, 
+			#{twentyFive, jdbcType=INTEGER}, 
+			#{twentySix, jdbcType=INTEGER}, 
+			#{twentySeven, jdbcType=INTEGER}, 
+			#{twentyEight, jdbcType=INTEGER}, 
+			#{twentyNine, jdbcType=INTEGER}, 
+			#{thirty, jdbcType=INTEGER}, 
+			#{thirtyOne, jdbcType=INTEGER}
+		)
+	</insert>
+
+
+	<select id="getById" resultMap="timeAutomatedResultMap" parameterType="string">
+		SELECT * FROM CF_TIMEAUTOMATED WHERE PRI_NUMBER = #{value}
+	</select>
+
+	<select id="page" resultMap="timeAutomatedResultMap" parameterType="com.zhph.model.cf.TimeAutomated">
+		select time .*,
+		emp.DEPT_NO,emp.EMP_NAME as empName,hp.POST_NAME jobName,emp.position rankType,
+		(select TO_CHAR(wm_concat(dept_type||'='||dept_name)) from HQCLCF_DEPT
+			where dept_type
+			is not null and id !=1 start with ID=
+			(select ID from
+			hqclcf_dept temp where temp.dept_code=emp.DEPT_NO)
+			CONNECT BY PRIOR PID =
+			ID) as deptInfo
+		 FROM CF_TIMEAUTOMATED time INNER JOIN 
+		HQCLCF_EMP_GZYM_REF emp ON time.EMP_NO=emp.EMP_NO AND emp.GZYM=time.GZ_YM LEFT JOIN HQCLCF_POST hp 
+		on emp.POST = hp.POST_NO AND hp.STATUS=1 where 1=1 
+		<!-- 各种条件 --> 
+		<if test="gzym != null and gzym !='' ">
+			 AND time.GZ_YM=#{gzym}
+		</if>
+		<if test="empNo != null and empNo !='' ">
+			<![CDATA[ AND time.EMP_NO LIKE CONCAT(CONCAT('%', #{empNo}),'%')]]>
+		</if>		
+		<if test="empName != null and empName !='' ">
+			<![CDATA[ AND emp.EMP_NAME LIKE CONCAT(CONCAT('%', #{empName}),'%')]]>
+		</if>		
+		<if test="ids != null ">
+			 AND time.PRI_NUMBER in 
+			 <foreach collection="ids" close=")" open="(" separator="," item="id">
+			 	#{id}
+			 </foreach>
+		</if>
+		<if test="region != null and region !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{region} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="filiale != null and filiale !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{filiale} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="businessDept != null and businessDept !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{businessDept} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="deptCode != null and deptCode !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{deptCode} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="deptNos !=null">
+			 and emp.DEPT_NO in 
+			 <foreach collection="deptNos" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+		</if>
+		 ORDER BY time.GZ_YM DESC
+	</select>
+
+	<select id="getTotal" resultType="long" parameterType="com.zhph.model.cf.TimeAutomated">
+		select count(1) FROM CF_TIMEAUTOMATED time INNER JOIN 
+		HQCLCF_EMP emp ON time.EMP_NO=emp.EMP_NO AND emp.GZYM=time.GZ_YM LEFT JOIN HQCLCF_BUSINESS_SCHEDULED hbs 
+		on emp.POSITION = hbs.POS_CODE AND hbs.STATUS=1 where 1=1 
+		<!-- 各种条件 --> 
+		<if test="gzym != null and gzym !='' ">
+			 AND time.GZ_YM=#{gzym}
+		</if>
+		<if test="empNo != null and empNo !='' ">
+			<![CDATA[ AND time.EMP_NO LIKE CONCAT(CONCAT('%', #{empNo}),'%')]]>
+		</if>		
+		<if test="empName != null and empName !='' ">
+			<![CDATA[ AND emp.EMP_NAME LIKE CONCAT(CONCAT('%', #{empName}),'%')]]>
+		</if>		
+		<if test="ids != null ">
+			 AND time.PRI_NUMBER in 
+			 <foreach collection="ids" close=")" open="(" separator="," item="id">
+			 	#{id}
+			 </foreach>
+		</if>
+		<if test="region != null and region !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{region} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="filiale != null and filiale !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{filiale} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="businessDept != null and businessDept !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{businessDept} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="deptCode != null and deptCode !='' ">
+			  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=emp.DEPT_NO START WITH ID=#{deptCode} CONNECT by PRIOR ID=PID)
+		</if>
+		<if test="deptIds !=null">
+			 and emp.DEPT_ID in 
+			 <foreach collection="deptIds" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+		</if>		
+	</select>
+
+	<delete id="deleteById" parameterType="string">
+		DELETE FROM CF_TIMEAUTOMATED WHERE PRI_NUMBER = #{value}
+	</delete>
+		<delete id="deleteByEmpnoAndGzym" parameterType="map">
+		DELETE FROM CF_TIMEAUTOMATED WHERE EMP_NO=#{empNo} AND GZ_YM = #{gzym}
+	</delete>
+	<delete id="deleteByEmpnosAndGzym" parameterType="map">
+		DELETE FROM CF_TIMEAUTOMATED WHERE GZ_YM = #{gzym}
+		<if test="empNos  != null">
+			AND EMP_NO IN 
+			<foreach collection="empNos" open="(" close=")" separator=","  item="item">
+				#{item}  
+			</foreach>
+		</if>
+	</delete>
+	<update id="edit" parameterType="com.zhph.model.cf.TimeAutomated">
+		UPDATE CF_TIMEAUTOMATED 
+		<!-- 各种更改的字段 --> 
+		<set>
+			<if test="empNo != null and empNo !='' ">
+				EMP_NO = #{empNo, jdbcType=VARCHAR}, 
+			</if>
+			<if test="gzym != null and gzym !='' ">
+				GZ_YM = #{gzym, jdbcType=VARCHAR}, 
+			</if>
+			<if test="days != null ">
+				DAYS = #{days, jdbcType=INTEGER}, 
+			</if>
+			<if test="createTime != null and createTime !='' ">
+				CREATE_TIME = #{createTime, jdbcType=VARCHAR}, 
+			</if>
+			<if test="updateTime != null and updateTime !='' ">
+				UPDATE_TIME = #{updateTime, jdbcType=VARCHAR}, 
+			</if>
+			<if test="creator != null and creator !='' ">
+				CREATOR = #{creator, jdbcType=VARCHAR}, 
+			</if>
+			<if test="updator != null and updator !='' ">
+				UPDATOR = #{updator, jdbcType=VARCHAR}, 
+			</if>
+			<if test="jobName != null and jobName !='' ">
+				JOB_NAME = #{jobName, jdbcType=VARCHAR}, 
+			</if>
+			<if test="one != null ">
+				ONE = #{one, jdbcType=INTEGER}, 
+			</if>
+			<if test="two != null ">
+				TWO = #{two, jdbcType=INTEGER}, 
+			</if>
+			<if test="three != null ">
+				THREE = #{three, jdbcType=INTEGER}, 
+			</if>
+			<if test="four != null ">
+				FOUR = #{four, jdbcType=INTEGER}, 
+			</if>
+			<if test="five != null ">
+				FIVE = #{five, jdbcType=INTEGER}, 
+			</if>
+			<if test="six != null ">
+				SIX = #{six, jdbcType=INTEGER}, 
+			</if>
+			<if test="seven != null ">
+				SEVEN = #{seven, jdbcType=INTEGER}, 
+			</if>
+			<if test="eight != null ">
+				EIGHT = #{eight, jdbcType=INTEGER}, 
+			</if>
+			<if test="nine != null ">
+				NINE = #{nine, jdbcType=INTEGER}, 
+			</if>
+			<if test="ten != null">
+				TEN = #{ten, jdbcType=INTEGER}, 
+			</if>
+			<if test="eleven != null  ">
+				ELEVEN = #{eleven, jdbcType=INTEGER}, 
+			</if>
+			<if test="twelve != null ">
+				TWELVE = #{twelve, jdbcType=INTEGER}, 
+			</if>
+			<if test="thirteen != null ">
+				THIRTEEN = #{thirteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="fourteen != null ">
+				FOURTEEN = #{fourteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="fifteen != null ">
+				FIFTEEN = #{fifteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="sixteen != null ">
+				SIXTEEN = #{sixteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="seventeen != null ">
+				SEVENTEEN = #{seventeen, jdbcType=INTEGER}, 
+			</if>
+			<if test="eighteen != null ">
+				EIGHTEEN = #{eighteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="nineteen != null ">
+				NINETEEN = #{nineteen, jdbcType=INTEGER}, 
+			</if>
+			<if test="twenty != null ">
+				TWENTY = #{twenty, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyOne != null ">
+				TWENTY_ONE = #{twentyOne, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyTwo != null ">
+				TWENTY_TWO = #{twentyTwo, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyThree != null ">
+				TWENTY_THREE = #{twentyThree, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyFour != null ">
+				TWENTY_FOUR = #{twentyFour, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyFive != null ">
+				TWENTY_FIVE = #{twentyFive, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentySix != null ">
+				TWENTY_SIX = #{twentySix, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentySeven != null ">
+				TWENTY_SEVEN = #{twentySeven, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyEight != null ">
+				TWENTY_EIGHT = #{twentyEight, jdbcType=INTEGER}, 
+			</if>
+			<if test="twentyNine != null  ">
+				TWENTY_NINE = #{twentyNine, jdbcType=INTEGER}, 
+			</if>
+			<if test="thirty != null ">
+				THIRTY = #{thirty, jdbcType=INTEGER}, 
+			</if>
+			<if test="thirtyOne != null ">
+				THIRTY_ONE = #{thirtyOne, jdbcType=INTEGER}, 
+			</if>
+		</set>
+			WHERE PRI_NUMBER = #{priNumber, jdbcType=INTEGER} 
+	</update>
+
+
+	<select id="queryAutoMatedByGzym" resultMap="timeAutomatedResultMap" parameterType="java.lang.String">
+		select cf.* from CF_TIMEAUTOMATED cf
+		right join HQCLCF_EMP e
+		on cf.EMP_NO = e.EMP_NO
+		<where>
+			<if test=" value!=null and value!='' ">
+				and cf.gz_ym = #{value,jdbcType=VARCHAR}
+				and e.BUSINESS_LINE = '2'
+				and e.STATUS_APP = '1'
+			</if>
+		</where>
+	</select>
+	<select id="queryByEmpnoAndGzym" resultMap="timeAutomatedResultMap" parameterType="map">
+		SELECT * FROM CF_TIMEAUTOMATED WHERE EMP_NO=#{empNo} AND GZ_YM = #{gzym}
+	</select>
+
+	<select id="queryByEmpNoAndGzym" resultMap="timeAutomatedResultMap" parameterType="map">
+		select cf.* from cf_timeautomated cf
+		<where>
+			<if test=" empNo!=null and empNo!='' ">
+				and cf.EMP_NO = #{empNo}
+			</if>
+			<if test=" gzym!=null and gzym!='' ">
+				and cf.GZ_YM = #{gzym}
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfBusinessMapper">
+  <resultMap id="BaseResultMap" type="com.zhph.model.hqclcf.HqclcfBusiness">
+    <id column="priNumber" jdbcType="VARCHAR" property="prinumber" />
+    <result column="pos_code" jdbcType="VARCHAR" property="posCode" />
+    <result column="pos_name" jdbcType="VARCHAR" property="posName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="updator" jdbcType="VARCHAR" property="updator" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="COMMENTS" jdbcType="VARCHAR" property="comments" />
+    <result column="rank_name" jdbcType="VARCHAR" property="rankName" />
+    <result column="RANK_CODE" jdbcType="VARCHAR" property="rankCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    priNumber, pos_code, pos_name, status, creator, create_time,updator,update_time,
+    comments,RANK_NAME,RANK_CODE
+  </sql>
+
+  <select id="queryBusinessByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hqclcf_business_scheduled
+    where priNumber = #{priNumber,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectRankList" resultMap="RankResultMap">
+    select
+    prinumber,no,name,status,create_date,create_name,comments
+    from hqclcf_rank_scheduled
+  </select>
+
+  <select id="checkName" resultMap="RankResultMap">
+    select
+    h.*
+    from hqclcf_business_scheduled h
+    <where>
+      <if test="posName !=null and posName !='' ">
+        and h.POS_NAME = #{posName}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from hqclcf_business_scheduled
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zhph.model.hqclcf.HqclcfBusiness">
+    insert into hqclcf_business_scheduled (priNumber, pos_code, pos_name, 
+      status, creator, create_time, 
+      updator, update_time, comments,rank_name,rank_code
+      )
+    values (SQ_ZHPH_HQCLCF_BUSINESS.NEXTVAL, #{posCode,jdbcType=VARCHAR}, #{posName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updator,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR},#{rankName,jdbcType=VARCHAR},
+      #{rankCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhph.model.hqclcf.HqclcfBusiness">
+    insert into hqclcf_business_scheduled
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prinumber != null">
+        priNumber,
+      </if>
+      <if test="posCode != null">
+        pos_code,
+      </if>
+      <if test="posName != null">
+        pos_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updator != null">
+        updator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="comments != null">
+        comments,
+      </if>
+      <if test="rankName != null">
+        rank_name,
+      </if>
+      <if test="rankCode != null and rankCode !='' ">
+        rank_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      SQ_ZHPH_HQCLCF_RANK.NEXTVAL,
+      <if test="posCode != null">
+        #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="posName != null">
+        #{posName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updator != null">
+        #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="rankName != null">
+        #{rankName,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCode != null and rankCode !='' ">
+        #{rankCode,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhph.model.hqclcf.HqclcfBusiness">
+    update hqclcf_business_scheduled
+    <set>
+      <if test="posCode != null">
+        pos_code = #{posCode,jdbcType=VARCHAR},
+      </if>
+      <if test="posName != null">
+        pos_name = #{posName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updator != null">
+        updator = #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="comments != null">
+        comments = #{comments,jdbcType=VARCHAR},
+      </if>
+       <if test="rankName != null">
+        rank_name = #{rankName,jdbcType=VARCHAR},
+      </if>
+      <if test="rankCode != null and rankCode !='' ">
+        rank_code = #{rankCode,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where priNumber = #{prinumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhph.model.hqclcf.HqclcfBusiness">
+    update hqclcf_business_scheduled
+    set pos_code = #{posCode,jdbcType=VARCHAR},
+      pos_name = #{posName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      updator = #{updator,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      comments = #{comments,jdbcType=VARCHAR},
+      rank_name = #{rankName,jdbcType=VARCHAR},
+      rank_code = #{rankCode,jdbcType=VARCHAR}
+    where priNumber = #{priNumber,jdbcType=VARCHAR}
+  </update>
+    <!-- 手动添加 -->
+   <select id="getBusinessByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from hqclcf_business_scheduled
+        <where>
+            <if test="posCode!=null and posCode!=''">
+                and POS_CODE like '%${posCode}%'
+            </if>
+            <if test="posName!=null and posName!=''">
+                and POS_NAME like '%${posName}%'
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+  <resultMap id="RankResultMap" type="com.zhph.model.hqclcf.HqclcfRank">
+    <id column="priNumber" jdbcType="VARCHAR" property="prinumber" />
+    <result column="no" jdbcType="VARCHAR" property="no" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_date" jdbcType="VARCHAR" property="createDate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="comments" jdbcType="VARCHAR" property="comments" />
+  </resultMap>
+
+
+  <select id="queryBusinessByDeptIdAndPost" resultMap="BaseResultMap">
+    select
+      prinumber,
+      pos_code,
+      pos_name,
+      status,
+      creator,
+      create_time,
+      updator,
+      update_time,
+      comments,
+      rank_name
+    from
+      (
+        select distinct
+        rank_no
+        from
+        hqclcf_post
+        where
+        DEPT_NO = #{deptId}
+        START with pri_number = #{postId} connect by post_pid = prior pri_number
+        group by
+        rank_no
+      ) A
+    left join hqclcf_business_scheduled B on B.pos_code = A .rank_no
+  </select>
+
+  <!-- 手动添加 -->
+  <select id="queryBusinessByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from hqclcf_business_scheduled
+    where pos_code = #{posCode,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

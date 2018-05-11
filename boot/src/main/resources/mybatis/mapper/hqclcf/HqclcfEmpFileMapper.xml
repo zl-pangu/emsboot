@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfEmpFileMapper">
+	<resultMap id="hqclcfEmpFileResultMap" type="com.zhph.model.hqclcf.HqclcfEmpFile">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+		<result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+		<result column="FILE_EXTEND" property="fileExtend" jdbcType="VARCHAR" />
+		<result column="FILE_TYPE" property="fileType" jdbcType="INTEGER" />
+		<result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+		<result column="UPDATOR" property="updator" jdbcType="VARCHAR" />
+		<result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="UPDATETIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="BUSINESS_LINE" property="businessLine" jdbcType="INTEGER" />
+		<result column="FILE_TYPE_FLAG" property="fileTypeFlag" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="hqclcfEmpTmepFileResultMap" type="com.zhph.model.hqclcf.HqclcfEmpTempFile">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+		<result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+		<result column="FILE_EXTEND" property="fileExtend" jdbcType="VARCHAR" />
+		<result column="FILE_TYPE" property="fileType" jdbcType="INTEGER" />
+		<result column="BUSINESS_LINE" property="businessLine" jdbcType="INTEGER" />
+		<result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+		<result column="CREATETIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="FID" property="fid" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!--表中所有字段-->
+	<sql id="Base_Column_List">
+		ID,
+		EMP_NO,
+		FILE_NAME,
+		FILE_EXTEND,
+		FILE_TYPE,
+		CREATOR,
+		UPDATOR,
+		CREATETIME,
+		UPDATETIME,
+		BUSINESS_LINE,
+		FILE_TYPE_FLAG
+	</sql>
+
+	<!--插入的实体对象值，允许为空-->
+	<sql id="Base_Column_Filed">
+		#{id,jdbcType=BIGINT},
+		#{empNo,jdbcType=VARCHAR},
+		#{fileName,jdbcType=VARCHAR},
+		#{fileExtend,jdbcType=VARCHAR},
+		#{fileType,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{updator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{businessLine,jdbcType=INTEGER},
+		#{fileTypeFlag,jdbcType=VARCHAR}
+	</sql>
+
+	<!--查询条件-->
+	<sql id="Example_Where_Clause">
+		<where>
+			<if test="id != null and id !='' or id==0 ">
+				AND ID=#{id}
+			</if>
+			<if test="empNo!=null and empNo!='' ">
+				AND EMP_NO=#{empNo}
+			</if>
+			<if test="fileType!=null and fileType!='' ">
+				AND FILE_TYPE=#{fileType}
+			</if>
+			<if test="businessLine!=null and businessLine!='' ">
+				AND BUSINESS_LINE=#{businessLine}
+			</if>
+		</where>
+	</sql>
+
+	<!--查询文件数据-->
+	<select id="queryEmpFile" resultMap="hqclcfEmpFileResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM HQCLCF_EMP_FILE
+		<include refid="Example_Where_Clause"/>
+		ORDER  BY ID DESC
+	</select>
+
+	<select id="queryEmpFileByEmpNoAndFileType" resultMap="hqclcfEmpFileResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM HQCLCF_EMP_FILE
+		<where>
+			<if test="empNo!=null and empNo!='' ">
+				AND EMP_NO=#{empNo}
+			</if>
+			<if test="fileType!=null and fileType!='' ">
+				AND FILE_TYPE=#{fileType}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryFileByParam" resultMap="hqclcfEmpFileResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM HQCLCF_EMP_FILE
+		<where>
+			<if test="empNo!=null and empNo!='' ">
+				AND EMP_NO=#{empNo}
+			</if>
+			<if test="fileType!=null and fileType!='' ">
+				AND FILE_TYPE=#{fileType}
+			</if>
+		</where>
+	</select>
+	<!--插入一条数据-->
+	<insert id="insertempFile" parameterType="com.zhph.model.hqclcf.HqclcfEmpFile">
+		<selectKey resultType="Long" keyProperty="id" order="BEFORE">
+			SELECT SQ_HQCLCF_EMP_FILE.nextval AS ID FROM DUAL
+		</selectKey>
+		INSERT INTO HQCLCF_EMP_FILE( <include refid="Base_Column_List"/>)
+		VALUES(<include refid="Base_Column_Filed"/>)
+	</insert>
+
+	<!--批量插入数据-->
+	<insert id="batchInsertFile" parameterType="com.zhph.model.hqclcf.HqclcfEmpFile">
+		INSERT INTO HQCLCF_EMP_FILE
+		(ID,
+		EMP_NO,
+		FILE_NAME,
+		FILE_EXTEND,
+		FILE_TYPE,
+		CREATOR,
+		UPDATOR,
+		CREATETIME,
+		UPDATETIME,
+		BUSINESS_LINE
+		)
+		SELECT  SQ_HQCLCF_EMP_FILE.nextval ID,A.* FROM(
+		<foreach collection="files" item="item" index="index" separator="UNION ALL">
+			SELECT
+				#{item.empNo,jdbcType=VARCHAR},
+				#{item.fileName,jdbcType=VARCHAR},
+				#{item.fileExtend,jdbcType=VARCHAR},
+				#{item.fileType,jdbcType=INTEGER},
+				#{item.creator,jdbcType=VARCHAR},
+				#{item.updator,jdbcType=VARCHAR},
+				#{item.createTime,jdbcType=TIMESTAMP},
+				#{item.updateTime,jdbcType=TIMESTAMP},
+				#{item.businessLine,jdbcType=INTEGER}
+			FROM dual
+		</foreach>
+		)A
+	</insert>
+
+	<!--删除-->
+	<delete id="deleteFile" parameterType="Object">
+ 		DELETE  FROM  HQCLCF_EMP_FILE WHERE  EMP_NO=#{empNo} AND FILE_TYPE=#{fileType}
+	</delete>
+
+	<delete id="deleteFileByBusiness" parameterType="Object">
+		DELETE  FROM  HQCLCF_EMP_FILE
+		<where>
+			<if test="id != null and id !='' or id==0 ">
+				AND ID=#{id}
+			</if>
+			<if test="empNo!=null and empNo!='' ">
+				AND EMP_NO=#{empNo}
+			</if>
+			<if test="fileType!=null and fileType!='' ">
+				AND FILE_TYPE=#{fileType}
+			</if>
+			<if test="businessLine!=null and businessLine!='' ">
+				AND BUSINESS_LINE=#{businessLine}
+			</if>
+		</where>
+	</delete>
+
+	<select id="getFilesByEmpNo" resultMap="hqclcfEmpFileResultMap">
+		SELECT * FROM HQCLCF_EMP_FILE where EMP_NO=#{empNo}
+	</select>
+
+	<!--更新业务条线-->
+	<update id="editBl" parameterType="com.zhph.model.hqclcf.HqclcfEmp">
+		UPDATE HQCLCF_EMP_FILE SET BUSINESS_LINE=#{businessLine,jdbcType=INTEGER} WHERE EMP_NO=#{empNo,jdbcType=VARCHAR}
+	</update>
+
+	<update id="eidtEmpFile" parameterType="com.zhph.model.hqclcf.HqclcfEmp">
+		UPDATE HQCLCF_EMP_FILE
+		<set>
+			<if test="id != null and id !='' or id==0 ">
+			   ID=#{id},
+			</if>
+			<if test="empNo!=null and empNo!='' ">
+				EMP_NO=#{empNo},
+			</if>
+			<if test="fileType!=null and fileType!='' ">
+				FILE_TYPE=#{fileType},
+			</if>
+			<if test="businessLine!=null and businessLine!='' ">
+				BUSINESS_LINE=#{businessLine}
+			</if>
+		</set>
+	</update>
+	
+	<select id="getTempFilesByEmpNo" resultMap="hqclcfEmpTmepFileResultMap">
+		SELECT * FROM HQCLCF_EMP_FILE_TEMP where EMP_NO=#{empNo} AND FID =#{fid}
+	</select>
+	
+	<delete id="delTempFile" parameterType="Object">
+    	delete from HQCLCF_EMP_FILE_TEMP where EMP_NO=#{empNo} and FID =#{fid}
+	</delete>
+	
+	<delete id="delTempTempFile" parameterType="Object">
+    	delete from HQCLCF_EMP_FILE_TEMP where EMP_NO=#{empNo} and FILE_TYPE =#{fileType} and FID =#{fid}
+	</delete>
+	
+	<insert id="insertEmpTempFile" parameterType="com.zhph.model.hqclcf.HqclcfEmpTempFile">
+		<selectKey resultType="Long" keyProperty="id" order="BEFORE">
+			SELECT SQ_HQCLCF_EMP_FILE_TEMP.nextval AS ID FROM DUAL
+		</selectKey>
+		INSERT INTO HQCLCF_EMP_FILE_TEMP( 
+			ID,
+			EMP_NO,
+			FILE_NAME,
+			FILE_EXTEND,
+			FILE_TYPE,
+			BUSINESS_LINE,
+			CREATOR,
+			CREATETIME,
+			FID
+		)VALUES(
+			#{id,jdbcType=BIGINT},
+			#{empNo,jdbcType=VARCHAR},
+			#{fileName,jdbcType=VARCHAR},
+			#{fileExtend,jdbcType=VARCHAR},
+			#{fileType,jdbcType=INTEGER},
+			#{businessLine,jdbcType=INTEGER},
+			#{creator,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{fid,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+</mapper>

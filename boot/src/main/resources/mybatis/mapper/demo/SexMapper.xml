@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.demo.SexMapper">
+
+	<resultMap id="ResultMap" type="com.zhph.model.Sex">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="SEX_NAME" property="sexName" jdbcType="VARCHAR" />
+		<result column="SEX_VALUE" property="sexValue" jdbcType="INTEGER" />
+	</resultMap>
+	
+ 	<!-- 通过编号查询 -->
+	<select id="getAll"  resultMap="ResultMap">
+           SELECT * FROM sex T 
+	</select>
+	
+	<select id="findById" resultMap="ResultMap">
+	
+		SELECT * FROM sex T where t.id=#{id}
+	</select>
+   
+</mapper>

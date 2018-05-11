@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.sys.SysUserMapper">
+	<resultMap id="userResultMap" type="com.zhph.model.sys.SysUser">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="PWD" property="pwd" jdbcType="VARCHAR" />
+		<result column="PWD_BAK" property="pwdBak" jdbcType="VARCHAR" />
+		<result column="TELE_NUM" property="teleNum" jdbcType="VARCHAR" />
+		<result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+		<result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+		<result column="IS_DELETE" property="isDelete" jdbcType="INTEGER" />
+		<result column="IS_ENABLE" property="isEnable" jdbcType="INTEGER" />
+		<result column="IS_SUPER_ADMIN" property="isSuperAdmin" jdbcType="INTEGER" />
+		<result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP" />
+		<result column="LOGIN_ERROR_COUNT" property="loginErrorCount" jdbcType="INTEGER" />
+		<result column="LAST_CHANGEPWD_TIME" property="lastChangePwdTime" jdbcType="TIMESTAMP" />
+		<result column="CREATOR_USER_ID" property="creatorUserId" jdbcType="VARCHAR" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_USER_ID" property="updateUserId" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="BL_SELECT" property="blSelect" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="queryAllUserByInfo" parameterType="com.zhph.model.sys.SysUser" resultMap="userResultMap">
+		SELECT u.id                  AS id,
+		       u.user_id             AS user_id,
+		       u.user_name           AS user_name,
+		       u.tele_num            AS tele_num,
+		       u.mobile              AS mobile,
+		       u.email               AS email,
+		       u.full_name           AS full_name,
+		       u.emp_no              AS emp_no,
+		       u.is_delete           AS is_delete,
+		       u.is_enable           AS is_enable,
+		       u.is_super_admin      AS is_super_admin,
+		       u.last_login_time     AS last_login_time,
+		       u.login_error_count   AS login_error_count,
+		       u.last_changepwd_time AS last_changepwd_time,
+		       u.creator_user_id     AS creator_user_id,
+		       u.create_time         AS create_time,
+		       u.update_user_id      AS update_user_id,
+		       u.update_time         AS update_time
+		  FROM sys_user u
+		<where>
+		       AND u.is_delete = 0
+			<if test="userName != null and userName != ''">
+				   AND u.user_name LIKE '%${userName}%'
+			</if>
+			<if test="fullName != null and fullName != ''">
+				   AND u.full_name LIKE '%${fullName}%'
+			</if>
+			<if test="empNo != null and empNo != ''">
+				   AND u.emp_no LIKE '%${empNo}%'
+			</if>
+			<if test="isEnable != null">
+				   AND u.is_enable = #{isEnable}
+			</if>
+		</where>
+		 ORDER BY u.create_time DESC
+	</select>
+	
+	<select id="queryUserById" parameterType="java.lang.Long" resultMap="userResultMap">
+		SELECT u.id                  AS id,
+		       u.user_id             AS user_id,
+		       u.user_name           AS user_name,
+		       u.tele_num            AS tele_num,
+		       u.mobile              AS mobile,
+		       u.email               AS email,
+		       u.full_name           AS full_name,
+		       u.emp_no              AS emp_no,
+		       u.is_delete           AS is_delete,
+		       u.is_enable           AS is_enable,
+		       u.is_super_admin      AS is_super_admin,
+		       u.last_login_time     AS last_login_time,
+		       u.login_error_count   AS login_error_count,
+		       u.last_changepwd_time AS last_changepwd_time,
+		       u.creator_user_id     AS creator_user_id,
+		       u.create_time         AS create_time,
+		       u.update_user_id      AS update_user_id,
+		       u.update_time         AS update_time,
+			   u.bl_select          AS bl_select
+		  FROM sys_user u
+		<where>
+			     u.id = #{_parameter}
+		</where>
+	</select>
+	
+	<update id="updateUserToDeleted" parameterType="java.lang.Long">
+		UPDATE sys_user u
+		   SET u.is_delete = 1
+		 WHERE u.id = #{_parameter}
+	</update>
+	
+	<update id="saveEdit" parameterType="com.zhph.model.sys.SysUser">
+		UPDATE sys_user u
+		   SET u.user_name = #{userName},
+		<if test="pwd != null and pwd != ''">
+		       u.pwd = #{pwd},
+		       u.pwd_bak = #{pwdBak},
+		</if>
+		       u.full_name = #{fullName},
+		       u.tele_num = #{teleNum},
+		       u.mobile = #{mobile},
+		       u.email = #{email},
+		       u.emp_no = #{empNo},
+		       u.is_enable = #{isEnable},
+		       u.update_user_id = #{updateUserId},
+		       u.update_time = #{updateTime},
+				u.BL_SELECT=#{blSelect}
+		 WHERE u.id = #{id}
+	</update>
+	
+	<insert id="saveAdd" parameterType="com.zhph.model.sys.SysUser">
+		INSERT
+		  INTO sys_user (id,
+		                 user_id,
+		                 user_name,
+		                 pwd,
+		                 pwd_bak,
+		                 tele_num,
+		                 mobile,
+		                 email,
+		                 full_name,
+		                 emp_no,
+		                 is_delete,
+		                 is_enable,
+		                 is_super_admin,
+		                 creator_user_id,
+		                 create_time,
+		                 BL_SELECT)
+		VALUES (sq_sys_user.nextval,
+		        #{userId},
+		        #{userName},
+		        #{pwd},
+		        #{pwdBak},
+		        #{teleNum},
+		        #{mobile},
+		        #{email},
+		        #{fullName},
+		        #{empNo},
+		        0,
+		        #{isEnable},
+		        0,
+		        #{creatorUserId},
+		        #{createTime},
+		        #{blSelect})
+	</insert>
+	
+	<select id="queryUserByUserId" parameterType="java.lang.String" resultMap="userResultMap">
+		SELECT u.id                  AS id,
+		       u.user_id             AS user_id,
+		       u.user_name           AS user_name,
+		       u.tele_num            AS tele_num,
+		       u.mobile              AS mobile,
+		       u.email               AS email,
+		       u.full_name           AS full_name,
+		       u.emp_no              AS emp_no,
+		       u.is_delete           AS is_delete,
+		       u.is_enable           AS is_enable,
+		       u.is_super_admin      AS is_super_admin,
+		       u.last_login_time     AS last_login_time,
+		       u.login_error_count   AS login_error_count,
+		       u.last_changepwd_time AS last_changepwd_time,
+		       u.creator_user_id     AS creator_user_id,
+		       u.create_time         AS create_time,
+		       u.update_user_id      AS update_user_id,
+		       u.update_time         AS update_time,
+			   u.bl_select           AS bl_select
+		  FROM sys_user u
+		<where>
+			     u.user_id = #{_parameter}
+		</where>
+	</select>
+
+	<select id="queryUserByUserName" parameterType="java.lang.String" resultMap="userResultMap">
+		SELECT u.id                  AS id,
+		       u.user_id             AS user_id,
+		       u.user_name           AS user_name,
+		       u.tele_num            AS tele_num,
+		       u.mobile              AS mobile,
+		       u.email               AS email,
+		       u.full_name           AS full_name,
+		       u.emp_no              AS emp_no,
+		       u.is_delete           AS is_delete,
+		       u.is_enable           AS is_enable,
+		       u.is_super_admin      AS is_super_admin,
+		       u.last_login_time     AS last_login_time,
+		       u.login_error_count   AS login_error_count,
+		       u.last_changepwd_time AS last_changepwd_time,
+		       u.creator_user_id     AS creator_user_id,
+		       u.create_time         AS create_time,
+		       u.update_user_id      AS update_user_id,
+		       u.update_time         AS update_time,
+			   U.bl_select           AS bl_select
+		  FROM sys_user u
+		<where>
+			     u.user_name = #{_parameter}
+		</where>
+	</select>
+
+	<select id="queryUserWithPwdByUserName" parameterType="java.lang.String" resultMap="userResultMap">
+		SELECT u.id                  AS id,
+		       u.user_id             AS user_id,
+		       u.user_name           AS user_name,
+		       u.pwd                 AS pwd,
+		       u.pwd_bak             AS pwd_bak,
+		       u.tele_num            AS tele_num,
+		       u.mobile              AS mobile,
+		       u.email               AS email,
+		       u.full_name           AS full_name,
+		       u.emp_no              AS emp_no,
+		       u.is_delete           AS is_delete,
+		       u.is_enable           AS is_enable,
+		       u.is_super_admin      AS is_super_admin,
+		       u.last_login_time     AS last_login_time,
+		       u.login_error_count   AS login_error_count,
+		       u.last_changepwd_time AS last_changepwd_time,
+		       u.creator_user_id     AS creator_user_id,
+		       u.create_time         AS create_time,
+		       u.update_user_id      AS update_user_id,
+		       u.update_time         AS update_time,
+			   u.bl_select           AS bl_select
+		  FROM sys_user u
+		<where>
+			     u.user_name = #{_parameter}
+		</where>
+	</select>
+
+	<!-- 重置密码错误次数为0 -->
+	<update id="resetLoginErrorCount" parameterType="java.lang.Long">
+		UPDATE sys_user u
+		   SET u.login_error_count = 0
+		 WHERE u.id = #{_parameter}
+	</update>
+	
+	<update id="updateLoginErrorCount" parameterType="com.zhph.model.sys.SysUser">
+		UPDATE sys_user u
+		   SET
+		<if test="isEnable == 0">
+		       u.is_enable = 0,
+		</if>
+		       u.login_error_count = u.login_error_count + 1
+		 WHERE u.user_name = #{userName}
+	</update>
+
+	<update id="saveChangePwd" parameterType="com.zhph.model.sys.SysUser">
+		UPDATE sys_user u
+		   SET u.pwd = #{pwd},
+		       u.pwd_bak = #{pwdBak},
+		       u.last_changepwd_time = #{lastChangePwdTime},
+		       u.login_error_count = #{loginErrorCount}
+		 WHERE u.id = #{id}
+	</update>
+
+	<insert id="batchInsertUserDeptAuth" parameterType="com.zhph.model.sys.dto.SysUserDeptDataAuth">
+		INSERT INTO SYS_USER_DEPTAUTH_REF
+		(ID,
+		USER_ID,
+		DEPT_ID
+		)
+		SELECT  SQ_SYS_USER_DEPTAUTH_REF.nextval ID,A.* FROM(
+		<foreach collection="list" item="item" index="index" separator="UNION ALL">
+			SELECT
+			#{item.userId},
+			#{item.deptAuthId}
+			FROM dual
+		</foreach>
+		)A
+	</insert>
+
+	<delete id="deleteDeptAuth"  parameterType="String">
+		DELETE FROM SYS_USER_DEPTAUTH_REF WHERE USER_ID=#{userId}
+	</delete>
+	
+	<select id="queryDeptIdByUserId" resultType="Long">
+		SELECT DISTINCT B.DEPT_ID FROM SYS_USER A INNER  JOIN SYS_USER_DEPTAUTH_REF B ON A.USER_ID=B.USER_ID WHERE A.ID=#{userId}
+	</select>
+
+
+	<select id="queryUserinfoByuserID" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT
+			USER_ID,FULL_NAME
+		FROM
+			(
+			<if test="creatorUserId!=null and creatorUserId!=''">
+				SELECT
+				*
+				FROM
+				SYS_USER
+				WHERE
+				USER_ID = #{creatorUserId}
+			</if>
+			<if test="creatorUserId!=null and creatorUserId!='' and updateUserId!=null and updateUserId!=''">
+				UNION ALL
+			</if>
+			<if test="updateUserId!=null and updateUserId!=''">
+				SELECT
+				*
+				FROM
+				SYS_USER
+				WHERE
+				USER_ID = #{updateUserId}
+			</if>
+			) GROUP BY USER_ID,FULL_NAME
+	</select>
+	
+	<select id="quertUserCount"  resultType="java.lang.Integer"  parameterType="java.util.HashMap">
+		SELECT count(*) FROM SYS_USER
+		<where>
+			<if test="empNo!=null and empNo!=''">
+				AND  EMP_NO=#{empNo}
+			</if>
+		</where>
+	</select>
+</mapper>

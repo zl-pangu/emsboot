@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cl.ClOrgTaskMapper">
+
+    <resultMap id="orgTaskResultMap" type="com.zhph.model.cl.ClOrgTask">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SALES_TARGET" property="salesTarget" jdbcType="VARCHAR"/>
+        <result column="DEPT_NO" property="deptNo" jdbcType="VARCHAR"/>
+        <result column="GZ_YM" property="gzYm" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllOrgTask" parameterType="com.zhph.model.cl.ClOrgTask" resultMap="orgTaskResultMap">
+        SELECT * FROM CL_ORG_TASK t
+        <where>
+            <if test="deptNo!=null and deptNo!='' ">
+                AND t.DEPT_NO=#{deptNo}
+            </if>
+            <if test="gzYm!=null and gzYm!='' ">
+                AND t.GZ_YM=#{gzYm}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addByOrg" parameterType="com.zhph.model.cl.ClOrgTask">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            SELECT SQ_CL_ORG_TASK_SET.NEXTVAL AS ID FROM DUAL
+        </selectKey>
+        INSERT INTO CL_ORG_TASK (
+        ID,
+        SALES_TARGET,
+        DEPT_NO,
+        GZ_YM,
+        CREATE_DATE,
+        CREATE_NAME
+        )
+        VALUES
+        (SQ_CL_ORG_TASK_SET.NEXTVAL,#{salesTarget,jdbcType=VARCHAR},
+        #{deptNo,jdbcType=VARCHAR},#{gzYm,jdbcType=VARCHAR},
+        #{createName,jdbcType=VARCHAR}#{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    
+    
+    <insert id="insertSomething" parameterType="com.zhph.model.cl.ClOrgTask" >  
+       INSERT INTO CL_ORG_TASK (
+        ID,
+        SALES_TARGET,
+        DEPT_NO,
+        GZ_YM,
+        CREATE_DATE,
+        CREATE_NAME
+        )
+        SELECT  SQ_CL_ORG_TASK_SET.nextval ID,A.* FROM(
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            SELECT
+            #{item.salesTarget,jdbcType=VARCHAR},
+            #{item.deptNo,jdbcType=VARCHAR},
+            #{item.gzYm,jdbcType=VARCHAR},
+            #{item.createDate,jdbcType=TIMESTAMP},
+            #{item.createName,jdbcType=VARCHAR}
+            FROM dual
+        </foreach>
+        )A
+       
+	</insert>  
+
+
+
+<select id="queryList" resultType="java.util.HashMap" parameterType="com.zhph.model.cl.ClOrgTask">
+        SELECT
+            ta.SALES_TARGET AS "salesTarget",
+            ta.GZ_YM AS "gzYm",
+            ta.DEPT_NO AS "orgNo",
+             TO_CHAR(ta.CREATE_DATE,'YYYY-MM-DD HH24:MI:SS') AS "createDate",
+            ta.CREATE_NAME AS "createName",
+            (
+                SELECT
+                    TO_CHAR (
+                        WM_CONCAT (DEPT_TYPE || '=' || DEPT_NAME)
+                    )
+                FROM
+                    HQCLCF_DEPT
+                WHERE
+                    DEPT_TYPE IS NOT NULL
+                AND ID != 1 START WITH ID = (
+                    SELECT
+                        ID
+                    FROM
+                        HQCLCF_DEPT TEMP
+                    WHERE
+                        TEMP.DEPT_CODE = TA.DEPT_NO
+                ) CONNECT BY PRIOR PID = ID
+            ) AS "deptInfo"
+        FROM
+            CL_ORG_TASK ta 
+            <where>
+            <if test="deptNo!=null and deptNo!='' ">
+                AND ta.DEPT_NO=#{deptNo}
+            </if>
+            <if test="gzYm!=null and gzYm!='' ">
+                AND ta.GZ_YM=#{gzYm}
+            </if>
+        </where>
+    </select>
+    
+    <delete id="delByGzYm" parameterType="java.lang.String">
+        delete from CL_ORG_TASK
+        where GZ_YM = #{gzYm,jdbcType=VARCHAR}
+    </delete>
+    
+
+</mapper>

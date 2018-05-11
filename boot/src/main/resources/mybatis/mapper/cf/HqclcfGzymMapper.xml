@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cf.HqclcfGzymMapper">
+    <resultMap id="BaseResultMap" type="com.zhph.model.hqclcf.HqclcfGzym">
+        <id column="pri_number" jdbcType="VARCHAR" property="priNumber" />
+        <result column="up_gzym" jdbcType="VARCHAR" property="upGzym" />
+        <result column="current_gzym" jdbcType="VARCHAR" property="currentGzym" />
+        <result column="next_gzym" jdbcType="VARCHAR" property="nextGzym" />
+        <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+        <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        s.pri_number,
+        s.up_gzym,
+        s.current_gzym,
+        s.next_gzym,
+        s.create_time,
+        s.create_name,
+        s.update_name,
+        s.update_time
+    </sql>
+    <select id="queryXjGzym" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from newsalaryuser.CF_SALARY_GZYM s
+    </select>
+    <select id="queryCurrGzym" resultMap="BaseResultMap">
+       SELECT
+       <include refid="Base_Column_List" />
+        FROM newsalaryuser.CL_SALARY_GZYM s
+        where s.pri_number = 1
+    </select>
+
+    <update id="updateGzym">
+        update
+        newsalaryuser.CF_SALARY_GZYM
+        set
+        up_gzym=to_char(add_months(to_date(up_gzym,'yyyy-MM'),1),'yyyy-MM'),
+        current_gzym=to_char(add_months(to_date(current_gzym,'yyyy-MM'),1),'yyyy-MM'),
+        next_gzym=to_char(add_months(to_date(next_gzym,'yyyy-MM'),1),'yyyy-MM')
+    </update>
+</mapper>

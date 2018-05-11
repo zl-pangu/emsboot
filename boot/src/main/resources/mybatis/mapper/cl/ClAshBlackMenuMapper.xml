@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cl.ClAshBlackMenuMapper">
+    <resultMap id="hqclcfAshBlackMap" type="com.zhph.model.cl.ClAshBlackMenuModel">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="EMP_NO" property="empNo" jdbcType="VARCHAR"/>
+        <result column="EMP_NAME" property="empName" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="INTEGER"/>
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="queryAllAhsBlack"
+            resultMap="hqclcfAshBlackMap">
+        SELECT
+        *
+        FROM HQCLCF_ASH_BLACK_MENU w
+        WHERE
+        1=1
+        <if test="item.empNo!=null and item.empNo!='' ">
+            AND w.EMP_NO LIKE CONCAT(CONCAT('%', #{item.empNo}),'%')
+        </if>
+        <if test="item.empName!=null and item.empName!='' ">
+            AND w.EMP_NAME LIKE CONCAT(CONCAT('%', #{item.empName}),'%')
+        </if>
+        <if test="item.type!=null and item.type!='' ">
+            AND w.TYPE=#{item.type}
+        </if>
+        <if test="item.description!=null and item.description!='' ">
+            AND w.DESCRIPTION=#{item.description}
+        </if>
+    </select>
+    <insert id="importAhsBlackData" parameterType="com.zhph.model.cl.ClAshBlackMenuModel">
+        INSERT INTO HQCLCF_ASH_BLACK_MENU (
+        <!--   <include refid="Base_Column_Filed"/>-->
+        ID,EMP_NO,EMP_NAME,TYPE,DESCRIPTION
+        )
+        SELECT SQ_HQCLCF_ASH_BLACK_MENU.nextval ID,A.* FROM(
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            SELECT
+            #{item.empNo,jdbcType=VARCHAR},
+            #{item.empName,jdbcType=VARCHAR},
+            #{item.type,jdbcType=INTEGER},
+            #{item.description,jdbcType=VARCHAR}
+            FROM dual
+        </foreach>
+        )A
+    </insert>
+
+
+</mapper>

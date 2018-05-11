@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<@compress single_line=true></@compress>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" />
+    <title>新增离职淘汰信息记录</title>
+    <style type="text/css">
+        body .tn-style {
+            border-radius: 4px
+        }
+
+        body .tn-style .layui-layer-title {
+            border-radius: 4px 4px 0 0;
+            height: 35px;
+            line-height: 35px
+        }
+
+        body .tn-style .layui-layer-input {
+            font-size: 14px;
+            line-height: 25px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: solid 1px #D2AF73;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        body .tn-style .layui-layer-setwin {
+            top: 10px;
+        }
+
+        body .tn-style .layui-layer-btn {
+            border: none;
+        }
+
+        body .tn-style .layui-layer-btn a {
+            width: 80px;
+            height: 20px;
+            border: none;
+            line-height: 20px;
+        }
+
+        body .tn-style .layui-layer-btn .layui-layer-btn0 {
+            background-color: #3969A2;
+            color: #fff;
+            text-align: center;
+        }
+
+        body .tn-style .layui-layer-btn .layui-layer-btn1 {
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        body .tn-style .layui-layer-btn .layui-layer-btn2 {
+            background-color: #D2AF73;
+            color: #fff;
+            -text-align: center;
+        }
+
+        body .table-style {
+            line-height: 15px;
+        }
+
+        body .td-style {
+            text-align: center;
+        }
+
+        body #empTips {
+            width: 200%;
+            height: 500px;
+            overflow: auto;
+            background-color: white;
+            border: 1px solid grey;
+            border-radius: 3px;
+            display: none;
+            z-index: 99999;
+            position: relative;
+            float: left;
+        }
+    </style>
+</head>
+<link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css">
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.validate-1.13.1.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layer/layer.js"></script>
+<body>
+<div class="ibox float-e-margins" id="workpaceEditDiv" style="height:800px;">
+    <form class="layui-form" lay-filter="form" id="transferForm" method="post" autocomplete="off" enctype="multipart/form-data">
+        <table class="layui-table table-style">
+            <tr>
+                <td>员工编码</td>
+                <td>
+                    <div class="layui-input-inline" style="width:70%;">
+                        <input type="text" class="layui-input" id="empNo" name='empNo' value="">
+                    </div>
+                </td>
+
+
+                <td>员工姓名</td>
+                 <td>
+                <div class="layui-input-inline" style="width:70%;">
+                <input name="empName" id="empNameHidden" type="hidden" value="">
+                <input type="text" disabled class="layui-input"  id="empName" value="">
+                 </div>
+                 </td>
+            </tr>
+            <tr>
+                <td>部门</td>
+                <td>
+                    <input name="deptNo" id="deptNameHidden" type="hidden" value="">
+                    <input type="text" readonly class="form-control input-sm" style="width: 70%;" id="deptNo"
+                           value="">
+                </td>
+                <td>业务条线</td>
+                <td>
+                <input name="businessLine" id="businessLineHidden" type="hidden" value="">
+                 <input  type="text" readonly class="form-control input-sm" style="width: 70%;"
+                           id="businessLine"
+                           value="">
+                </td>
+            </tr>
+            <tr>
+                <td>职务</td>
+                <td>
+                <input name="position" id="positionHidden" type="hidden" value="">
+                <input  type="text" readonly class="form-control input-sm" style="width: 70%;"
+                           id="business"
+                           value="">
+                </td>
+                <td>职级</td>
+                <td>
+                <input name="rank" id="rankHidden" type="hidden" value="">
+                    <input name="rankName" type="text" readonly class="form-control input-sm" style="width: 70%;"
+                           id="rankName"
+                           value="">
+                </td>
+            </tr>
+            <tr>
+                <td>岗位</td>
+                <td>
+                    <input name="post" id="postHiddent" type="hidden" value="">
+                    <input type="text" readonly class="form-control input-sm" style="width: 70%;" id="post" value=""
+                           lay-search="">
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+               <td>入职日期</td>
+                <td>
+                <input name="entryTime" id="entryTimeHidden" type="hidden" value="">
+                <input type="text" disabled class="form-control input-sm" id="entryTime" style="width: 70%;" value="">
+                </td>
+                <td>员工主体</td>
+                <td>
+                 <input name="empSubject" id="empSubjectHidden" type="hidden" value="">
+                <input type="text" disabled class="form-control input-sm" id="empSubject" style="width: 70%;"
+                value="">
+                </td>
+            </tr>
+            <tr>
+                <td>离职日期</td>
+                <td>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="exitTime" name="exitTime"
+                               placeholder="请输入离职时间">
+                    </div>
+                    <span style='color:red;'>*</span>
+                </td>
+                <td>离职原因</td>
+                <td>
+                    <div class="layui-input-block" style="width: 70%;display: inline-block;">
+                        <select style="width: 70%;" id="leavingReason" name="leavingReason" lay-search="">
+                            <option value=''>请选择</option>
+                            <#list dimissionTypeList as le>
+                       <option value="${le.sysValue!}">${le.sysName!}</option>
+                      </#list>
+                        </select></div>
+                    <span style='color:red;'>*</span></td>
+            </tr>
+            <tr>
+                <td>描述</td>
+                <td colspan="3"><textarea class='layui-textarea' name="remark" style="width:700px;height:60px;"
+                                          id="remark"></textarea></td>
+            </tr>
+            <tr>
+                <td>离职审批表</td>
+                <td style="text-align: left;">
+                    <button type="button" class="btn btn-primary btn-sm layui-btn-xs" id="lzspbBtn">
+                        <i class="layui-icon">&#xe60a;</i>选择上传文件
+                    </button>
+                    <span style='color:red;'>*</span>
+                </td>
+                <td>离职交接表</td>
+                <td style="text-align: left;">
+                    <button type="button" class="btn btn-primary btn-sm layui-btn-xs" id="lzjjbBtn">
+                        <i class="layui-icon">&#xe60a;</i>选择上传文件
+                    </button>
+                    <span style='color:red;'>*</span>
+
+                </td>
+            </tr>
+            <tr>
+                <td>解除劳动合同协议书</td>
+                <td style="text-align: left;">
+                    <button type="button" class="btn btn-primary btn-sm layui-btn-xs" id="jcldhtBtn">
+                        <i class="layui-icon">&#xe60a;</i>选择上传文件
+                    </button>
+                    <span style='color:red;'>*</span>
+                </td>
+                <td>离职承诺书</td>
+                <td style="text-align: left;">
+                    <button type="button" class="btn btn-primary btn-sm layui-btn-xs" id="lzclsBtn">
+                        <i class="layui-icon">&#xe60a;</i>选择上传文件
+                    </button>
+                    <span style='color:red;'>*</span>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <button lay-submit lay-filter="auditSubmit" class="btn btn-primary btn-sm"
+                        onclick="submitForm()"    type="button">
+                        <font>新增</font>
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="cancel" class="btn btn-primary btn-sm"
+                            style="background-color: #FF5722" type="button">
+                        <font>取消</font>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+    <div id="postList" style="display:none;">
+        <#list  post as bl>
+            <option value='${bl.postNo!}' name="${bl.deptNo!}">${bl.postName!}</option>
+        </#list>
+        <div id="rankList">
+            <#list  rank as bl>
+                <option value='${bl.no}' name="${bl.name}">${bl.name}</option>
+            </#list>
+        </div>
+        <div id="deptList">
+            <#list  dept as bl>
+                <option value='${bl.deptCode}' id="${bl.id!}" name="${bl.businessLine!}">${bl.deptName}</option>
+            </#list>
+        </div>
+    </div>
+</div>
+</body>
+<#include "/pages/common/foot.html" />
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript">
+
+    var form;
+    var table;
+    var upload;
+    
+    
+
+
+    /*Init*/
+    $(document).ready(function () {
+
+        /*Listener*/
+        layui.use(['table', 'form', 'upload', 'laydate'], function () {
+            form = layui.form;
+            table = layui.table;
+            upload = layui.upload;
+            form.render();
+            table.render();
+
+            /*离职审批表*/
+            upload.render({
+                elem: '#lzspbBtn',
+                auto: false,
+                accept: 'file',
+                field: 'lzspbBtn',
+                size: 2000
+            });
+
+            /*离职交接表*/
+            upload.render({
+                elem: '#lzjjbBtn',
+                auto: false,
+                accept: 'file',
+                field: 'lzjjbBtn',
+                size: 2000
+            });
+            
+            /*解除劳动合同协议书*/
+            upload.render({
+                elem: '#jcldhtBtn',
+                auto: false,
+                accept: 'file',
+                field: 'jcldhtBtn',
+                size: 2000
+            });
+            
+            /*离职承诺书*/
+            upload.render({
+                elem: '#lzclsBtn',
+                auto: false,
+                accept: 'file',
+                field: 'lzclsBtn',
+                size: 2000
+            });
+
+            laydate = layui.laydate;
+
+
+            /*日期控件*/
+            laydate.render({
+                elem: '#exitTime'
+            });
+        });
+
+        /*DownMenu*/
+        $('#empNo').combogrid({
+            loadMsg: 'Loading···',
+            panelWidth: 375,
+            panelHeight:400,
+            delay: 350,
+            mode: 'remote',
+            url: '${ctx}/hqclcf/hqclcfLeave/queryByq',
+            idField: 'EMPNO',
+            textField: 'EMPNO',
+            method: 'post',
+            striped : true,
+            rownumbers : true,
+            pagination : true,
+            pageList : [10,50,100],
+            columns: [[
+                {field: 'EMPNO', title: '员工编码', width: 200, sortable: true},
+                {field: 'EMPNAME', title: '员工姓名', width: 140, sortable: true}
+            ]],
+            onSelect: function (rowIndex, row) {
+            	  $("#empNo").val(row['EMPNO']);
+            	  $("#empName").val(row['EMPNAME']);
+            	  $("#deptNo").val(row['DEPTNAME']);
+            	  $("#business").val(row['POSITIONNAME']);
+            	  $("#rankName").val(row['RANKNAME']);
+            	  $("#post").val(row['POSTNAME']);
+            	  $("#entryTime").val(row['ENTERDATE']);
+            	  $("#empSubject").val(row['EMPSUBJECT']);
+            	  
+            	  $("#deptNameHidden").val(row['DEPTNO']);
+            	  $("#empNameHidden").val(row['EMPNAME']);
+            	  $("#positionHidden").val(row['POSITION']);
+            	  $("#rankHidden").val(row['RANKNO']);
+            	  $("#postHiddent").val(row['POSTNO']);
+            	  $("#empSubjectHidden").val(row['EMPSUBJECT']);
+            	  $("#entryTimeHidden").val(row['ENTERDATE']);
+            	  $("#businessLineHidden").val(row['BUSINESSLINE']);
+            	  
+            	  var es=  row['EMPSUBJECT'];
+              	switch(es){
+              	case 1:
+              		$("#empSubject").val('ZH');
+              		break;
+              	case 2:
+              		$("#empSubject").val('HT');
+              		break;
+              	}
+            	  
+            	var bl=  row['BUSINESSLINE'];
+            	switch(bl){
+            	case 1:
+            		$("#businessLine").val("总部");
+            		break;
+            	case 2:
+            		$("#businessLine").val("消分");
+            		break;
+            	case 3:
+            		$("#businessLine").val("信贷");
+            		break;
+            	}
+            }
+        });
+
+        /*cancel*/
+        $("#cancel").click(function () {
+        	var url ="${ctx}/hqclcf/hqclcfLeave/init.mvc";
+            window.location.href=url;
+        })
+
+    })
+
+
+
+    /*父页面调用子页面的方法*/
+    function validatePersonTransfer() {
+        var flag = true;
+        var re = /^[0-9]*[1-9][0-9]*$/;
+        if ($("#empNo").val() == '') {
+            validatePersonTransferTips('员工编码', '不能为空');
+            flag = false;
+            return flag;
+        }
+        if ($("#empName").val() == '') {
+            validatePersonTransferTips('员工姓名', '不能为空');
+            flag = false;
+            return flag;
+        }
+        
+        if ($("#exitTime").val() == '') {
+            validatePersonTransferTips('离职日期', '不能为空');
+            flag = false;
+            return flag;
+        }
+        
+        if ($("#leavingReason").val() == '') {
+            validatePersonTransferTips('离职原因', '不能为空');
+            flag = false;
+            return flag;
+        }
+        
+         if ($("#remark").val().length > 250) {
+            validatePersonTransferTips('备注过长','');
+            flag = false;
+            return flag;
+        }
+
+        return flag;
+    }
+
+    /*Tips*/
+    function validatePersonTransferTips(filedName, msg) {
+        layer.msg("<font style='color: paleturquoise'>" + filedName + "</font>" + msg + "", {
+            anim: 6,
+        });
+    }
+    
+    var index;
+    function submitForm() {
+        $( "#transferForm" ).submit();
+    }
+
+    $(function() {
+        $('#transferForm').form({
+            url : '${ctx}/hqclcf/hqclcfLeave/add.mvc',
+            onSubmit : function() {
+                var flag = validateForm();
+                validatePersonTransfer();
+                if(flag){
+                    index = layer.load(1, {shade: true});
+                }
+                return flag;
+            },
+            success : function(result) {
+                layer.close(index);
+                result = $.parseJSON(result);
+               if(result.success){
+                   layer.msg("提交成功", {icon: 6});
+                   setTimeout(
+                       function() {
+                           var url ="${ctx}/hqclcf/hqclcfLeave/init.mvc";
+                           window.location.href=url;
+                       }, 1000);
+               }else{
+                   layer.msg("提交失败："+result.msg, {icon: 5});
+               }
+            }
+        });
+    });
+    
+    function validateForm() {
+        var flag=true;
+        var a=$(".layui-upload-file,.layui-input");
+        $.each(a,function (index,item) {
+            var dname = $(item).closest('td').prev();
+            var isVisible = $(dname).is(':visible');
+            if(!$(item).val().trim()  && isVisible) {
+                validateAddDeptTips($(dname).text().trim(),"不能为空");
+                flag=false;
+                return false;
+            }
+        });
+        
+        if ($("#remark").val().length > 250) {
+            validatePersonTransferTips('备注过长');
+            flag = false;
+            return flag;
+        }
+        return flag;
+    }
+    
+    function validateAddDeptTips(filedName,msg){
+        layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+            anim:6,
+        });
+    }
+
+
+</script>
+</html>
+

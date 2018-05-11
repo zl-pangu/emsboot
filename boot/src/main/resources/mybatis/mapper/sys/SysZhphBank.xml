@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.sys.SysZhphBankMapper">
+    <resultMap id="bankResultMap" type="com.zhph.model.sys.SysZhphBank">
+        <id column="PRI_NUMBER" property="priNumber" jdbcType="BIGINT"/>
+        <result column="BANK_CODE" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="BANK_NAME" property="bankName" jdbcType="VARCHAR"/>
+        <result column="BANK_FULL_NAME" property="bankFullName" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+        <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllZhphBank" parameterType="com.zhph.model.sys.SysZhphBank" resultMap="bankResultMap">
+        SELECT *FROM SYS_ZHPH_BANK w
+        <where>
+            <if test="bankCode!=null and bankCode!='' ">
+                AND w.BANK_CODE LIKE CONCAT(CONCAT('%', #{bankCode}),'%')
+            </if>
+            <if test="bankName!=null and bankName!='' ">
+                AND w.BANK_NAME LIKE CONCAT(CONCAT('%', #{bankName}),'%')
+            </if>
+            <if test="status!=null and status!='' ">
+                AND w.STATUS=#{status}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="addByObj" parameterType="com.zhph.model.sys.SysZhphBank">
+        <selectKey resultType="Long" keyProperty="priNumber" order="BEFORE">
+            SELECT SQ_SYS_BANK_SET.NEXTVAL AS ID FROM DUAL
+        </selectKey>
+        INSERT INTO SYS_ZHPH_BANK (
+        PRI_NUMBER,
+        BANK_CODE,
+        BANK_NAME,
+        BANK_FULL_NAME,
+        STATUS,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_NAME,
+        UPDATE_NAME,
+        REMARK
+        )
+        VALUES
+        (SQ_SYS_BANK_SET.NEXTVAL,#{bankCode,jdbcType=VARCHAR},
+        #{bankName,jdbcType=VARCHAR},#{bankFullName,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=VARCHAR},#{createName,jdbcType=VARCHAR},
+        #{updateName,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <update id="updateById" parameterType="com.zhph.model.sys.SysZhphBank">
+        UPDATE SYS_ZHPH_BANK W
+        SET
+        w.BANK_CODE=#{bankCode,jdbcType=VARCHAR},
+        w.BANK_NAME=#{bankName,jdbcType=VARCHAR},
+        w.BANK_FULL_NAME=#{bankFullName,jdbcType=VARCHAR},
+        w.STATUS=#{status,jdbcType=VARCHAR},
+        w.REMARK=#{remark,jdbcType=VARCHAR}
+        <where>
+            AND w.PRI_NUMBER=#{priNumber,jdbcType=BIGINT}
+        </where>
+    </update>
+
+
+    <delete id="delById" parameterType="java.lang.Long">
+        delete from SYS_ZHPH_BANK
+        where PRI_NUMBER = #{priNumber,jdbcType=BIGINT}
+    </delete>
+
+    <select id="findBankCountById" resultType="Integer"> 
+   		select count(*) from SYS_ZHPH_BANK where BANK_CODE=#{bankCode}
+   </select>
+
+    <select id="queryZhphBankByCode" parameterType="com.zhph.model.sys.SysZhphBank" resultMap="bankResultMap">
+   		select * from SYS_ZHPH_BANK where BANK_CODE=#{bankCode}
+   </select>
+
+
+</mapper>

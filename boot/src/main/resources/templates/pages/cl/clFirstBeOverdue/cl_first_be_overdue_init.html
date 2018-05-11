@@ -1,0 +1,198 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="renderer" content="webkit" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<#include "/pages/common/head.html" >
+		<title>首逾明细</title>
+		<link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css" >
+</head>
+
+<body >
+<div class="wrapper wrapper-content animated fadeInUp">
+	<ol class="breadcrumb">
+		您的位置：
+		<li>
+			<a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+		</li>
+		<li class="active">系统管理</li>
+		<li class="active">
+			<i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+			<font>首逾明细</font>
+		</li>
+	</ol>
+	<div class="ibox float-e-margins">
+		<div class="ibox-content">
+			<form id="form" class="layui-form" lay-filter="form">
+				<div class="container-fluid">
+					<div class="row">
+					<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>合同号：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="loanContractNo" type="text" class="form-control input-sm"
+                                           placeholder="合同号"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--客户姓名-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>客户姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="loanName" type="text" class="form-control input-sm" placeholder="客户姓名">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>业务经理姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="businessManagerName" type="text" class="form-control input-sm" placeholder="业务经理姓名">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>工资年月：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input" id="gzYm" name="gzYm"
+                                                   placeholder="工资年月">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+    
+						<!--按钮-->
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0">
+							<div class="row">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<@auth url='${ctx}/cl/clOrgTask/list'>
+									<button lay-submit lay-filter="auditQuery" class="btn btn-primary btn-sm" type="button" title="查询">
+										<i class="fa fa-search"></i>
+										<font>查询</font>
+									</button>
+									 </@auth>
+									 <@auth url='${ctx}/cl/clOrgTask/importExl'>
+									<button lay-submit lay-filter="exportExl" class="btn btn-primary btn-sm"
+                                            type="button" title="导出">
+                                        <i class="fa fa-search"></i>
+                                        <font>导出</font>
+                                    </button>
+                                    </@auth>
+									<button lay-submit lay-filter="reset" id="clearBtn" class="btn btn-primary btn-sm"
+											type="button" title="重置"  onclick="resetFormData()">
+										<i class="fa fa-search"></i>
+										<font>重置</font>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--Grid-->
+		<div class="ibox-content">
+			<table class="layui-hide" id="clFirstBeOverduTable" lay-filter="clFirstBeOverduTableFilter"></table>
+		</div>
+	</div>
+</div>
+</body>
+<#include "/pages/common/foot.html" >
+
+	<script type="text/html" id="tableRowNumTpl">
+        {{ d.LAY_TABLE_INDEX+1}}
+	</script>
+	<script type="text/html" id="orgNoListTpl">
+	{{#  layui.each(${orgNoListTpl!}.obj, function(index, item){  }}
+	{{#  if(item.areaCode == d.orgNo){  }}
+	{{   item.area }}
+	{{#  return true;  }}
+	{{#  } }}
+	{{#  });}}
+</script>
+	
+	<script type="text/javascript">
+		var table;
+		var form;
+		layui.use(['table','form','laydate','upload'],function () {
+			table=layui.table;
+			form = layui.form;
+			laydate = layui.laydate;
+			upload = layui.upload;
+            form.render();
+            
+            laydate.render({
+                elem: '#gzYm',
+                type: 'month'
+              });
+		
+			table.render({
+				elem: '#clFirstBeOverduTable',
+                id: 'id',
+				url:'${ctx}/cl/ClFirstBeOverdue/list',
+                loading:true,
+                method:'post',
+				cols: [[
+					{width:70,fixed:true,title:'序号',align:'center',templet:'#tableRowNumTpl'},
+					{field:'loanContractNo',title: '合同编号',width:100,align:'center'},
+					{field:'loanName',title: '客户姓名',width:100,align:'center'},
+					{field:'businessManagerName',title: '业务经理姓名',width:100,align:'center'},
+					{field:'businessManagerNo',title: '业务经理编号',width:100,align:'center'},
+					{field:'teamManagerName',title: '团队经理姓名',width:100,align:'center'},
+					{field:'teamManagerNo',title: '团队经理编号',width:100,align:'center'},
+					{field:'orgManagerName',title: '门店销售经理	',width:100,align:'center'},
+					{field:'orgManagerNo',title: '门店销售经理编号',width:100,align:'center'},
+					{field:'areaManagerName',title: '区域经理',width:100,align:'center'},
+					{field:'areaManagerNo',title: '区域经理编号',width:100,align:'center'},
+					{field:'payDate',title: '放款时间',width:100,align:'center'},
+					{field:'beOverdueNum',title: '逾期天数',width:80,align:'center'},
+					{field:'loanAmount',title: '合同额',width:100,align:'center'},
+					{field:'grantLoanAmount',title: '放款额',width:100,align:'center'},
+					{field:'orgNo',title: '分公司',width:100,align:'center',templet:'#orgNoListTpl'},
+					{field:'gzYm',title: '年月',width:100,align:'center'},
+				]],
+                height : '500',
+                skin : 'row',
+                size:'sm',
+                even : true,
+                page : true,
+                limits : [ 10, 30, 50 ],
+                limit : 10
+			});
+            form.on('submit(auditQuery)',function (data) {
+            	console.log(data);
+                table.reload('id',{
+                    where:data.field || {}
+                })
+            });
+            form.on('submit(exportExl)', function () {
+                window.location = '${ctx}/cl/ClFirstBeOverdue/exportExl?' + $("#form").serialize();
+                return false;
+            });
+		});
+
+        function resetFormData() {
+            $("#form")[0].reset();
+        }
+		
+	</script>
+</html>
+</@compress>

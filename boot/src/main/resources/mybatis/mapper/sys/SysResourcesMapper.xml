@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.sys.SysResourcesMapper">
+
+	<resultMap id="ResultMap" type="com.zhph.model.sys.SysResources">
+		<id column="resources_id" property="resourcesId" jdbcType="BIGINT" />
+		<result column="resources_parent_id" property="resourcesParentId" jdbcType="BIGINT" />
+		<result column="resources_name" property="resourcesName" jdbcType="VARCHAR" />
+		<result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR" />
+		<result column="resources_sort_id" property="resourcesSortId" jdbcType="INTEGER" />
+		<result column="resources_is_use" property="resourcesIsUse" jdbcType="INTEGER" />
+		<result column="resources_is_end" property="resourcesIsEnd" jdbcType="INTEGER" />
+		<result column="resources_type" property="resourcesType" jdbcType="INTEGER" />
+		<result column="resources_description" property="resourcesDescription" jdbcType="VARCHAR" />
+		<result column="resources_child_size" property="resourcesChildSize" jdbcType="INTEGER" />
+		<result column="resources_is_popedoms" property="resourcesIsPopedoms" jdbcType="INTEGER" />
+		<result column="resources_level_number" property="resourcesLevelNumber" jdbcType="INTEGER" />
+		<result column="resources_full_id" property="resourcesFullId" jdbcType="VARCHAR" />
+		<result column="resources_full_name" property="resourcesFullName" jdbcType="VARCHAR" />
+		<result column="resources_sys_type" property="resourcesSysType" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_id" property="updateId" jdbcType="BIGINT" />
+	</resultMap>
+	 
+	 <select id="findById"  resultMap="ResultMap" >
+	 	select * from sys_resources where  resources_id=#{id} order by resources_level_number,resources_sort_id
+	 </select>
+	 
+	 
+ 	 <select id="findByParentId"  resultMap="ResultMap" >
+	 	select * from sys_resources where  resources_parent_id=#{parentId} order by resources_level_number,resources_sort_id
+	 </select>
+	
+	
+	<insert id="insert" parameterType="com.zhph.model.sys.SysResources" >
+		
+		  <selectKey keyProperty="t.resourcesId" resultType="Long"  order="BEFORE" >  
+		    select SQ_SYS_RESOURCES.NEXTVAL as resourcesId  from dual  
+	 	  </selectKey>  
+		 	
+			insert into sys_resources (
+			 resources_id,
+			 resources_parent_id,
+			 resources_name,
+			 resources_url,
+			 resources_sort_id,
+			 resources_is_use,
+			 resources_type,
+			 resources_description,
+			 resources_child_size,
+			 resources_is_popedoms,
+			 resources_level_number,
+			 <if test="t.resourcesFullId !=null">
+				 resources_full_id,
+			 </if>
+			 
+ 			 <if test="t.resourcesFullName !=null">
+				 resources_full_name,
+			 </if>
+			 
+			 resources_sys_type,
+			 resources_is_end,
+			 creator_id,
+			 create_time
+			)
+			values (
+ 	 		${t.resourcesId},
+	 		#{t.resourcesParentId},
+			#{t.resourcesName},
+		 	#{t.resourcesUrl},
+		 	#{t.resourcesSortId},
+		 	#{t.resourcesIsUse},
+		 	#{t.resourcesType},
+		 	#{t.resourcesDescription},
+		 	#{t.resourcesChildSize},
+		 	#{t.resourcesIsPopedoms},
+		 	#{t.resourcesLevelNumber},
+			<if test="t.resourcesFullId !=null">
+		 		#{t.resourcesFullId},
+		 	</if>
+ 			<if test="t.resourcesFullName !=null">
+			 	#{t.resourcesFullName},
+		 	</if>
+		 	#{t.resourcesSysType},
+		 	#{t.resourcesIsEnd},
+		 	#{t.creatorId},
+			#{t.createTime}
+			)
+	</insert>
+	
+	<update id="update" parameterType="com.zhph.model.sys.SysResources">
+	
+		update sys_resources set
+		
+		 <trim  suffixOverrides="," >
+			<if test="t.resourcesParentId !=null">
+				 resources_parent_id =#{t.resourcesParentId},
+			</if>
+			
+			 <if test="t.resourcesUrl !=null">
+			 	resources_url=#{t.resourcesUrl},
+			 </if>
+			 
+			 <if test="t.resourcesSortId!=null">
+			 	 resources_sort_id=#{t.resourcesSortId},
+			 </if>
+			 
+ 			 <if test="t.resourcesIsUse!=null">
+			 	 resources_is_use=#{t.resourcesIsUse},
+			 </if>
+			 
+ 			 <if test="t.resourcesType!=null">
+	 			 resources_type=#{t.resourcesType},
+			 </if>
+			 
+ 			 <if test="t.resourcesDescription!=null">
+ 			 	 resources_description=#{t.resourcesDescription},
+			 </if>
+			 
+ 			 <if test="t.resourcesChildSize!=null">
+				 resources_child_size=#{t.resourcesChildSize},
+			 </if>
+			 
+ 			 <if test="t.resourcesIsPopedoms!=null">
+ 				 resources_is_popedoms=#{t.resourcesIsPopedoms},
+			 </if>
+			 
+			 <if test="t.resourcesLevelNumber!=null">
+	 			 resources_level_number=#{t.resourcesLevelNumber},
+			 </if>
+			 
+			 <if test="t.resourcesFullId!=null">
+	  			 resources_full_id=#{t.resourcesFullId},
+			 </if>
+			  
+			 <if test="t.resourcesFullName!=null">
+	   			 resources_full_name=#{t.resourcesFullName},
+			 </if>
+			   
+			 <if test="t.resourcesSysType!=null">
+    			 resources_sys_type=#{t.resourcesSysType},
+			 </if>
+			  
+			  <if test="t.resourcesName!=null">
+			 	resources_name=#{t.resourcesName},
+			  </if>
+			  
+  			  <if test="t.resourcesIsEnd!=null">
+			 	resources_is_end=#{t.resourcesIsEnd},
+			  </if>
+			  
+  			  <if test="t.updateTime!=null">
+			 	update_time=#{t.updateTime},
+			  </if>
+			  
+  			  <if test="t.updateId!=null">
+			 	update_id=#{t.updateId},
+			  </if>
+			  
+			 </trim>
+			 	
+			where 	resources_id = #{t.resourcesId}
+	
+	</update>
+	
+		<delete id="deleteById" parameterType="Long">
+			delete from sys_resources where resources_id=#{id}
+		
+		</delete>
+	
+	<!-- 根据权限ID 查询菜单已启用的菜单权限 -->	
+	<select id="findMenuByResourcesId" resultMap="ResultMap">
+		select * from sys_resources where resources_type=1 and resources_is_use=1  and resources_id in 
+		
+        <foreach collection="list" item="resourcesId" index="index"
+            open="(" close=")" separator=",">
+            #{resourcesId}
+        </foreach>
+		order by  resources_sort_id
+	</select>
+ 	
+ 	<select id="findAllByResourcesSysType" resultMap="ResultMap">
+ 		select * from sys_resources where  resources_is_use=1 
+ 		<if test="resourcesSysType !=null and resourcesSysType !=0">
+ 			and  resources_sys_type=#{resourcesSysType}
+ 		</if>
+ 	</select>
+ 	
+ 	<!-- 根据角色ID 查询所有资源 -->
+ 	<select id="findResourcesByRoleId" resultMap="ResultMap">
+ 	
+ 		select distinct t.resources_url,t.resources_id from sys_resources t 
+		left join sys_role_resources_ref r on t.resources_id=r.resources_id
+  	 	
+  	 	 where role_id in 
+ 		<foreach collection="list" item="roleId" index="index"
+            open="(" close=")" separator=",">
+ 			#{roleId}
+ 		</foreach>
+ 	</select>
+   
+   <select id="findRoleCountByResourcesId" resultType="Integer"> 
+   		select count(*) from sys_role_resources_ref where resources_id=#{resourcesId}
+   </select>
+   
+   <select id="findAllURI" resultType="String">
+   		select resources_url from sys_resources
+   </select>
+   
+   
+     <select id="checkNameRepeat" resultType="Integer"> 
+   		select count(*) from sys_resources where resources_name=#{resourcesName}
+   </select>
+   
+   
+   <select id="findAllChildrenByResourcesId" resultType="Integer">
+   	select t.resources_id from SYS_RESOURCES t where t.resources_full_id like #{resourcesId}
+   </select>
+   
+   
+   <update id="updateResourcesIsUse">
+   		update  SYS_RESOURCES set resources_is_use=#{resourcesIsUse}
+   		where resources_id in 
+   		
+   		<foreach collection="list" item="resourcesId" index="index"
+            open="(" close=")" separator=",">
+ 			#{resourcesId}
+ 		</foreach>
+   </update>
+   
+   
+</mapper>
