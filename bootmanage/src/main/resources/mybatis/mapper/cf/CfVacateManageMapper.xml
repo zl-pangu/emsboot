@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cf.CfVacateManageMapper">
+
+	<!-- 1、配置返回结果Map和参数Map -->
+
+	<resultMap type="com.zhph.model.cf.CfVacateManage" id="baseVacateManageResultMap">
+		<id property="priNumber" column="PRI_NUMBER"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="empName" column="EMP_NAME"/>
+		<result property="regionId" column="REGION_ID"/>
+		<result property="filialeId" column="FILIALE_ID"/>
+		<result property="businessDeptId" column="BUSINESSDEPT_ID"/>
+		<result property="teamId" column="TEAM_ID"/>
+		<result property="deptId" column="DEPT_ID"/>
+		<result property="leaveType" column="LEAVE_TYPE"/>
+		<result property="post" column="POST"/>
+		<result property="rankType" column="RANK_TYPE"/>
+		<result property="leaveInterval" column="LEAVE_INTERVAL"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="totalTime" column="TOTAL_TIME"/>
+		<result property="startTimecorspMonth" column="STARTTIME_CORSPMONTH"/>
+		<result property="endTimecorspMonth" column="ENDTIME_CORSPMONTH"/>
+		<result property="dayBystart" column="DAY_BYSTART"/>
+		<result property="dayByend" column="DAY_BYEND"/>
+		<result property="leaveReason" column="LEAVE_REASON"/>
+		<result property="status" column="STATUS"/>
+		<result property="auditOpinion" column="AUDIT_OPINION"/>
+		<result property="dateofLeave" column="DATEOF_LEAVE"/>
+		<result property="createuser" column="CREATE_USER"/>
+		<result property="salesCreateFlag" column="SALESCREATEFLAG"/>
+		<!-- other field -->
+		<result property="postName" column="POST_NAME"/>
+	</resultMap>
+
+	<resultMap type="com.zhph.model.cf.CfVacateManage" id="vacateManageResultMap" extends="baseVacateManageResultMap">
+	</resultMap>
+	<!-- <parameter property="deptId" javaType="string" jdbcType="VARCHAR"/> -->
+	<parameterMap type="com.zhph.model.cf.CfVacateManage" id="vacateManageParameterMap">
+		<parameter property="priNumber" javaType="long" jdbcType="BIGINT"/>
+		<parameter property="empNo" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="empName" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="regionId" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="filialeId" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="businessDeptId" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="teamId" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="deptId" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="leaveType" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="post" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="rankType" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="leaveInterval" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="startTime" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="endTime" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="totalTime" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="startTimecorspMonth" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="endTimecorspMonth" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="dayBystart" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="dayByend" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="leaveReason" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="status" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="auditOpinion" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="dateofLeave" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="createuser" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="salesCreateFlag" javaType="string" jdbcType="VARCHAR"/>
+	</parameterMap>
+
+
+	<!-- 2、各个SeqID -->
+
+	<insert id="save" parameterMap="vacateManageParameterMap">
+	<selectKey order="BEFORE" keyProperty="priNumber" resultType="long">SELECT SQ_CF_ATTENDANCE_VACATE.NEXTVAL FROM DUAL</selectKey>
+		INSERT INTO CF_ATTENDANCE_VACATEMANAGE (PRI_NUMBER, EMP_NO, EMP_NAME, REGION_ID, FILIALE_ID, BUSINESSDEPT_ID, TEAM_ID, DEPT_ID, LEAVE_TYPE, POST, RANK_TYPE, LEAVE_INTERVAL, START_TIME, END_TIME, TOTAL_TIME, STARTTIME_CORSPMONTH, ENDTIME_CORSPMONTH, DAY_BYSTART, DAY_BYEND, LEAVE_REASON, STATUS, AUDIT_OPINION, DATEOF_LEAVE, CREATE_USER, SALESCREATEFLAG) VALUES (
+			#{priNumber, jdbcType=BIGINT}, 
+			#{empNo, jdbcType=VARCHAR}, 
+			#{empName, jdbcType=VARCHAR}, 
+			#{regionId, jdbcType=VARCHAR}, 
+			#{filialeId, jdbcType=VARCHAR}, 
+			#{businessDeptId, jdbcType=VARCHAR}, 
+			#{teamId, jdbcType=VARCHAR}, 
+			#{deptId, jdbcType=VARCHAR}, 
+			#{leaveType, jdbcType=VARCHAR}, 
+			#{post, jdbcType=VARCHAR}, 
+			#{rankType, jdbcType=VARCHAR}, 
+			#{leaveInterval, jdbcType=VARCHAR}, 
+			#{startTime, jdbcType=VARCHAR}, 
+			#{endTime, jdbcType=VARCHAR}, 
+			#{totalTime, jdbcType=VARCHAR}, 
+			#{startTimecorspMonth, jdbcType=VARCHAR}, 
+			#{endTimecorspMonth, jdbcType=VARCHAR}, 
+			#{dayBystart, jdbcType=VARCHAR}, 
+			#{dayByend, jdbcType=VARCHAR}, 
+			#{leaveReason, jdbcType=VARCHAR}, 
+			#{status, jdbcType=VARCHAR}, 
+			#{auditOpinion, jdbcType=VARCHAR}, 
+			#{dateofLeave, jdbcType=VARCHAR}, 
+			#{createuser, jdbcType=VARCHAR}, 
+			#{salesCreateFlag, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 判断不可重复的属性是否已经存在，这里默认只判断deptName属性，具体的业务再进行修改添加 -->
+	<!--
+	<select id="isExists" resultType="integer" parameterMap="vacateManageParameterMap">
+		SELECT COUNT(1) FROM CF_ATTENDANCE_VACATEMANAGE WHERE DEPT_NAME=#{deptName}
+		<if test="deptId != null and deptId !='' ">
+			<![CDATA[ AND DEPT_ID <> #{deptId, jdbcType=VARCHAR} ]]>
+		</if>
+	</select>
+	-->
+
+	<select id="getById" resultMap="vacateManageResultMap" parameterType="long">
+		SELECT * FROM CF_ATTENDANCE_VACATEMANAGE WHERE PRI_NUMBER = #{value}
+	</select>
+
+	<select id="queryByPage" resultMap="vacateManageResultMap" parameterType="com.zhph.model.cf.CfVacateManage">
+		SELECT a.*,(select POS_NAME from HQCLCF_BUSINESS_SCHEDULED where POS_CODE=post and rownum=1 ) as POST_NAME FROM CF_ATTENDANCE_VACATEMANAGE a WHERE 1=1
+		<!-- 各种条件 --> 
+		<if test="empName != null and empName !='' ">
+			<![CDATA[ AND a.EMP_NAME LIKE CONCAT(CONCAT('%', #{empName}),'%')]]>
+		</if>
+		<if test="empNo != null and empNo !='' ">
+			<![CDATA[ AND a.EMP_NO LIKE CONCAT(CONCAT('%', #{empNo}),'%')]]>
+		</if>
+		<!-- 非营业部的人登录时，businessDeptFlag为空，可以按照如下条件查询，否则不能使用如果条件，而直接按照deptId查询 -->
+		<if test="regionId != null and regionId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{regionId} CONNECT by PRIOR id=pid)
+		</if>
+		<if test="filialeId != null and filialeId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{filialeId} CONNECT by PRIOR id=pid)
+		</if>
+		<if test="businessDeptId != null and businessDeptId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{businessDeptId} CONNECT by PRIOR id=pid)
+		</if>
+		<if test="deptIds !=null">
+			 and a.DEPT_ID in 
+			 <foreach collection="deptIds" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+		</if>
+		<if test="rankType != null and rankType !='' ">
+			AND a.POST= #{rankType}
+		</if>
+		<if test="leaveType != null and leaveType !='' ">
+			AND a.LEAVE_TYPE= #{leaveType}
+		</if>
+		<if test="startTime != null and startTime !=''  and endTime != null and endTime !='' ">
+			 <![CDATA[ and ((START_TIME <= #{startTime} and END_TIME BETWEEN #{startTime} AND #{endTime}) or (END_TIME >= #{endTime} and START_TIME BETWEEN #{startTime} AND #{endTime}) or (START_TIME <= #{startTime} and END_TIME >= #{endTime}) or (START_TIME >= #{startTime} and END_TIME <= #{endTime}) )]]> 
+		</if>
+		<if test="startTime != null and startTime !=''  and (endTime == null or endTime =='' )">
+			<![CDATA[ and END_TIME >= #{startTime}]]>
+		</if>		
+		<if test="endTime != null and endTime !=''  and (startTime == null or startTime =='' )">
+			<![CDATA[ and START_TIME <= #{endTime}]]>
+		</if>
+		<if test="status != null and status !='' ">
+			AND a.STATUS= #{status}
+		</if>
+ 		order by pri_number DESC 
+	</select>
+
+	<select id="queryVacateManageCount" resultType="long" parameterType="com.zhph.model.cf.CfVacateManage">
+		SELECT COUNT(1) FROM CF_ATTENDANCE_VACATEMANAGE WHERE 1=1
+		<!-- 各种条件 --> 
+		<if test="empName != null and empName !='' ">
+			<![CDATA[ AND a.EMP_NAME LIKE CONCAT(CONCAT('%', #{empName}),'%')]]>
+		</if>
+		<if test="empNo != null and empNo !='' ">
+			<![CDATA[ AND a.EMP_NO LIKE CONCAT(CONCAT('%', #{empNo}),'%')]]>
+		</if>
+		<!-- 非营业部的人登录时，businessDeptFlag为空，可以按照如下条件查询，否则不能使用如果条件，而直接按照deptId查询 -->
+		<if test="regionId != null and regionId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{regionId} CONNECT by PRIOR id=pid)
+		</if>
+		<if test="filialeId != null and filialeId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{filialeId} CONNECT by PRIOR id=pid)
+		</if>
+		<if test="businessDeptId != null and businessDeptId !='' ">
+			 and exists (select id from HQCLCF_DEPT b where b.id=a.DEPT_ID start with id=#{businessDeptId} CONNECT by PRIOR id=pid)
+		</if>
+		<!-- 营业部权限控制（营业部登录时候必然存在的条件） -->
+		<if test="rankType != null and rankType !='' ">
+			AND a.POST= #{rankType}
+		</if>
+		<if test="leaveType != null and leaveType !='' ">
+			AND a.LEAVE_TYPE= #{leaveType}
+		</if>
+		<if test="startTime != null and startTime !=''  and endTime != null and endTime !='' ">
+			 <![CDATA[ and ((START_TIME <= #{startTime} and END_TIME BETWEEN #{startTime} AND #{endTime}) or (END_TIME >= #{endTime} and START_TIME BETWEEN #{startTime} AND #{endTime}) or (START_TIME <= #{startTime} and END_TIME >= #{endTime}) or (START_TIME >= #{startTime} and END_TIME <= #{endTime}) )]]> 
+		</if>
+		<if test="startTime != null and startTime !=''  and (endTime == null or endTime =='' )">
+			<![CDATA[ and END_TIME >= #{startTime}]]>
+		</if>		
+		<if test="endTime != null and endTime !=''  and (startTime == null or startTime =='' )">
+			<![CDATA[ and START_TIME <= #{endTime}]]>
+		</if>
+		<if test="status != null and status !='' ">
+			AND a.STATUS= #{status}
+		</if>
+	</select>
+
+	<select id="queryByempNo" parameterType="string" resultType="map">
+		SELECT
+			a.EMP_NAME,a.EMP_NO,a.RANK,b.NAME,a.position 
+			FROM HQCLCF_EMP a LEFT JOIN HQCLCF_RANK_SCHEDULED b ON
+			a.RANK=b.no WHERE a.EMP_NO=#{value}
+	</select>
+	
+	<select id="getDaysForMonth" resultType="double" parameterType="com.zhph.model.cf.CfVacateManage">
+		select
+		nvl(sum(nvl(a.NODE_VALUE,0)),0) as days
+		from SYS_NODE_DAYS a
+		LEFT JOIN CF_ATTENDANCE_VACATEMANAGE b on a.KEY_ID=b.PRI_NUMBER
+		where 1=1
+		<if test="empNo != null and empNo != ''">
+			 and a.TREE_ID=#{empNo}
+		</if>
+		<if test="gzYm != null and gzYm != ''">
+			 and a.NODE_NO=#{gzYm}
+		</if>
+		<if test="status != null and status != ''">
+			 and  b.STATUS=#{status}
+		</if>
+		<if test="leaveType != null">
+			 and b.LEAVE_TYPE in
+			<foreach collection="leaveTypes" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM CF_ATTENDANCE_VACATEMANAGE WHERE PRI_NUMBER = #{value}
+	</delete>
+
+	<update id="update" parameterType="com.zhph.model.cf.CfVacateManage">
+		UPDATE CF_ATTENDANCE_VACATEMANAGE 
+		<!-- 各种更改的字段 --> 
+		<set>
+			<if test="empNo != null and empNo !='' ">
+				EMP_NO = #{empNo, jdbcType=VARCHAR}, 
+			</if>
+			<if test="empName != null and empName !='' ">
+				EMP_NAME = #{empName, jdbcType=VARCHAR}, 
+			</if>
+			<if test="regionId != null and regionId !='' ">
+				REGION_ID = #{regionId, jdbcType=VARCHAR}, 
+			</if>
+			<if test="filialeId != null and filialeId !='' ">
+				FILIALE_ID = #{filialeId, jdbcType=VARCHAR}, 
+			</if>
+			<if test="businessDeptId != null and businessDeptId !='' ">
+				BUSINESSDEPT_ID = #{businessDeptId, jdbcType=VARCHAR}, 
+			</if>
+			<if test="teamId != null and teamId !='' ">
+				TEAM_ID = #{teamId, jdbcType=VARCHAR}, 
+			</if>
+			<if test="deptId != null and deptId !='' ">
+				DEPT_ID = #{deptId, jdbcType=VARCHAR}, 
+			</if>
+			<if test="leaveType != null and leaveType !='' ">
+				LEAVE_TYPE = #{leaveType, jdbcType=VARCHAR}, 
+			</if>
+			<if test="post != null and post !='' ">
+				POST = #{post, jdbcType=VARCHAR}, 
+			</if>
+			<if test="rankType != null and rankType !='' ">
+				RANK_TYPE = #{rankType, jdbcType=VARCHAR}, 
+			</if>
+			<if test="leaveInterval != null and leaveInterval !='' ">
+				LEAVE_INTERVAL = #{leaveInterval, jdbcType=VARCHAR}, 
+			</if>
+			<if test="startTime != null and startTime !='' ">
+				START_TIME = #{startTime, jdbcType=VARCHAR}, 
+			</if>
+			<if test="endTime != null and endTime !='' ">
+				END_TIME = #{endTime, jdbcType=VARCHAR}, 
+			</if>
+			<if test="totalTime != null and totalTime !='' ">
+				TOTAL_TIME = #{totalTime, jdbcType=VARCHAR}, 
+			</if>
+			<if test="startTimecorspMonth != null and startTimecorspMonth !='' ">
+				STARTTIME_CORSPMONTH = #{startTimecorspMonth, jdbcType=VARCHAR}, 
+			</if>
+			<if test="endTimecorspMonth != null and endTimecorspMonth !='' ">
+				ENDTIME_CORSPMONTH = #{endTimecorspMonth, jdbcType=VARCHAR}, 
+			</if>
+			<if test="dayBystart != null and dayBystart !='' ">
+				DAY_BYSTART = #{dayBystart, jdbcType=VARCHAR}, 
+			</if>
+			<if test="dayByend != null and dayByend !='' ">
+				DAY_BYEND = #{dayByend, jdbcType=VARCHAR}, 
+			</if>
+			<if test="leaveReason != null and leaveReason !='' ">
+				LEAVE_REASON = #{leaveReason, jdbcType=VARCHAR}, 
+			</if>
+			<if test="status != null and status !='' ">
+				STATUS = #{status, jdbcType=VARCHAR}, 
+			</if>
+			<if test="auditOpinion != null and auditOpinion !='' ">
+				AUDIT_OPINION = #{auditOpinion, jdbcType=VARCHAR}, 
+			</if>
+			<if test="dateofLeave != null and dateofLeave !='' ">
+				DATEOF_LEAVE = #{dateofLeave, jdbcType=VARCHAR}, 
+			</if>
+			<if test="createuser != null and createuser !='' ">
+				CREATE_USER = #{createuser, jdbcType=VARCHAR}, 
+			</if>
+			<if test="salesCreateFlag != null and salesCreateFlag !='' ">
+				SALESCREATEFLAG = #{salesCreateFlag, jdbcType=VARCHAR}, 
+			</if>
+		</set>
+			WHERE PRI_NUMBER = #{priNumber, jdbcType=BIGINT} 
+	</update>
+	<update id="updateStatusByIds" parameterType="map">
+			UPDATE CF_ATTENDANCE_VACATEMANAGE SET 
+			<if test="status != null and status !='' ">
+				 STATUS = #{status, jdbcType=VARCHAR}, 
+			</if>
+			<if test="auditOpinion != null and auditOpinion !='' ">
+				 AUDIT_OPINION = #{auditOpinion, jdbcType=VARCHAR}, 
+			</if>
+			PRI_NUMBER=PRI_NUMBER  Where 1=1
+			<if test="ids != null	">
+				 AND PRI_NUMBER IN 
+				<foreach collection="ids" separator="," close=")" open="(" item="id">
+					#{id}
+				</foreach>
+			</if>
+			<if test="condStatus != null	">
+				 AND STATUS IN 
+				<foreach collection="condStatus" separator="," close=")" open="(" item="stat">
+					#{stat}
+				</foreach>
+			</if>
+	</update>
+	
+	<select id="querySalaryEmp"  resultType="map" parameterType="map" >
+			select a.emp_no,a.emp_name,a.dept_no,b.POS_NAME AS post,
+			(select TO_CHAR(wm_concat(dept_type||'='||dept_name)) from HQCLCF_DEPT
+			where dept_type
+			is not null and id !=1 start with ID=
+			(select ID from
+			hqclcf_dept temp where temp.dept_code=a.dept_no)
+			CONNECT BY PRIOR PID =
+			ID) as deptInfo from hqclcf_emp a join hqclcf_dept hd on hd.dept_code=a.dept_no  LEFT JOIN HQCLCF_BUSINESS_SCHEDULED b ON
+			a.position=b.POS_CODE where  a.business_line='2' AND a.status='1'
+			<if test="empInfo !=null and empInfo != ''">
+				 and (a.EMP_NO like CONCAT(CONCAT('%', #{empInfo}),'%') or a.EMP_NAME like CONCAT(CONCAT('%', #{empInfo}),'%'))
+			</if>
+			<if test="deptIds !=null">
+			  and hd.id in
+				<foreach collection="deptIds" close=")" item="deptId" open="(" separator=",">
+					#{deptId}
+				</foreach>
+			</if>
+			<if test="empNo!=null and empNo!=''">
+				and a.emp_No like concat(concat('%','${empNo}'),'%')
+			</if>
+	</select>
+	<select id="querySalaryEmpCount">
+			select count(1) from hqclcf_emp a join hqclcf_dept hd on hd.dept_code=a.dept_no   where a.business_line='2'  AND a.status='1' 
+			<if test="empInfo !=null and empInfo != ''">
+				 and (a.EMP_NO like CONCAT(CONCAT('%', #{empInfo}),'%') or a.EMP_NAME like CONCAT(CONCAT('%', #{empInfo}),'%'))
+			</if>
+			<if test="deptIds !=null">
+			  and hd.id in
+				<foreach collection="deptIds" close=")" item="deptId" open="(" separator=",">
+					#{deptId}
+				</foreach>
+			</if>			
+	</select>
+</mapper>

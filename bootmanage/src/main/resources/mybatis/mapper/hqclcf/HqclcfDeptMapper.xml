@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfDeptMapper">
+    <resultMap id="hqclcfDeptResultMap" type="com.zhph.model.hqclcf.HqclcfDept">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="DEPT_TYPE" property="deptType" jdbcType="VARCHAR"/>
+        <result column="PID" property="pid" jdbcType="BIGINT"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="UPDATOR" property="updator" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="BUSINESS_LINE" property="businessLine" jdbcType="INTEGER"/>
+        <result column="ORGANIZAT" property="organizat" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="hqclcfPostResultMap" type="com.zhph.model.hqclcf.HqclcfPost">
+        <id column="pri_number" property="priNumber" jdbcType="BIGINT"/>
+        <result column="post_no" property="postNo" jdbcType="VARCHAR"/>
+        <result column="post_name" property="postName" jdbcType="VARCHAR"/>
+        <result column="dept_no" property="deptNo" jdbcType="VARCHAR"/>
+        <result column="rank_no" property="rankNo" jdbcType="VARCHAR"/>
+        <result column="post_pid" property="postPid" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="businessline" property="businessLine" jdbcType="INTEGER"/>
+        <result column="createby" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="organizat" property="organizat" jdbcType="INTEGER"/>
+    </resultMap>
+    <!--表中所有字段-->
+    <sql id="Base_Column_List">
+      ID,DEPT_CODE,DEPT_NAME,DEPT_TYPE,PID,STATUS,REMARK,CREATOR,UPDATOR,BUSINESS_LINE,ORGANIZAT,CREATE_TIME,UPDATE_TIME
+    </sql>
+    <!--插入的实体对象值，允许为空-->
+    <sql id="Base_Column_Filed">
+      #{id,jdbcType=BIGINT},#{deptCode,jdbcType=VARCHAR},#{deptName,jdbcType=VARCHAR},
+      #{deptType,jdbcType=VARCHAR},#{pid,jdbcType=BIGINT},#{status,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},#{updator,jdbcType=VARCHAR},
+      #{businessLine,jdbcType=INTEGER},#{organizat,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}
+    </sql>
+    <!--查询条件-->
+    <sql id="Example_Where_Clause">
+        <where>
+            <if test="id != null and id !='' or id==0 ">
+                AND ID=#{id}
+            </if>
+            <if test="deptCode!=null and deptCode !='' ">
+                AND DEPT_CODE=#{deptCode}
+            </if>
+            <if test="deptType!=null and deptType !='' ">
+                AND DEPT_TYPE=#{deptType}
+            </if>
+            <if test="deptName !=null and deptName !='' ">
+                AND DEPT_NAME=#{deptName}
+            </if>
+            <if test="pid!=null and pid!='' ">
+                AND PID=#{pid}
+            </if>
+            <if test="status!=null and status!='' ">
+                AND STATUS=#{status}
+            </if>
+            <if test="businessLine!=null and businessLine!='' ">
+                AND BUSINESS_LINE=#{businessLine}
+            </if>
+        </where>
+    </sql>
+
+    <!--根据条件查询-->
+    <select id="queryAll" resultMap="hqclcfDeptResultMap" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <include refid="Example_Where_Clause"/>
+        ORDER BY ID ASC
+    </select>
+    <!--逐一查询所有上级部门-->
+    <select id="queryParentOrSubDepts" resultMap="hqclcfDeptResultMap" parameterType="map">
+        SELECT distinct
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT WHERE DEPT_TYPE IS NOT NULL AND STATUS='1'
+        <if test="userId !=null and userId !=''">
+            start with id in (select dept_id from sys_user_deptauth_ref where user_id=#{userId} and rownum=1)
+            CONNECT by PRIOR
+            <if test="type != null and type=='up'">
+                pid=id
+            </if>
+            <if test="type != null and type!='up'">
+                id=pid
+            </if>
+        </if>
+        <if test="deptId !=null and deptId !=''">
+            start with id=#{deptId} CONNECT by PRIOR
+            <if test="type != null and type=='up'">
+                pid=id
+            </if>
+            <if test="type != null and type!='up'">
+                id=pid
+            </if>
+        </if>
+        <if test="deptIds != null">
+            start with id in
+            <foreach collection="deptIds" open="(" close=")" separator="," item="deptId">
+                #{deptId}
+            </foreach>
+            CONNECT by PRIOR
+            <if test="type != null and type=='up'">
+                pid=id
+            </if>
+            <if test="type != null and type!='up'">
+                id=pid
+            </if>
+        </if>
+        <if test="deptCode !=null and deptCode !=''">
+            start with DEPT_CODE=#{deptCode} CONNECT by PRIOR
+            <if test="type != null and type=='up'">
+                pid=id
+            </if>
+            <if test="type != null and type!='up'">
+                id=pid
+            </if>
+        </if>
+    </select>
+
+    <!--查询树，不排除组织机构-->
+    <select id="queryTreeByParams" resultMap="hqclcfDeptResultMap" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <include refid="Example_Where_Clause"/>
+        UNION
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <where>
+            <choose>
+                <when test="isSuperior=='yes'">
+                  AND ID =1 AND BUSINESS_LINE IS NULL
+                </when>
+                <otherwise>
+                    AND ID IS NULL
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY ID DESC
+    </select>
+
+    <!--根据当前登录用户拥有的业务条线查询树-->
+    <select id="queryTreeByOnlineUserBl" resultMap="hqclcfDeptResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <where>
+            <if test="businessLine!=null and businessLine.size!=0">
+                AND BUSINESS_LINE IN
+                <foreach collection="businessLine" item="bl" index="index" open="(" close=")" separator=",">
+                    #{bl}
+                </foreach>
+            </if>
+            AND STATUS=1
+        </where>
+        UNION
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT WHERE ID =1 AND BUSINESS_LINE IS NULL
+    </select>
+
+
+    <insert id="addDept" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            SELECT SQ_HQCLCF_DEPT.nextval AS ID FROM DUAL
+        </selectKey>
+        INSERT INTO HQCLCF_DEPT(<include refid="Base_Column_List"/>)
+        VALUES(<include refid="Base_Column_Filed"/>)
+    </insert>
+
+    <update id="editEdit" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        UPDATE HQCLCF_DEPT
+        SET
+        DEPT_NAME=#{deptName,jdbcType=VARCHAR},
+        DEPT_TYPE=#{deptType,jdbcType=VARCHAR},
+        PID=#{pid,jdbcType=BIGINT},
+        STATUS=#{status,jdbcType=VARCHAR},
+        REMARK=#{remark,jdbcType=VARCHAR},
+        UPDATOR=#{updator,jdbcType=VARCHAR},
+        BUSINESS_LINE=#{businessLine,jdbcType=INTEGER},
+        ORGANIZAT=#{organizat,jdbcType=INTEGER},
+        UPDATE_TIME=#{updateTime,jdbcType=TIMESTAMP}
+        WHERE ID=#{id}
+    </update>
+
+    <delete id="delById" parameterType="Object">
+      DELETE  FROM  HQCLCF_DEPT WHERE  ID=#{id}
+    </delete>
+
+    <!--批量修改-->
+    <update id="updateDeptByPdept" parameterType="java.util.List">
+        begin
+        <foreach collection="list" item="item" index="index" separator=";">
+            update HQCLCF_DEPT
+            <set>
+                <if test="item.status!=null and item.status!=''">
+                    STATUS = #{item.status},
+                </if>
+            </set>
+            where ID = #{item.id}
+        </foreach>
+        ;end;
+    </update>
+    <!-- update HQCLCF_DEPT SET PID=#{pid,jdbcType=BIGINT} WHERE  ID=#{id}-->
+  <!--  update HQCLCF_DEPT SET DEPT_CODE=#{deptCode,jdbcType=VARCHAR} WHERE  ID=#{id}-->
+    <update id="updataById" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        update HQCLCF_DEPT SET PID=#{pid,jdbcType=BIGINT} WHERE  ID=#{id}
+    </update>
+
+
+    <!--根据部门ID查询上级节点-->
+    <select id="queryPidObjById" parameterType="Map" resultMap="hqclcfDeptResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <choose>
+            <!--传入自定义的type: 这个排除自身和最上级部门-->
+            <when test=" type =='NotOwnAndMaxP' ">
+                <where>
+                    <if test="id!=null and id !='' ">
+                        AND ID NOT IN(1,#{id}) START WITH ID = ${id} CONNECT BY PRIOR PID = ID
+                    </if>
+                </where>
+            </when>
+            <!--不传type就默认查询出自己合最上级部门-->
+            <otherwise>
+                START WITH ID = #{id} CONNECT BY PRIOR PID = ID
+            </otherwise>
+        </choose>
+        ORDER BY ID
+    </select>
+
+
+    <select id="queryPostByDeptId" resultMap="hqclcfPostResultMap">
+        SELECT DISTINCT
+        B.PRI_NUMBER,
+        B.POST_NO,
+        B.POST_NAME,
+        B.BUSINESSLINE,
+        B.DEPT_NO,
+        B.RANK_NO,
+        B.POST_PID,
+        B.ORGANIZAT,
+        B.STATUS,
+        B.CREATEBY,
+        B.CREATE_TIME,
+        B.DESCRIPTION
+        FROM HQCLCF_DEPT A INNER JOIN HQCLCF_POST B ON A.ID=B.DEPT_NO
+        <where>
+            <if test="id!=null and id!='' ">
+                AND A.ID=#{id}
+            </if>
+            <if test="status!=null and status!='' ">
+                AND B.STATUS=#{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryDeptByCode" parameterType="java.lang.String" resultMap="hqclcfDeptResultMap">
+		SELECT * FROM HQCLCF_DEPT where DEPT_CODE = #{deptCode}
+    </select>
+
+    <select id="queryDeptNameByCode" parameterType="java.lang.String" resultMap="hqclcfDeptResultMap">
+		SELECT DISTINCT DEPT_CODE FROM HQCLCF_DEPT where DEPT_NAME = #{deptName}
+    </select>
+    
+    <select id="queryDeptChildNameByCode" parameterType="com.zhph.model.hqclcf.HqclcfDept" resultMap="hqclcfDeptResultMap">
+		SELECT DISTINCT DEPT_CODE FROM HQCLCF_DEPT hd where DEPT_NAME = #{hqclcfDept.deptName}
+		and
+		hd.pid = (SELECT hd1.id from hqclcf_dept hd1  where  hd1.dept_code= #{hqclcfDept.deptCode})
+    </select>
+
+    <select id="queryOrgParams" resultMap="hqclcfDeptResultMap">
+		select * From HQCLCF_DEPT where BUSINESS_LINE=3 and STATUS=1 and DEPT_TYPE=2
+    </select>
+
+    <select id="queryDeptById" parameterType="java.lang.Long" resultMap="hqclcfDeptResultMap">
+        SELECT * FROM HQCLCF_DEPT where ID = #{id}
+    </select>
+
+    <select id="queryDeptMapByMap" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+        SELECT
+            DISTINCT
+            A.ID,
+            A.DEPT_CODE,
+            A.DEPT_NAME,
+            A.BUSINESS_LINE
+        FROM
+            HQCLCF_DEPT A
+        INNER JOIN SYS_USER_DEPTAUTH_REF B ON A . ID = B.DEPT_ID
+        WHERE
+            USER_ID = #{userId} GROUP BY A. ID,
+            A.DEPT_CODE,
+            A.DEPT_NAME,
+            A.BUSINESS_LINE
+    </select>
+    <select id="queryAuthedDeptsByUserId" resultMap="hqclcfDeptResultMap" parameterType="string">
+            SELECT * FROM HQCLCF_DEPT hd
+         	JOIN SYS_USER_DEPTAUTH_REF sudr ON hd.ID=sudr.DEPT_ID AND
+        	sudr.USER_ID=#{value} WHERE hd.STATUS='1'
+    </select>
+
+    <!--根据下拉传入的id查询消分的上下级关系-->
+    <select id="queryCfDeptStartWithId" resultMap="hqclcfDeptResultMap" parameterType="java.lang.Long">
+        SELECT DISTINCT
+            ID AS "id",
+            DEPT_CODE AS "deptCode",
+            DEPT_NAME AS "deptName",
+            DEPT_TYPE AS "deptType",
+            PID AS "pid"
+        FROM
+            (
+                SELECT
+                    ID,
+                    DEPT_CODE,
+                    DEPT_NAME,
+                    DEPT_TYPE,
+                    PID
+                FROM
+                    NEWSALARYUSER.HQCLCF_DEPT
+                WHERE
+                    ID != 1
+                AND DEPT_TYPE IS NOT NULL AND DEPT_TYPE!=4 START WITH ID = #{id} CONNECT BY PRIOR PID = ID
+                GROUP BY
+                    ID,
+                    DEPT_CODE,
+                    DEPT_NAME,
+                    DEPT_TYPE,
+                    PID
+                UNION ALL
+                    SELECT
+                        ID,
+                        DEPT_CODE,
+                        DEPT_NAME,
+                        DEPT_TYPE,
+                        PID
+                    FROM
+                        NEWSALARYUSER.HQCLCF_DEPT
+                    WHERE
+                        ID != 1
+                    AND DEPT_TYPE IS NOT NULL AND DEPT_TYPE!=4  START WITH ID = #{id} CONNECT BY PID = PRIOR ID
+                    GROUP BY
+                        ID,
+                        DEPT_CODE,
+                        DEPT_NAME,
+                        DEPT_TYPE,
+                        PID
+            )
+    </select>
+
+    <!--根据deptId查询上级以及下级数据(包含自己)-->
+    <select id="queryChildNodeBydeptId" resultMap="hqclcfDeptResultMap" parameterType="map">
+        SELECT distinct
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_DEPT
+        <if test="deptId !=null and deptId !=''">
+            start with id=#{deptId} CONNECT by PRIOR
+            <if test="type != null and type=='up'">
+                pid=id
+            </if>
+            <if test="type != null and type='down'">
+                id=pid
+            </if>
+        </if>
+    </select>
+    
+    <select id="queryArea" resultType="java.util.Map">
+		 SELECT  DISTINCT 
+         hd.dept_name,hd.dept_code  
+         FROM  hqclcf_dept hd,hqclcf_emp he 
+         where 
+         hd.dept_type='1' and  he.BUSINESS_LINE='3'
+    </select>
+    
+    <select id="queryOrg" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT  DISTINCT 
+         hd.dept_name,hd.dept_code  
+         FROM  hqclcf_dept hd,hqclcf_emp he 
+         where 
+         hd.dept_type='2' and  he.BUSINESS_LINE='3'
+         and hd.pid = (SELECT hd1.id from hqclcf_dept hd1 where  hd1.dept_code= #{deptCode})
+    </select>
+    
+    <select id="queryDept" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT  DISTINCT 
+         hd.dept_name,hd.dept_code  
+         FROM  hqclcf_dept hd,hqclcf_emp he 
+         where 
+         hd.dept_type='3' and  he.BUSINESS_LINE='3'
+         and hd.pid = (SELECT hd1.id from hqclcf_dept hd1 where  hd1.dept_code= #{deptCode})
+    </select>
+    
+    <select id="queryTeam" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT  DISTINCT 
+         hd.dept_name,hd.dept_code  
+         FROM  hqclcf_dept hd,hqclcf_emp he 
+         where 
+         hd.dept_type='4' and  he.BUSINESS_LINE='3'
+         and hd.pid = (SELECT hd1.id from hqclcf_dept hd1 where  hd1.dept_code= #{deptCode})
+    </select>
+</mapper>

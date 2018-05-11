@@ -1,0 +1,294 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <style>
+            #mainForm .layui-inline{
+                width : 320px;
+                margin-left : 10px;
+                display: inline;
+            }
+            #mainForm .layui-form-label{
+                width : 20% !important;
+                padding: 4px 15px;
+            }
+            #mainForm .layui-required-span{
+                color: red;
+                float: left;
+                padding: 9px 0px;
+            }
+            #mainForm .layui-form-item{
+                margin-bottom : 0px;
+            }
+            #mainForm .Non-Selectable{
+               background-color: #F8F8F8;
+                cursor: not-allowed!important;
+            }
+            #mainForm .layui-input:hover {
+                border-color: #5bb730 !important;
+            }
+            .layui-layer-hui .layui-layer-content {
+                padding: 7px 25px;
+                margin-top: 1px;
+                text-align: center;
+                background-color: black;
+            }
+            .form .form-body {
+                padding: 4%;
+            }
+        </style>
+</head>
+<link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css">
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.validate-1.13.1.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layer/layer.js"></script>
+
+<body>
+	<div class="wrapper wrapper-content animated fadeInUp" style="padding: 0px" >
+    <div class="container-fluid" style="padding: 0px;">
+        <div class="ibox-content form">
+            <div class="form-body" style="height: 550px">
+                <div class="container-fluid">
+                    <div class="row layui-form">
+                        <form id="mainForm">
+                            <input type="hidden"  name="priNumber" id="priNumber" value="${detail.priNumber!}">
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">合同编码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="loanContractNo" id="loanContractNo" value="${detail.loanContractNo!}" readonly class="layui-input Non-Selectable" placeholder="请输入合同编码" >
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="width: auto;">客户姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="loanName" id="loanName" value="${detail.loanName!}"  class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                            </div>
+                           <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">合同额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="loanAmount" id="loanAmount" value="${detail.loanAmount!}" class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">约定放款日</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="grantLoanDate" id="grantLoanDate" value="${detail.grantLoanDate!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">放款额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="grantLoanAmount" id="grantLoanAmount" value="${detail.grantLoanAmount!}" class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">实际放款日</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="payDate" id="payDate" value="${detail.payDate!}" class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">业务经理编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="businessManagerNo" id="businessManagerNo">
+                                        <input type="text"   id="businessManagerNo"  value="${detail.businessManagerNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">业务经理姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="businessManagerName" id="businessManagerName" value="${detail.businessManagerName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">团队经理编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="teamManagerNo" id="teamManagerNo">
+                                        <input type="text"   id="teamManagerNo"  value="${detail.teamManagerNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">团队经理姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="teamManagerName" id="teamManagerName" value="${detail.teamManagerName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">营业部经理编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="orgManagerNo" id="orgManagerNo">
+                                        <input type="text"   id="orgManagerNo"  value="${detail.orgManagerNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">营业部经理姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="orgManagerName" id="orgManagerName" value="${detail.orgManagerName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">区域经理编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="areaManagerNo" id="areaManagerNo">
+                                        <input type="text"   id="areaManagerNo"  value="${detail.areaManagerNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">区域经理姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="areaManagerName" id="areaManagerName" value="${detail.areaManagerName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">外访专员编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="wfEmpNo" id="wfEmpNo">
+                                        <input type="text"   id="wfEmpNo"  value="${detail.wfEmpNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">外访专员姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="wfEmpName" id="wfEmpName" value="${detail.wfEmpName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">信审专员编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="xsEmpNo" id="xsEmpNo">
+                                        <input type="text"   id="xsEmpNo"  value="${detail.xsEmpNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">信审专员姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="xsEmpName" id="xsEmpName" value="${detail.xsEmpName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">客服专员编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="hidden" name="kfEmpNo" id="kfEmpNo">
+                                        <input type="text"   id="kfEmpNo"  value="${detail.kfEmpNo!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">客服专员姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  name="kfEmpName" id="kfEmpName" value="${detail.kfEmpName!}"  class="layui-input Non-Selectable" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                            <div class="layui-inline ">
+                                <label class="layui-form-label" style="width: auto;">区域</label>
+                                <div class="layui-input-inline">
+                                    <input type="text"  name="areaName" id="areaName"  value="${detail.areaName!}"   class="layui-input Non-Selectable" readonly >
+                                </div>
+                            </div>
+                            <div class="layui-inline ">
+                                <label class="layui-form-label" style="width: auto;">分公司</label>
+                                <div class="layui-input-inline">
+                                    <input type="text"  name="orgName" id="orgName"  value="${detail.orgName!}" class="layui-input Non-Selectable" readonly >
+                                </div>
+                            </div>
+                        </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">部门</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  readonly name="deptName"  id="deptName" value="${detail.deptName!}" class="layui-input Non-Selectable"  >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                  <label class="layui-form-label" style="width: auto;">团队</label>
+                                  <div class="layui-input-inline">
+                                    <input type="text"  name="teamName" id="teamName"  value="${detail.teamName!}" class="layui-input Non-Selectable" readonly >
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">工资年月</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  readonly name="gzym"  id="gzym" value="${detail.gzym!}" class="layui-input Non-Selectable"  >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                  <label class="layui-form-label" style="width: auto;"></label>
+                                  <div class="layui-input-inline">
+                                   
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  readonly name="createTime"  id="createTime" value="${(detail.createTime?string('yyyy-MM-dd'))!}" class="layui-input Non-Selectable" readonly >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                  <label class="layui-form-label" style="width: auto;">创建者</label>
+                                      
+                                  <div class="layui-input-inline">
+                                     <input type="text"  name="creatorNo" id="creatorNo"  value="${detail.creatorNo!}" class="layui-input Non-Selectable"  readonly>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline ">
+                                    <label class="layui-form-label" style="width: auto;">修改时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  readonly name="updateTime"  id="updateTime" value="${detail.updateTime!}" class="layui-input Non-Selectable"  >
+                                    </div>
+                                </div>
+                                <div class="layui-inline ">
+                                  <label class="layui-form-label" style="width: auto;">修改者</label>
+                                  <div class="layui-input-inline">
+                                    <input type="text"  name="modifierName" id="modifierName"  value="${(detail.modifierName?string('yyyy-MM-dd'))!}" class="layui-input Non-Selectable"  readonly>
+                                  </div>
+                                </div>
+                            </div>                             
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+	
+</body>
+
+<script type="text/javascript">
+	
+</script>
+</html>
+</@compress>

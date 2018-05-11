@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.common.BaseMapper">
+    <resultMap id="syslogResultMap" type="com.zhph.model.common.SysLog">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="OPERATE_CLASS" property="operateClass" jdbcType="VARCHAR" />
+        <result column="OLD_DATA" property="oldData" jdbcType="CLOB" javaType="java.lang.String" typeHandler="com.zhph.util.OracleClobTypeHandler"/>
+        <result column="NEW_DATA" property="newData" jdbcType="CLOB" javaType="java.lang.String" typeHandler="com.zhph.util.OracleClobTypeHandler"/>
+        <result column="OPERATE_TYPE" property="operateType" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,
+        CREATE_NAME,
+        CREATE_TIME,
+        OLD_DATA,
+        NEW_DATA,
+        OPERATE_CLASS,
+        OPERATE_TYPE
+    </sql>
+
+    <sql id="Base_Column_Filed">
+        #{id,jdbcType=BIGINT},
+        #{createName,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{oldData,jdbcType=VARCHAR},
+        #{newData,jdbcType=VARCHAR},
+        #{operateClass,jdbcType=VARCHAR},
+        #{operateType,jdbcType=VARCHAR}
+    </sql>
+
+    <select id="queryLogByUserName" resultMap="syslogResultMap">
+        SELECT
+       <include refid="Base_Column_List"/>
+        FROM NEWSALARYUSER.SYS_LOG_INFO
+        <where>
+            <if test="createName!=null and createName!=''">
+                AND CREATE_NAME=#{createName}
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveLog" parameterType="com.zhph.model.common.SysLog">
+        <selectKey resultType="Long" keyProperty="id" order="BEFORE">
+            SELECT SQ_SYS_LOG_INFO.nextval AS ID FROM DUAL
+        </selectKey>
+        INSERT INTO SYS_LOG_INFO( <include refid="Base_Column_List"/>)
+        VALUES(<include refid="Base_Column_Filed"/>)
+    </insert>
+</mapper>

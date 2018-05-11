@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<@compress single_line=true></@compress>
+<html>
+<head>
+    <#include "/pages/common/head.html" />
+    <title>人员异动管理</title>
+</head>
+<style>
+    #workpaceEditDiv input {
+        width: 157px;
+        height: 24px;
+    }
+
+    #workpaceEditDiv select {
+        width: 157px;
+        height: 24px;
+    }
+</style>
+<body style="padding: 0px; margin: 0px;">
+<div class="wrapper wrapper-content">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">基础管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe62a;</i>
+            <font>人员异动管理</font>
+        </li>
+    </ol>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="form" class="layui-form" lay-filter="form">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!--员工编码-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工编码：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empNo" type="text" class="form-control input-sm" placeholder="员工编码">
+                                </div>
+                            </div>
+                        </div>
+                        <!--员工姓名-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empName" type="text" class="form-control input-sm" placeholder="员工姓名">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>异动类型：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <select name="transferType" lay-search="">
+                                                <option></option>
+                                                <#list  transferTypeList as tl>
+                                                    <option value="${tl.sysValue!}">${tl.sysName!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>调动时间：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="transferTime" id="transferTime" type="text"
+                                           class="layui-input input-sm"
+                                           placeholder="调动时间">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>原部门：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input type="hidden" id="priDeptNoHidden" value="">
+                                    <input id="priDeptNo" type="text" class="form-control input-sm" readonly
+                                           placeholder="原部门">
+                                    <input type="hidden" name="priDeptNo" id="actionTypeId"/>
+                                    <!--actionTreeContent-->
+                                    <div id="actionTreeContent"
+                                         style="width: 300px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                        <ul id="actionTypeTree" class="ztree"
+                                            style="margin-top:0;height: 200px;overflow: auto;"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>原岗位：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <select name="priPostNo" id="priPostNo" type="text" class="form-control input-sm"
+                                            placeholder="原岗位" lay-search="">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>新部门：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input type="hidden" id="newDeptHidden" value="">
+                                    <input id="newDept" type="text" class="form-control input-sm" readonly
+                                           placeholder="新部门">
+                                    <input type="hidden" name="newDept" id="newDeptActionTypeId"/>
+                                    <!--actionTreeContent-->
+                                    <div id="newActionTreeContent"
+                                         style="width: 300px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                        <ul id="newActionTypeTree" class="ztree"
+                                            style="margin-top:0;height: 200px;overflow: auto;"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>新岗位：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <select name="newPost" id="newPost" type="text" class="form-control input-sm"
+                                            placeholder="新岗位" lay-search="">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>原业务条线：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <select id="busineSelect" name="priBusinessLine" lay-search="">
+                                                <option></option>
+                                                <#list  businessLineList as bl>
+                                                    <option value="${bl.sysValue!}">${bl.sysName!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>新业务条线：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <select id="newBusineSelect" name="newBusinessLine" lay-search="">
+                                                <option></option>
+                                                <#list  businessLineList as bl>
+                                                    <option value="${bl.sysValue!}">${bl.sysName!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--按钮-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-lg-offset-10 col-md-offset-6 col-sm-offset-0 ">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content"
+                                     style="position: relative;left: -160px;">
+                                    <@auth url='/hqclcf/hqclcfPersonTransfer/list'>
+                                    <button lay-submit lay-filter="auditQuery" class="btn btn-primary btn-sm"
+                                            type="button" title="查询">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe615;</i>
+                                        <font>查询</font>
+                                    </button>
+                                </@auth>
+                                <@auth url='/hqclcf/hqclcfPersonTransfer/addInit'>
+                                <button class="btn btn-primary btn-sm" lay-submit lay-filter="addPersonTransfer"
+                                        style="background-color: #FF5722" type="button" title="新增">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+                                    <font>新增</font>
+                                </button>
+                            </@auth>
+                            <button class="btn btn-primary btn-sm" lay-submit lay-filter="clear"
+                                    type="button" title="清除">
+                                <i class="layui-icon" style="font-size: 15px;">&#x1002;</i>
+                                <font>清除</font>
+                            </button>
+                            <@auth url='/hqclcf/hqclcfPersonTransfer/exportExl' >
+                            <button class="btn btn-primary btn-sm" lay-submit lay-filter="exportExl"
+                                    style="background-color: #009688" type="button" title="导出">
+                                <i class="layui-icon" style="font-size: 15px;">&#xe601;</i>
+                                <font>导出</font>
+                            </button>
+                        </@auth>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+<!--Grid-->
+<div class="ibox-content">
+    <table class="layui-hide" id="transferTable" lay-filter="useruv"></table>
+</div>
+</div>
+</div>
+<!--上部分查询-->
+<div style="display: none;" id="blList">
+    <#list  blList as bl>
+        <option value="${bl!}">${bl!}</option>
+    </#list>
+</div>
+</body>
+<#include "/pages/common/foot.html" />
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+<script type="text/html" id="tableRowNumTpl">
+    {{ d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="tableRowOperationTpl">
+    <@auth url='/hqclcf/hqclcfPersonTransfer/editInit'>
+    <a class="layui-btn layui-btn-radius layui-btn-xs" lay-event="edit">编辑</a>
+    </@auth>
+    <@auth url='/hqclcf/hqclcfPersonTransfer/del'>
+    <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </@auth>
+</script>
+<script type="text/html" id="businessLineListTpl">
+    {{#  layui.each(${businessLineListTpl!}.obj, function(index, item){  }}
+    {{#  if(item.sysValue == d.priBusinessLine){  }}
+    {{   item.sysName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="newbusinessLineListTpl">
+    {{#  layui.each(${businessLineListTpl!}.obj, function(index, item){  }}
+    {{#  if(item.sysValue == d.newBusinessLine){  }}
+    {{   item.sysName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="transferTypeListTpl">
+    {{#  layui.each(${transferTypeListTpl!}.obj, function(index, item){  }}
+    {{#  if(item.sysValue == d.transferType){  }}
+    {{   item.sysName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="deptsListTpl">
+    {{#  layui.each(${depts!}.obj, function(index, item){  }}
+    {{#  if(item.deptCode == d.priDeptNo){  }}
+    {{   item.deptName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="newdeptsListTpl">
+    {{#  layui.each(${depts!}.obj, function(index, item){  }}
+    {{#  if(item.deptCode == d.newDept){  }}
+    {{   item.deptName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="postsListTpl">
+    {{#  layui.each(${posts!}.obj, function(index, item){  }}
+    {{#  if(item.postNo == d.priPostNo){  }}
+    {{   item.postName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="newpostsListTpl">
+    {{#  layui.each(${posts!}.obj, function(index, item){  }}
+    {{#  if(item.postNo == d.newPost){  }}
+    {{   item.postName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="businessesListTpl">
+    {{#  layui.each(${businesses!}.obj, function(index, item){  }}
+    {{#  if(item.posCode == d.priHqPosition){  }}
+    {{   item.posName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="newbusinessesListTpl">
+    {{#  layui.each(${businesses!}.obj, function(index, item){  }}
+    {{#  if(item.posCode == d.newHqPosition){  }}
+    {{   item.posName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="ranksListTpl">
+    {{#  layui.each(${ranks!}.obj, function(index, item){  }}
+    {{#  if(item.no == d.priHqRank || item.name == d.priHqRank){  }}
+    {{   item.name }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="newRanksListTpl">
+    {{#  layui.each(${ranks!}.obj, function(index, item){  }}
+    {{#  if(item.no == d.newHqRank || item.name == d.newHqRank){  }}
+    {{   item.name }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/javascript">
+
+
+    var setting = {
+        view: {
+            dblClickExpand: false,
+            showLine: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid"
+            }
+        },
+        callback: {
+            onClick: onClick
+        }
+    };
+
+    /*Init Nodes and action*/
+    function onClick(e, treeId, treeNode) {
+
+        if (treeId == "actionTypeTree") {
+            $("#priDeptNo").val(treeNode.name);
+        }
+        if (treeId == "newActionTypeTree") {
+            $("#newDept").val(treeNode.name);
+        }
+        tree.getDeptInfo(treeNode.id, treeId);
+        tree.getDeptAndPostByDeptNo(treeNode.id, treeId);
+    }
+
+    /*tree*/
+    var tree = {
+        showActionDeptTree: function (type) {
+            $.ajax({
+                url: '${ctx}/hqclcf/hqclcfPost/dept/tree',
+                type: 'post',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+
+                    /*原部门*/
+                    if (type == "pri") {
+                        ztreeObj = $.fn.zTree.init($("#actionTypeTree"), setting, data);
+                        $("#actionTreeContent").slideDown("fast");
+                        var zTree = $.fn.zTree.getZTreeObj("actionTypeTree");
+                        var node = zTree.getNodeByParam("id", $('#actionTypeId').val(), null);
+                        zTree.selectNode(node);
+                        $("body").bind("mousedown", onBodyDownByActionType);
+                    }
+                    /*新部门*/
+                    if (type == "new") {
+                        ztreeObj = $.fn.zTree.init($("#newActionTypeTree"), setting, data);
+                        $("#newActionTreeContent").slideDown("fast");
+                        var zTree = $.fn.zTree.getZTreeObj("newActionTypeTree");
+                        var node = zTree.getNodeByParam("id", $('#newActionTypeId').val(), null);
+                        zTree.selectNode(node);
+                        $("body").bind("mousedown", onBodyDownByActionType);
+                    }
+                }
+            });
+        },
+        getDeptAndPostByDeptNo: function (data, type) {
+            layui.use(['form'], function () {
+                var form = layui.form;
+                $.ajax({
+                    url: '${ctx}/hqclcf/hqclcfPersonTransfer/deptAndPostByDeptNo',
+                    method: 'post',
+                    data: {
+                        id: data
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code == "200") {
+                            if (type == "actionTypeTree") {
+                                $('body').find("#busineSelect option").each(function (index, n) {
+                                    if ($(this).val() == res.dept.businessLine) {
+                                        document.getElementById("busineSelect").value = res.dept.businessLine;
+                                        form.render();
+                                    }
+                                })
+                                $("#priPostNo").empty();
+                                for (var i = 0; i < res.post.length; i++) {
+                                    if (i == 0) {
+                                        $("<option></option>").appendTo($("#priPostNo"));
+                                    }
+                                    $("<option value=" + res.post[i].postNo + ">" + res.post[i].postName + "</option>").appendTo($("#priPostNo"));
+                                }
+                            }
+                            if (type == "newActionTypeTree") {
+                                $('body').find("#newBusineSelect option").each(function (index, n) {
+                                    if ($(this).val() == res.dept.businessLine) {
+                                        document.getElementById("newBusineSelect").value = res.dept.businessLine;
+                                        form.render();
+                                    }
+                                })
+                                $("#newPost").empty();
+                                for (var i = 0; i < res.post.length; i++) {
+                                    if (i == 0) {
+                                        $("<option></option>").appendTo($("#newPost"));
+                                    }
+                                    $("<option value=" + res.post[i].postNo + ">" + res.post[i].postName + "</option>").appendTo($("#newPost"));
+                                }
+                            }
+                            form.render();
+                        } else {
+                            layer.msg("异常，请确认改部门下是否存在岗位或岗位异常", {icon: 3, time: 1500});
+                        }
+
+                    }
+                })
+            })
+        },
+        getDeptInfo: function (deptPriNumber, type) {
+            $.ajax({
+                url: '${ctx}/hqclcf/hqclcfPost/dept/businessLine',
+                data: {
+                    id: deptPriNumber
+                },
+                type: 'POST',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    var code = data.deptCode;
+                    if (type == "actionTypeTree") {
+                        $("#actionTypeId").val(code);
+                    }
+                    if (type == "newActionTypeTree") {
+                        $("#newDeptActionTypeId").val(code);
+                    }
+                }
+            });
+        }
+
+
+    }
+
+    var table;
+    var form;
+    var laydate;
+    /*初始化*/
+    layui.use(['table', 'laydate', 'form'], function () {
+        table = layui.table;
+        form = layui.form;
+        laydate = layui.laydate;
+
+        form.render();
+        table.render({
+            elem: '#transferTable',
+            id: 'id',
+            url: '${ctx}/hqclcf/hqclcfPersonTransfer/list',
+            loading: true,
+            method: 'post',
+            cols: [[
+                {width: 70, fixed: true, title: '序号', align: 'center', sort: true, templet: '#tableRowNumTpl'},
+                {field: 'empNo', title: '员工编码', width: 120, align: 'center'},
+                {field: 'empName', title: '员工姓名', width: 100, align: 'center'},
+                {field: 'priDeptNo', title: '原部门', width: 160, align: 'center', templet: '#deptsListTpl'},
+                {
+                    field: 'priBusinessLine',
+                    title: '原业务条线',
+                    width: 100,
+                    align: 'center',
+                    templet: '#businessLineListTpl'
+                },
+                {field: 'priPostNo', title: '原岗位', width: 150, align: 'center', templet: '#postsListTpl'},
+                {field: 'priHqPosition', title: '原职务', width: 150, align: 'center', templet: '#businessesListTpl'},
+                {field: 'priHqRank', title: '原职级', width: 100, align: 'center', templet: '#ranksListTpl'},
+                {field: 'transferType', title: '异动类型', width: 150, align: 'center', templet: '#transferTypeListTpl'},
+                {field: 'transferTime', title: '生效日期', width: 100, align: 'center'},
+                {field: 'newDept', title: '新部门', width: 160, align: 'center', templet: '#newdeptsListTpl'},
+                {
+                    field: 'newBusinessLine',
+                    title: '新业务条线',
+                    width: 100,
+                    align: 'center',
+                    templet: '#newbusinessLineListTpl'
+                },
+                {field: 'newPost', title: '新岗位', width: 150, align: 'center', templet: '#newpostsListTpl'},
+                {field: 'newHqPosition', title: '新职务', width: 150, align: 'center', templet: '#newbusinessesListTpl'},
+                {field: 'newHqRank', title: '新职级', width: 100, align: 'center', templet: '#newRanksListTpl'},
+                {field: 'createName', title: '创建人', width: 100, align: 'center'},
+                {field: 'createDate', title: '创建日期', width: 100, align: 'center'},
+                {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#tableRowOperationTpl'}
+            ]],
+            height: '500',
+            skin: 'row',
+            size: 'sm',
+            even: true,
+            page: true,
+            limits: [10, 30, 50],
+            limit: 10
+        });
+
+        /*表单事件*/
+        form.on('submit(auditQuery)', function (obj) {
+            table.reload('id', {
+                where: obj.field || {}
+            })
+        });
+        /*导出异动信息*/
+        form.on('submit(exportExl)', function () {
+            window.location = '${ctx}/hqclcf/hqclcfPersonTransfer/exportExl?' + $("#form").serialize();
+            return false;
+        });
+
+        /*一键清除*/
+        form.on('submit(clear)', function () {
+            $("#form").find("input,select").each(function (index, n) {
+                $(this).val("");
+                $("#priPostNo").find("option").each(function (priIndex, n2) {
+                    $(n2).remove();
+                })
+                $("#newPost").find("option").each(function (newIndex, n3) {
+                    $(n3).remove();
+                })
+                form.render();
+            })
+        })
+
+        /*新增*/
+        form.on('submit(addPersonTransfer)', function () {
+
+            var addLayer = layer.open({
+                type: 2,
+                title: '您的位置：基础管理>人员异动管理>新增',
+                btnAlign: 'c',
+                resize: false,
+                skin: '',
+                area: ['65%', '84%'],
+                content: ['${ctx}/hqclcf/hqclcfPersonTransfer/addInit', 'yes'],
+                yes: function (index, layero) {
+
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    /**/
+                    if (iframeWin.validatePersonTransfer()) {
+                        var form = layer.getChildFrame('form', index);
+
+                        var formData = new FormData($(form));
+
+                        $(form).find("select").each(function (index, n) {
+                            if ($(this).attr('name') == "newBusinessLine") {
+                                $(this).attr('disabled', false);
+                            }
+                        })
+                        var obj = $.fn.serializeObject($(form));
+                        /*JSON.stringify(obj)*/
+                        $.ajax({
+                            url: '${ctx}/hqclcf/hqclcfPersonTransfer/add',
+                            data: {"data": JSON.stringify(obj)},
+                            type: 'post',
+                            async: false,
+                            success: function (res) {
+                                if (res.code == "200") {
+                                    layer.msg("新增成功", {icon: 6, time: 1500}, function () {
+                                        table.reload('id', {
+                                            where: obj.field || {}
+                                        })
+
+                                        if (res.msg != null) {
+                                            layer.mgs(res.msg, {icon: 5, time: 1500});
+                                        }
+
+                                        layer.closeAll();
+                                    });
+                                } else {
+                                    layer.msg("新增失败：", {icon: 5, time: 1500});
+                                }
+                            },
+                            error: function () {
+                                layer.msg("新增异常：", {icon: 5, time: 1500});
+                            }
+                        });
+
+                        layer.close(index);
+                    }
+
+                }, cancel: function (index) {
+                    layer.close(index);
+                }
+            });
+
+
+            return false;
+        });
+
+        /*删除修改*/
+        table.on('tool(useruv)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定要删除吗', function (index) {
+                    $.ajax({
+                        url: '${ctx}/hqclcf/hqclcfPersonTransfer/del',
+                        data: {
+                            priNumber: data.priNumber,
+                            transferTime: data.transferTime
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (msg) {
+                            if (msg.status == "1") {
+                                layer.msg("删除成功!", {icon: 6});
+                                table.reload('id', {
+                                    where: obj.field || {}
+                                })
+                            } else {
+                                layer.msg("删除失败! " + msg.info, {icon: 5});
+                            }
+                        },
+                        error: function (msg) {
+
+                        },
+
+                    });
+                });
+            } else if (obj.event === 'edit') {
+
+                if (data.status == 1) {
+                    layer.msg("人员异动已生效，不允许修改！", {time: 1500, icon: 5});
+                    return;
+                }
+
+                var editLayer = layer.open({
+                    type: 2,
+                    title: '您的位置：基础管理>人员异动管理>修改',
+                    btnAlign: 'c',
+                    resize: false,
+                    skin: '',
+                    area: ['1080px', '720px'],
+                    content: ['${ctx}/hqclcf/hqclcfPersonTransfer/editInit?id=' + data.priNumber, 'yes'],
+                    yes: function (index, layero) {
+                    }
+                }, function () {
+                    form.render();
+                });
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+        var form ;
+        var table;
+
+        layui.use(['table', 'laydate', 'form'], function () {
+
+            laydate = layui.laydate;
+            form = layui.form;
+            table = layui.table;
+
+            form.render();
+
+            /*日期控件*/
+            laydate.render({
+                elem: '#transferTime',
+                theme: '#393D49',
+                type: 'month'
+            });
+
+        })
+
+        /*PriDeptTree*/
+        $("#priDeptNo").click(function () {
+            tree.showActionDeptTree("pri");
+        })
+        /*newDeptTree*/
+        $("#newDept").click(function () {
+            tree.showActionDeptTree("new");
+        })
+
+        $('body').find("#busineSelect option").each(function (index, n1) {
+            $(n1).attr('disabled','disabled');
+
+            $('body').find("#blList option").each(function (index, n2) {
+                if ($(n1).val() == $(n2).val()) {
+                    $(n1).attr('disabled',false);
+                }
+            })
+
+        })
+
+        $('body').find("#newBusineSelect option").each(function (index, n1) {
+            $(n1).attr('disabled','disabled');
+
+            $('body').find("#blList option").each(function (index, n2) {
+                if ($(n1).val() == $(n2).val()) {
+                    $(n1).attr('disabled',false);
+                }
+            })
+
+        })
+
+
+    })
+
+
+    /*
+     * Body鼠标按下事件回调函数
+     */
+    function onBodyDownByActionType(event) {
+        if (event.target.id.indexOf('switch') == -1 && event.target.id != 'actionTypeTree') {
+            hideActionTypeMenu();
+        }
+    }
+
+    /*
+     * 隐藏点击事件Tree
+     */
+    function hideActionTypeMenu() {
+        $("#actionTreeContent").fadeOut("fast");
+        $("#newActionTreeContent").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDownByActionType);
+    }
+
+</script>
+</html>

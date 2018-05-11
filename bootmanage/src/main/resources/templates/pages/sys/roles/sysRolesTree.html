@@ -1,0 +1,147 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <title>资源列表</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit"/>
+    <link rel="stylesheet" href="/ui/css/vendor.css"/>
+    <link rel="stylesheet" type="text/css" href="../../ui/css/plugins/grid/bsgrid.all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../ui/css/plugins/zTree_v3/zTreeStyle/zTreeStyle.css"/>
+    <link rel="stylesheet" href="/ui/css/main.css"/>
+    <link rel="stylesheet" href="../../ui/css/plugins/validform/style.css"/>
+    <link href="../../ui/jquery-easyui-1.3.3/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../ui/jquery-easyui-1.3.3/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../ui/js/vendor/modernizr.js"></script>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="../../scripts/ie9.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="wrapper wrapper-content animated fadeInUp">
+    <div class="row">
+        <div class="col-md-3">
+            <select id="sysType" class="form-control input-sm">
+                <option value="1">系统1</option>
+                <option value="2">系统2</option>
+                <option value="3">系统3</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-content">
+                <div class="col-sm-4">
+                    <ul id="resource_view" class="ztree"></ul>
+        <ul id="resource_view2" class="ztree" style="display: none;"></ul>
+            <ul id="resource_view3" class="ztree" style="display: none;"></ul>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" id="returnBtn" class="btn btn-default" >取消</button>
+            <button type="button" id="saveBtn" class="btn btn-primary">确定</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+
+            </body>
+
+            <!-- 全局js 开始-->
+            <script type="text/javascript" src="../../ui/js/vendor.js"></script>
+<script type="text/javascript" src="../../ui/js/plugins/grid/grid.zh-CN.min.js"></script>
+<script type="text/javascript" src="../../ui/js/plugins/grid/bsgrid.all.min.js"></script>
+<script type="text/javascript" src="../../ui/js/plugins/validform/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="../../ui/js/plugins/layerui/layer/layer.js"></script>
+<script type="text/javascript" src="../../ui/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+
+
+<script type="text/javascript">
+    var treeResolver=function(data,topNodeId)
+    {
+        var result =[];
+        parseChildren(data);
+        if(data.id==topNodeId)
+        {
+            result.push(data);
+        }else if(data instanceof Array){
+            result = data;
+        }else
+        {
+            result=data.children;
+        }
+        return result;
+    };
+
+    /**
+     * 处理服务器返回的树形节点
+     */
+    var parseChildren = function(data,topNodeId) {
+        if (data.childSize > 0 && data.children.length == 0) {
+            data.state = "closed";
+        }
+        if(data.children&&data.children.length>0)
+            for ( var i = 0; i < data.children.length; i++) {
+                parseChildren(data.children[i]);
+            }
+    };
+
+    function treeForUpdateFunc(sysType){
+        //初始化Ztree
+        $("#resource_view").tree({
+            url:"/sys/resources/findTreeBySysType?resourcesSysType="+sysType,
+            checkbox:true,
+            onBeforeSelect:function(node){
+            },
+
+            loadFilter: function(data){
+                //过滤
+                return treeResolver(data,"1");
+            }
+        });
+        var nodes="";
+        setTimeout(function(){
+            nodes=$("#resource_view").tree("getChecked","unchecked");
+            for(var i=0;i<nodes.length;i++){
+                $("#resource_view").tree("check",nodes[i].target);//节点被选中
+            }
+        },3000)
+    }
+    /**增加页面进行调用 根据系统展示不同的资源列表*/
+    function treeForAddFunc(sysType){
+        $("#resource_view").tree({
+            url:"/sys/resources/findTreeBySysType?resourcesSysType="+sysType,
+            checkbox:true,
+            onBeforeSelect:function(node){
+            },
+            loadFilter: function(data){
+                //过滤
+                return treeResolver(data,"1");
+            }
+        });
+        var nodes;
+        nodes=$("#resource_view").tree('getChecked');//被选中的节点
+        for(var i=0;i<nodes.length;i++){
+            console.log(nodes[i].id);
+            // $("#resource_view").tree("check",nodes[i].target);//节点被选中
+        }
+    }
+    $(function(){
+        treeForAddFunc( $("#sysType").val());
+        $("#sysType").change(function(){
+            treeForAddFunc(this.value);
+        });
+    });
+
+    /*]]>*/
+</script>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<#include "/pages/common/head.html" >
+<style>
+#editshowForm .layui-inline {
+	width: 320px;
+	margin-left: 10px;
+	display: inline;
+}
+
+#editshowForm .layui-form-label {
+	width: 120px !important;
+	padding: 4px 15px;
+}
+
+#editshowForm .layui-required-span {
+	color: red;
+	float: left;
+	padding: 9px 0px;
+}
+
+#editshowForm .layui-form-item {
+	margin-bottom: 0px;
+}
+
+#editshowForm .layui-input:hover {
+	border-color: #ffa946 !important;
+}
+
+.layui-layer-hui .layui-layer-content {
+	padding: 7px 25px;
+	margin-top: 1px;
+	text-align: center;
+	background-color: black;
+}
+</style>
+</head>
+<body>
+	<div class="wrapper wrapper-content animated fadeInUp" style="padding: 0px">
+		<div class="container-fluid" style="padding: 0px;">
+			<div class="ibox-content form">
+				<div class="form-body" style="height: 360px">
+					<div class="container-fluid">
+						<div class="row layui-form">
+							<form id="editshowForm">
+								<div class="layui-form-item">
+									<div class="layui-inline ">
+										<label class="layui-form-label" style="width: auto;">节假日名称</label>
+										<div class="layui-input-inline">
+											<input type="hidden" name="id" value="" >
+											<input type="text" name="holidayName" id="holidayName" class="layui-input" maxlength="10"  placeholder="节假日名称">
+										</div>
+										<span class="layui-required-span">*</span>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-inline">
+										<label class="layui-form-label" style="width: auto;">开始日期</label>
+										<div class="layui-input-inline">
+											<input type="text" name="holidayStartDate" id="holidayStartDate" class="layui-input" maxlength="10" placeholder="yyyy-MM-dd" readonly>
+										</div>
+										<span class="layui-required-span">*</span>
+									</div>
+									<div class="layui-inline ">
+										<label class="layui-form-label" style="width: auto;">结束日期</label>
+										<div class="layui-input-inline">
+											<input type="text" name="holidayEndDate" id="holidayEndDate"   class="layui-input" maxlength="10" placeholder="yyyy-MM-HH" readonly>
+										</div>
+										<span class="layui-required-span">*</span>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-inline ">
+										<label class="layui-form-label" style="width: auto;">调休上班日</label>
+										<div class="layui-input-inline">
+											<input type="text" id="thisDate" class="layui-input" placeholder="yyyy-MM-HH" readonly>
+											<textarea class="layui-textarea" name="offLaterDate"  id="offLaterDate" style="width: 510px; margin: 3px 0px" readonly  maxlength="120"></textarea>
+										</div>
+										<div class="layui-input-inline">
+											<button class="btn btn-primary btn-sm" type="button" onclick="addText();">添加</button>
+											<button class="btn btn-primary btn-sm" style="background-color: #FF5722" type="button" onclick="cleanText();">清除</button>
+										</div>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-inline ">
+										<label class="layui-form-label" style="width: auto;">描述</label>
+										<div class="layui-input-inline">
+											<textarea class="layui-textarea" name="remark" style="width: 510px;"  maxlength="150"></textarea>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<#include "/pages/common/foot.html" >
+<script type="text/javascript">
+
+	var table;
+	var form;
+	var laydate;
+	layui.use(['table','form','laydate'],function () {
+	    table=layui.table;
+	    form = layui.form;
+	    laydate= layui.laydate;
+
+	    form.render();
+	    laydate.render({
+	        elem: '#holidayStartDate'
+	    });
+	    laydate.render({
+	        elem: '#holidayEndDate'
+	    });
+	    laydate.render({
+	        elem: '#thisDate'
+	    });
+	});
+	
+	function validateForm(){
+		var message = "";
+		if($("#holidayName").val() == ''){
+			message = message + "节假日名称不能为空<br/>";
+		}
+		
+		var startDate = $("#holidayStartDate").val();
+		if(startDate == ''){
+			message = message + "开始日期不能为空<br/>";
+		}
+		
+		var endDate = $("#holidayEndDate").val();
+		if(endDate == ''){
+			message = message + "结束日期不能为空<br/>";
+		}
+		
+		if(!compareDate(startDate,endDate)){
+			message = message + "结束日期不能小于开始时间<br/>";   	
+		}
+		
+		if(message != ""){
+			layer.msg(message,{anim:6,});
+			return false;	
+		}else{
+			return true
+		}
+	}
+	
+	function addText(){
+		var thisdate = $("#thisDate").val();
+		if(thisdate != ""){
+			var off = $("#offLaterDate").text();
+			if(off != ""){
+				if(off.replace(/-/g,'').indexOf(thisdate.replace(/-/g,''))< 0){
+					off = off + ";" + thisdate;		
+				}
+			}else{
+				off = thisdate;
+			}	
+			$("#offLaterDate").text(off);
+		}else{
+			layer.msg("请选择调休上班日期！");
+		}
+	}
+	
+	function cleanText(){
+		$("#offLaterDate").text("");
+	}
+	
+	
+</script>
+</html>

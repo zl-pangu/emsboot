@@ -1,0 +1,89 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <style>
+            #mainForm .layui-inline{
+                width : 320px;
+                margin-left : 10px;
+                display: inline;
+            }
+            #mainForm .layui-form-label{
+                width : 20% !important;
+                padding: 4px 15px;
+            }
+            #mainForm .layui-required-span{
+                color: red;
+                float: left;
+                padding: 9px 0px;
+            }
+            #mainForm .layui-form-item{
+                margin-bottom : 0px;
+            }
+            #mainForm .Non-Selectable{
+               background-color: #F8F8F8;
+                cursor: not-allowed!important;
+            }
+            #mainForm .layui-input:hover {
+                border-color: #5bb730 !important;
+            }
+            .layui-layer-hui .layui-layer-content {
+                padding: 7px 25px;
+                margin-top: 1px;
+                text-align: center;
+                background-color: black;
+            }
+            .form .form-body {
+                padding: 4%;
+            }
+            .b{
+               margin-left :65px;
+               padding-top:30px;
+            }
+        </style>
+</head>
+<link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css">
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.validate-1.13.1.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layer/layer.js"></script>
+
+<body>
+	<div class="b">
+	<b><h1>是否同步业绩明细？</h1></b>
+	</div>
+</body>
+
+<script type="text/javascript">
+	function validateSync() {
+        var flag=true;
+            /* var businessManagerNo = $("#businessManagerNo").val();
+            var businessManagerName = $("businessManagerName").val();
+            
+            
+            if(businessManagerNo==''){
+                validateAddTips('业务经理编码','，不能为空！');
+                flag=false;
+            }
+            if(businessManagerName==''){
+                validateAddTips('业务经理姓名','，不能为空！');
+                flag=false;
+            } */
+        return flag;
+    }
+    
+    function validateAddTips(filedName,msg){
+        layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+            anim:6,
+        });
+    }
+	
+</script>
+</html>
+</@compress>

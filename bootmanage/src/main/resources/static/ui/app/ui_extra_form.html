@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="renderer" content="webkit" /><!-- 让部分国产浏览器默认采用高速模式渲染页面 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>长虹[联合运营平台后台管理系统]</title>
+		<!-- 全局CSS 开始-->
+		<link href="../css/global/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/global/font-awesome.min.css" rel="stylesheet" />
+		<link href="../css/global/simple-line-icons.css" rel="stylesheet" />
+		<link href="../css/global/animate.css" rel="stylesheet">
+		<link href="../css/global/style.css" rel="stylesheet">
+		<link href="../js/plugins/pace/pace.css" rel="stylesheet">
+		<!-- 全局CSS 结束-->
+		<!-- 页面CSS 开始-->
+		<!-- datetimepicker-->
+		<link href="../css/plugins/datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet">
+		<!-- 页面CSS 结束-->
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="../js/bootstrap/html5shiv.min.js"></script>
+		<script src="../js/bootstrap/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="wrapper wrapper-content animated fadeInUp">
+			<div class="row page-heading">
+				<h4><i class="fa fa-flask"></i>  UI组件 / 其他表单组件</h4>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>基于fileupload.js插件</h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<p>fileupload.js插件是bootstrap的扩展插件，首先引入<code>../js/plugins/fileinput/fileinput.js</code>，然后引入例子中代码，具体的js方法<a href="http://jasny.github.io/bootstrap/javascript/#fileinput-usage">点击详情</a></p>
+							<h5 class="text-danger">文件上传 file input</h5>
+							<p>带输入框组的文件上传</p>
+							<div class="fileinput fileinput-new" data-provides="fileinput">
+								<div class="input-group">
+									<div class="form-control input-sm" data-trigger="fileinput">
+										<i class="fa fa-file fileinput-exists"></i>
+										<span class="fileinput-filename"></span>
+									</div>
+									<span class="input-group-addon btn btn-file">
+									<span class="fileinput-new">选择</span>
+									<span class="fileinput-exists">更改</span>
+									<input type="file" name="...">
+									</span>
+									<a href="#" class="input-group-addon btn btn-default fileinput-exists upload-btn">上传</a>
+									<a href="#" class="input-group-addon btn btn-default fileinput-exists"
+									data-dismiss="fileinput">删除</a>
+								</div>
+							</div>
+							<p>基本的上传按钮</p>
+							<div class="fileinput fileinput-new" data-provides="fileinput">
+								<span class="btn btn-default btn-sm btn-file">
+								<span class="fileinput-new">选择文件</span>
+								<span class="fileinput-exists">更改</span>
+								<input type="file" name="...">
+								</span>
+								<a href="#" class="btn btn-default btn-sm fileinput-exists upload-btn">上传</a>
+								<span class="fileinput-filename"></span>
+								<a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+							</div>
+							<h5 class="text-danger">图片上传组件</h5>
+							<div class="fileinput fileinput-new" data-provides="fileinput">
+								<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;">
+									<img src="../images/200x150.gif" alt="...">
+								</div>
+								<div>
+									<span class="btn btn-default btn-sm btn-file">
+									<span class="fileinput-new">选择图片</span>
+									<span class="fileinput-exists">更改</span>
+									<input type="file" name="...">
+									</span>
+									<a href="#" class="btn btn-default btn-sm fileinput-exists upload-btn">上传</a>
+									<a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput">删除</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>日期选择器 datapicker</h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<h3>
+							Data picker
+							</h3>
+							<p>
+							通过鼠标就能轻松选择日期的插件，首先引入<code>bootstrap-datetimepicker.js</code>和<code>bootstrap-datetimepicker.zh-CN.js</code>，然后引入例子中代码，具体的js方法<a href="https://github.com/eternicode/bootstrap-datepicker/">点击详情</a>
+							</p>
+							<div class="form-group" id="data_1">
+								<label class="font-noraml">基本选择</label>
+								<div class="input-group date">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-sm" value="03/04/2014">
+								</div>
+							</div>
+							<div class="form-group" id="data_2">
+								<label class="font-noraml">月份视图</label>
+								<div class="input-group date">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-sm" value="08/25/2014">
+								</div>
+							</div>
+							<div class="form-group" id="data_3">
+								<label class="font-noraml">年份视图</label>
+								<div class="input-group date">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-sm" value="10/11/2013">
+								</div>
+							</div>
+							<div class="form-group" id="data_4">
+								<label class="font-noraml">选择月份</label>
+								<div class="input-group date">
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control input-sm" value="07/01/2014">
+								</div>
+							</div>
+							<div class="form-group" id="data_5">
+								<label class="font-noraml">时间范围</label>
+								<div class="input-daterange input-group" id="datepicker">
+									<input type="text" class="input-sm form-control input-sm" name="start" value="05/14/2014"/>
+									<span class="input-group-addon">到</span>
+									<input type="text" class="input-sm form-control" name="end" value="05/22/2014" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-10">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>iCheck优化输入框样式插件</h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+								<a class="close-link">
+									<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<p>给需要添加icheck样式的input添加class<code>.i-checks</code></p>
+							<h4>添加class<code>.i-checks</code>的input</h4>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>复选框</label>
+										<div class="checkbox-list">
+											<label><input type="checkbox" class="i-checks"> Checkbox 1</label>
+											<label><input type="checkbox" class="i-checks"> Checkbox 2</label>
+											<label><input type="checkbox" class="i-checks" checked disabled> Disabled & checked</label>
+											<label><input type="checkbox" class="i-checks"  disabled> Disabled</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>单选框</label>
+										<div class="checkbox-list">
+											<label><input type="radio" class="i-checks" name="flat-radio"> radio 1</label>
+											<label><input type="radio" class="i-checks" name="flat-radio"> radio 2</label>
+											<label><input type="radio" class="i-checks" name="flat-radio" checked disabled> Disabled & checked</label>
+											<label><input type="radio" class="i-checks" name="flat-radio" disabled> Disabled</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h4>不添加class<code>.i-checks</code>的默认input</h4>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>复选框</label>
+										<div class="checkbox-list">
+											<label><input type="checkbox"> Checkbox 1</label>
+											<label><input type="checkbox"> Checkbox 2</label>
+											<label><input type="checkbox" checked disabled> Disabled & checked</label>
+											<label><input type="checkbox"  disabled> Disabled</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>单选框</label>
+										<div class="checkbox-list">
+											<label><input type="radio" name="flat-radio"> radio 1</label>
+											<label><input type="radio" name="flat-radio"> radio 2</label>
+											<label><input type="radio" name="flat-radio" checked disabled> Disabled & checked</label>
+											<label><input type="radio" name="flat-radio" disabled> Disabled</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h4>iCheck的参数及回调时间</h4>
+							<a href="http://www.bootcss.com/p/icheck/#options">点击详情</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 全局js 开始-->
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap/bootstrap.min.js"></script>
+		<script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script src="../js/custom/custom.js"></script>
+		<script src="../js/plugins/pace/pace.min.js"></script>
+		<!-- 全局js 结束-->
+		<!-- 页面js 开始-->
+		<!-- iframeResizer -->
+		<!-- <script src="../js/plugins/iframeResizer/iframeResizer.contentWindow.min.js"></script> -->
+		<!-- fileinput -->
+		<script src="../js/plugins/fileinput/fileinput.js"></script>
+		<!-- datetimepicker -->
+		<script src="../js/plugins/datetimepicker/bootstrap-datetimepicker.js"></script>
+		<script src="../js/plugins/datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+		<script>
+		$('#data_1 .input-group.date').datepicker({
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			calendarWeeks: true,
+			language: "zh-CN",
+			autoclose: true
+		});
+		$('#data_2 .input-group.date').datepicker({
+			startView: 1,
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			language: "zh-CN",
+			autoclose: true
+		});
+		$('#data_3 .input-group.date').datepicker({
+			startView: 2,
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			language: "zh-CN",
+			autoclose: true
+		});
+		$('#data_4 .input-group.date').datepicker({
+			minViewMode: 1,
+			keyboardNavigation: false,
+			forceParse: false,
+			autoclose: true,
+			language: "zh-CN",
+			todayHighlight: true
+		});
+		$('#data_5 .input-daterange').datepicker({
+			keyboardNavigation: false,
+			forceParse: false,
+			language: "zh-CN",
+			autoclose: true
+		});
+		</script>
+		<!-- 页面js 结束-->
+	</body>
+</html>

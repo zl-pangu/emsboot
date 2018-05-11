@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfEmpOragnizationDtoMapper">
+    <resultMap id="BaseResultMap" type="com.zhph.model.hqclcf.dto.HqclcfEmpOragnizationDto">
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="post" jdbcType="VARCHAR" property="post"/>
+        <result column="dept_no" jdbcType="VARCHAR" property="deptNo"/>
+        <result column="usedNo" jdbcType="VARCHAR" property="usedNo"/>
+    </resultMap>
+
+    <select id="queryEmpOrganizationPost" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select e.EMP_NO,e.EMP_NAME,e.POST,e.DEPT_NO,
+          (
+          select count(*)
+          from HQCLCF_EMP j
+          where
+          j.post = #{post}
+          and j.STATUS_APP = 1
+              and j.STATUS_APP is not null
+                                  and j.STATUS != 2
+                                  and j.status is not null
+            and j.post = e.post
+        ) as usedNo
+        from HQCLCF_EMP e
+        <where>
+            <if test="postNo!=null and postNo!='' ">
+                and e.post = #{post}
+            </if>
+            <if test="empNo!=null and empNo!='' ">
+                and e.emp_no = #{empNo}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="queryEmpOrganizationDept" resultMap="BaseResultMap" parameterType="java.lang.String">
+            select e.EMP_NO,e.EMP_NAME,e.POST,e.DEPT_NO,
+      (
+        select count(*)
+        from HQCLCF_EMP j
+        where
+          j.DEPT_NO = #{deptNo}
+          and j.STATUS_APP = 1
+          and j.STATUS_APP is not null
+          and j.STATUS != 2
+          and j.status is not null
+          and j.DEPT_NO = e.DEPT_NO
+      ) as usedNo
+    from HQCLCF_EMP e
+        <where>
+            <if test="deptNo!=null and deptNo!='' ">
+                and e.dept_no = #{deptNo}
+            </if>
+            <if test="empNo!=null and empNo!='' ">
+                and e.emp_no = #{empNo}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

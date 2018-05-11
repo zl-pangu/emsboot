@@ -1,0 +1,930 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+    <title>离职灰黑名单</title>
+</head>
+<style>
+    /*  #addshowForm .layui-inline {
+          width: 320px;
+          margin-left: 10px;
+          display: inline;
+      }
+
+      #addshowForm .layui-form-label {
+          width: 120px !important;
+      }
+
+      #addshowForm .layui-form-item {
+          margin-bottom: 0px;
+      }
+
+      #addshowEditForm .layui-inline {
+          width: 320px;
+          margin-left: 10px;
+          display: inline;
+      }
+
+      #addshowEditForm .layui-form-label {
+          width: 120px !important;
+      }
+
+      #addshowEditForm .layui-form-item {
+          margin-bottom: 0px;
+      }
+
+      #addshowEditForm .layui-input:hover {
+          border-color: #ff706f !important;
+      }
+
+      #addshowForm .layui-input:hover {
+          border-color: #5bb730 !important;
+      }
+
+      #addshowAppForm .layui-inline {
+          width: 320px;
+          margin-left: 10px;
+          display: inline;
+      }
+
+      #addshowAppForm .layui-form-label {
+          width: 120px !important;
+      }
+
+      #addshowAppForm .layui-form-item {
+          margin-bottom: 0px;
+      }
+
+      #addshowAppForm .layui-input:hover {
+          border-color: #ff706f !important;
+      }
+
+      #addshowAppForm .layui-input:hover {
+          border-color: #5bb730 !important;
+      }
+
+      #addshowDetForm .layui-inline {
+          width: 320px;
+          margin-left: 10px;
+          display: inline;
+      }
+
+      #addshowDetForm .layui-form-label {
+          width: 120px !important;
+      }
+
+      #addshowDetForm .layui-form-item {
+          margin-bottom: 0px;
+      }
+
+      #addshowDetForm .layui-input:hover {
+          border-color: #ff706f !important;
+      }*/
+</style>
+<body>
+<div class="wrapper wrapper-content animated fadeInUp">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">系统管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+            <font>灰黑名单</font>
+            <link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css">
+        </li>
+    </ol>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="form" class="layui-form" lay-filter="form">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工编号：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empNo" type="text" class="form-control input-sm" placeholder="员工编号">
+                                </div>
+                            </div>
+                        </div>
+                        <!--员工姓名-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empName" type="text" class="form-control input-sm" placeholder="员工姓名">
+                                </div>
+                            </div>
+                        </div>
+                        <!--部门-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>部门：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <input id="deptNoQuery" class="layui-input" placeholder="请选择部门" readonly
+                                                   onclick="showTree()"/>
+                                            <input hidden="hidden" id="deptHid" name="deptNo">
+                                            <div id="deptNoContent"
+                                                 style="width:265px;height:350px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                                <ul id="deptNoTree" class="ztree"
+                                                    style="height:100%;width:100%;overflow: auto;"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--工资年月-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>工资年月：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input" id="gzYm" name="gzYm"
+                                                   placeholder="yyyy-MM">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--按钮-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <button lay-submit lay-filter="auditQuery" class="btn btn-primary btn-sm"
+                                            type="button" title="查询">
+                                        <i class="fa fa-search"></i>
+                                        <font>查询</font>
+                                    </button>
+
+                                    <button id="importFile" class="btn btn-primary btn-sm"
+                                            type="button" title="导入">
+                                        <i class="fa fa-search"></i>
+                                        <font>导入</font>
+                                    </button>
+
+                                    <button lay-submit lay-filter="reset" class="btn btn-primary btn-sm"
+                                            type="button" title="重置" onclick="resetFormData()">
+                                        <i class="fa fa-search"></i>
+                                        <font>重置</font>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--Grid-->
+        <div class="ibox-content">
+            <table class="layui-hide" id="hqclcfLeaveTable" lay-filter="hqclcfLeaveTableFilter"></table>
+        </div>
+    </div>
+</div>
+</body>
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<#include "/pages/common/foot.html" >
+<script type="text/html" id="tableRowNumTpl">
+    {{# console.log(JSON.stringify(d)); }}
+    {{ d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="typeConvert">
+    {{#  layui.each(${ashBlackTypeListTpl!}.obj, function(index, item){  }}
+    {{#  if(item.sysValue == d.type){
+    console.log(d.type);
+    }}
+    {{   item.sysName }}
+    {{#  return true;  }}
+    {{#  } }}
+    {{#  });}}
+</script>
+<script type="text/html" id="tableRowOperationTpl">
+    {{#  if(d.status == '1'){ }}
+    <a class="layui-btn layui-btn-radius layui-btn-xs" lay-event="edit">修改</a>
+    {{#  } }}
+    {{#  if(d.status == '1'){ }}
+    <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+    {{#  if(d.status == '1'){ }}
+    <a class="layui-btn layui-btn-radius layui-btn-xs" lay-event="approve">审批</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="details">详细信息</a>
+</script>
+<script type="text/javascript">
+    var table;
+    var form;
+    layui.use(['table', 'form', 'laydate', 'upload'], function () {
+        table = layui.table;
+        form = layui.form;
+        laydate = layui.laydate;
+        var upload = layui.upload;
+        /*table.clearCacheKey($("#hqclcfLeaveTable")); 清本地缓存*/
+        form.render();
+        laydate.render({
+            elem: '#gzYm',
+            type: 'month'
+        });
+        table.render({
+            elem: '#hqclcfLeaveTable',
+            id: 'id',
+            url: '${ctx}/cl/ClAshBlackMenu/list',
+            loading: true,
+            method: 'post',
+            /*   initSort: {field: 'id', type: 'asc'},*/ /*根据字段排序*! bug:这个版本的设置排序,分页加载LAY_TABLE_INDEX，undefine*/
+            cols: [[
+                {width: 70, fixed: true, title: '序号', align: 'center', templet: '#tableRowNumTpl'},
+                {field: 'empNo', title: '员工编号', width: 150, align: 'center'},
+                {field: 'empName', title: '员工姓名', width: 100, align: 'center'},
+                {field: 'rank', title: '职级', width: 100, align: 'center'},
+                {field: 'subcompany', title: '分公司', width: 100, align: 'center'},
+                {field: 'type', title: '类型', width: 100, align: 'center', templet: '#typeConvert'},
+                {field: 'subcompany', title: '工资年月', width: 100, align: 'center'},
+                {field: 'description', title: '备注', width: 550, align: 'left'},
+                /* 暂时注调 {fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#tableRowOperationTpl'}*/
+            ]],
+            height: '500',
+            skin: 'row',
+            size: 'sm',
+            even: true,
+            page: true,
+            limits: [10, 30, 50],
+            limit: 10,
+        });
+        /*start 渲染编辑上传按钮*/
+        /*提供删除*/
+        upload.render({
+            elem: '#importFile',
+            type: 'post',
+            auto: true, /*自动上传*/
+            accept: 'file',
+            field: 'ash_black_file',
+            url: '${ctx}/cl/ClAshBlackMenu/importExl'
+            , before: function () {/*上传之前附加文件标识*/
+                /*    $("#lzspbAdd").append("<i class='layui-icon layui-anim layui-anim-rotate layui-anim-loop' style='font-size:15px;' >&#xe63e;</i>");
+                    /!*加载图标*!/
+                    $(this.item).toggle();
+                    this.data = {"empNo": $("#empNo").val()};*/
+            },
+            done: function (res, index, upload) {
+                console.log(JSON.stringify(res));
+                if (res.success) {
+                    /*导入成功后 重新渲染当前页面,根据容器id*/
+                    table.reload('id', {url: '${ctx}/cl/ClAshBlackMenu/list'});
+                    form.render();
+                    layer.msg(res.msg, {icon: 6});
+                } else {
+                    layer.msg("上传失败！原因:" + res.msg, {icon: 5});
+                }
+                /*   /!*上传完毕回调*!/
+                   $("#lzspbAdd").empty();
+                   if (res) {
+                       $(this.item).toggle();
+                       var empNo = res.empNo;
+                       var fileType = res.fileType;
+                       /!*移除加载图标*!/
+                       $("#lzspbAdd").append("<p style='color: red' id='lzspbAddInfo'>上传成功</p><a style='color: #0c80d7' target='_blank' href='${ctx}/hqclcf/hqclcfLeave/preViewFile?empNo=" + res.empNo + "&fileType=" + res.fileType + "'>" + res.fileName + "</a></span>");
+                       /!*预览当前上传文件*!/
+                       /!*"<a  href='javascript:delFile(" + empNo + "," + fileType + ")' ><i class='layui-icon' style='color: red'>&#x1007;</i></a>" + /!*删除当前上传文件*!/!*!/
+                   } else {
+                       layer.msg("上传失败稍后重试！", {icon: 6});
+                       $(this.item).toggle();
+                   }*/
+            }
+            , error: function () {
+                layer.msg("上传失败稍后重试！", {icon: 5});
+            }
+        });
+        /*end  渲染编辑上传按钮*/
+        form.on('submit(auditQuery)', function (data) {
+            console.log(">>>>>>" + JSON.stringify(data.field));
+            table.reload('id', {
+                where: data.field || {}
+            })
+        });
+        /*是否开启下级部门查询*/
+        form.on('switch(switchTest)', function (data) {
+            this.checked ? $(this).val('1') : $(this).val('0');
+            console.log($(this).val());
+            /*    layer.tips('当前下级部门显示：' + (this.checked ? '显示' : '未显示'), data.othis)*/
+        });
+        /*导出按钮触发*/
+        form.on('submit(exportExl)', function () {
+            window.location = '${ctx}/hqclcf/hqclcfLeave/exportExl?' + $("#form").serialize();
+            return false;
+        });
+
+        table.on('tool(hqclcfLeaveTableFilter)', function (obj) {
+            var event = obj.event;
+            if (event === 'edit') {
+                editByid(obj);
+            } else if (event === 'del') {
+                delById(obj);
+            } else if (event === 'approve') {
+                appById(obj);
+            } else if (event === 'details') {
+                detById(obj);
+            }
+        });
+    });
+    /*部门树*/
+    var treeObj;
+    var setting = {
+        async: {
+            dataFilter: function (id, pNode, res) {
+                if (res.code == 200) {
+                    if (res && res.data)
+                        return res.data;
+                } else {
+                    layer.alert("加载树失败：" + res.msg, {
+                        icon: 5,
+                        title: "失败"
+                    });
+                    return [];
+                }
+            },
+            enable: true,
+            url: "${ctx}/hqclcf/hqclcfdept/queryDeptTree",
+            autoParam: ["id"],
+            otherParam: {
+                "isShowChild": function () {
+                    return $("#deptQueryIsShow").val() ? $("#deptQueryIsShow").val() : '1';
+                }
+            }
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: true
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid"
+            }
+        },
+        callback: {
+            onAsyncSuccess: function (event, treeId, treeNode, msg) {
+                var zTree = $.fn.zTree.getZTreeObj("deptNoTree");
+                var node = zTree.getNodeByParam("id", $("#deptHid").val(), null);
+                zTree.selectNode(node);
+                treeObj.expandAll(true);
+            },
+            onClick: function (event, treeId, treeNode) {
+                $(event.currentTarget).parent().prev().val(treeNode.id);
+                var check = checkDeptPrepare(treeNode);
+                if (check) {
+                    $(event.currentTarget).parent().prev().prev().val(treeNode.name);
+                    $(event.currentTarget).parent().toggle();
+                    /*隐藏组织机构树状图*/
+                } else {
+                    $("#deptNoQuery").val("");
+                }
+            }
+
+        }
+    };
+
+    function showTree() {
+        treeObj = $.fn.zTree.init($("#deptNoTree"), setting);
+        var deptOffset = $("#deptHid").offset();
+        $("#deptNoContent").css({
+            left: deptOffset.left + "px",
+            top: deptOffset.top + 28 + "px"
+        }).slideDown("fast");
+
+
+        $("body").bind("mousedown", function onBodyDown(event) {
+            var length = $(event.target).parents("#deptNoTree").length;
+            var id = event.target.id;
+            if (!(length == 1 || (length == 0 && id == 'deptNoTree'))) {
+                $("#deptNoContent").fadeOut("fast");
+                $("body").unbind("mousedown", onBodyDown);
+            }
+        });
+    }
+
+    /* 验证部门编制*/
+    function checkDeptPrepare(treeNode) {
+        var flag = true;
+        var id = treeNode.id;
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfdept/checkDeptPrepare',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data: {'id': id, 'type': 'add'},
+            success: function (data) {
+                if (!data.success) {
+                    layer.tips('选择失败:' + data.msg, "#deptName", {
+                        tips: 2
+                    });
+                    flag = false;
+                }
+            }
+        });
+        return flag;
+    }
+
+    function resetFormData() {
+        $("#form")[0].reset();
+    }
+
+    /*
+    function editByid(obj) {
+        var data = obj.data;
+        $("#priNumberEdit").val(data.priNumber);
+        $("#empNoEdit").val(data.empNo);
+        $("#empNameEdit").val(data.empName);
+        $("#deptNoEdit").val(data.deptNo);
+        $("#deptNameEdit").val(data.deptName);
+        $("#postEditName").val(data.postName);
+        $("#positionEditName").val(data.positionName);
+        $("#rankEditName").val(data.rankName);
+        $("#businessLineEdit").val(data.businessLine);
+        $("#postEdit").val(data.post);
+        $("#empSubjectEdit").val(data.empSubject == 1 ? 'ZH' : 'HT');
+        $("#positionEdit").val(data.position);
+        $("#entryTimeEdit").val(data.entryTime);
+        $("#rankEdit").val(data.rank);
+        $("#exitTimeEdit").val(data.exitTime);
+        $("#leavingReasonEdit").val(data.leavingReason);
+        $("#remarkEdit").val(data.remark);
+        $("#lzspbEdit").append("未上传文件");
+        $("#lzclsEdit").append("未上传文件");
+        $("#lzjjbEdit").append("未上传文件");
+        $("#jcldhtEdit").append("未上传文件");
+        /!*读取文件地址*!/
+        $.ajax({
+                url: '${ctx}/hqclcf/hqclcfLeave/queryFiles',
+                type: 'POST',
+                dataType: "json",
+                async: false,
+                data: {'empNo': data.empNo, 'busLine': data.businessLine},
+                success: function (data) {
+                    console.log(JSON.stringify(data));
+                    if (data.length > 0) {
+                        $.each(data, function (index, value) {
+                            var fileId = value.SYS_CODE + "Edit";
+                            $("#" + fileId).empty();
+                            $("#" + fileId).append("<a  style='color: #0c80d7' target='_blank' href='${ctx}/hqclcf/hqclcfLeave/preViewFile?empNo=" + value.EMP_NO + "&fileType=" + value.FILE_TYPE + "'>" + value.FILE_NAME + "</a>");
+                        });
+                    }
+                },
+                error: function () {
+                    layer.tips('读取文件列表失败:' + data.msg, "#deptName", {
+                        tips: 2
+                    });
+                },
+            }
+        );
+        form.render('select');
+        layer.open({
+            type: 1,
+            title: ['<b>离职淘汰编辑</b>', 'font-size:15px;text-align:center;'],
+            content: $('#leaveEditDiv'),
+            area: ['750px', '550px'],
+            btnAlign: 'c',
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                editBySelect(obj);
+                layer.close(index);
+            }, btn2: function (index, layero) {
+                $("#lzspbEdit").empty();
+                $("#lzclsEdit").empty();
+                $("#lzjjbEdit").empty();
+                $("#jcldhtEdit").empty();
+                layer.close(index);
+            }, cancel: function (index) {
+                $("#lzspbEdit").empty();
+                $("#lzclsEdit").empty();
+                $("#lzjjbEdit").empty();
+                $("#jcldhtEdit").empty();
+                layer.close(index);
+            }
+        });
+    }
+
+    function detById(obj) {
+        var data = obj.data;
+        $("#empNoDet").val(data.empNo);
+        $("#empNameDet").val(data.empName);
+        $("#deptNameDet").val(data.deptName);
+        $("#businessLineDet").val(data.businessLine);
+        $("#postDet").val(data.postName);
+        $("#empSubjectDet").val(data.empSubject == 1 ? 'ZH' : 'HT');
+        $("#positionDet").val(data.positionName);
+        $("#rankDet").val(data.rankName);
+        $("#entryTimeDet").val(data.entryTime);
+        $("#exitTimeDet").val(data.exitTime);
+        $("#leavingReasonDet").val(data.leavingReason);
+        $("#remarkDet").val(data.remark);
+        $("#gzYmDet").val(data.gzYm);
+        $("#approverNameDet").val(data.approverName);
+        if (data.appStatus == '1') {
+            $("#appStatusDet").val('通过');
+        } else if (data.appStatus == '2') {
+            $("#appStatusDet").val('不通过');
+        } else {
+            $("#appStatusDet").val('');
+        }
+        $("#appOpinionsDet").val(data.appOpinions);
+        $("#approverTimeDet").val(data.approverTime);
+        $("#createNameDet").val(data.createName);
+        $("#createDateDet").val(data.createDate);
+        $("#updateNameDet").val(data.updateName);
+        $("#updateDateDet").val(data.updateDate);
+        $("#lzspbDet").append("<span>未上传文件</span>");
+        $("#lzclsDet").append("<span>未上传文件</span>");
+        $("#lzjjbDet").append("<span>未上传文件</span>");
+        $("#jcldhtDet").append("<span>未上传文件</span>");
+        /!*读取文件地址*!/
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfLeave/queryFiles',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data: {'empNo': data.empNo, 'busLine': data.businessLine},
+            success: function (data) {
+                if (data.length > 0) {
+                    $.each(data, function (index, value) {
+                        console.log(JSON.stringify(value));
+                        var btn = value.SYS_CODE + "Det";
+                        $("#" + btn).empty();
+                        $("#" + btn).append("<a style='color: #0c80d7' target='_blank' href='${ctx}/hqclcf/hqclcfLeave/preViewFile?empNo=" + value.EMP_NO + "&fileType=" + value.FILE_TYPE + "'>" + value.FILE_NAME + "</a>");
+                    });
+                }
+            },
+            error: function () {
+                layer.tips('读取文件列表失败:' + data.msg, "#deptName", {
+                    tips: 2
+                });
+            },
+        });
+        /!*读取上传文件名称*!/
+        form.render('select');
+        layer.open({
+            type: 1,
+            title: ['<b>离职淘汰详情</b>', 'font-size:15px;text-align:center;'],
+            content: $('#leaveDetDiv'),
+            area: ['750px', '550px'],
+            btnAlign: 'c',
+            btn: ['取消'],
+            btn1: function (index, layero) {
+                console.log("....1");
+                $("#lzspbDet").empty();
+                $("#lzclsDet").empty();
+                $("#lzjjbDet").empty();
+                $("#jcldhtDet").empty();
+                layer.close(index);
+            }, cancel: function (index) {
+                console.log("....2");
+                $("#lzspbDet").empty();
+                $("#lzclsDet").empty();
+                $("#lzjjbDet").empty();
+                $("#jcldhtDet").empty();
+                layer.close(index);
+            }
+        });
+    }
+
+    function appById(obj) {
+        var data = obj.data;
+        console.log(data);
+        $("#priNumberApp").val(data.priNumber);
+        $("#empNoApp").val(data.empNo);
+        $("#empNameApp").val(data.empName);
+        $("#deptNoApp").val(data.deptNo);
+        $("#deptNoAppName").val(data.deptName);
+        $("#postAppName").val(data.postName);
+        $("#positionAppName").val(data.positionName);
+        $("#rankAppName").val(data.rankName);
+        $("#businessLineApp").val(data.businessLine);
+        $("#postApp").val(data.post);
+        $("#empSubjectApp").val(data.empSubject == 1 ? 'ZH' : 'HT');
+        $("#positionApp").val(data.position);
+        $("#rankApp").val(data.rank);
+        $("#entryTimeApp").val(data.entryTime);
+        $("#exitTimeApp").val(data.exitTime);
+        $("#gzYmApp").val(data.gzYm);
+        $("#leavingReasonApp").val(data.leavingReason);
+        $("#remarkApp").val(data.remark);
+        $("#appStatusApp").val(data.appStatus);
+        $("#appOpinionsApp").val(data.appOpinions);
+        $("#lzspbApp").append("<span>暂无上传文件</span>");
+        $("#lzjjbApp").append("<span>暂无上传文件</span>");
+        $("#lzclsApp").append("<span>暂无上传文件</span>");
+        $("#jcldhtApp").append("<span>暂无上传文件</span>");
+        /!*读取文件地址*!/
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfLeave/queryFiles',
+            type: 'POST',
+            dataType: "json",
+            async: false,
+            data: {'empNo': data.empNo, 'busLine': data.businessLine},
+            success: function (data) {
+                if (data.length > 0) {
+                    $.each(data, function (index, value) {
+                        var btn = value.SYS_CODE + "App";
+                        $("#" + btn).empty();
+                        $("#" + btn).append("<a style='color: #0c80d7' target='_blank' href='${ctx}/hqclcf/hqclcfLeave/preViewFile?empNo=" + value.EMP_NO + "&fileType=" + value.FILE_TYPE + "'>" + value.FILE_NAME + "</a>");
+                    });
+                }
+            },
+            error: function () {
+                layer.tips('读取文件列表失败:' + data.msg, "#deptName", {
+                    tips: 2
+                });
+            },
+        });
+        form.render('select');
+        layer.open({
+            type: 1,
+            title: ['<b>离职淘汰审批</b>', 'font-size:15px;text-align:center;'],
+            content: $('#leaveAppDiv'),
+            area: ['750px', '550px'],
+            btnAlign: 'c',
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                if (appBySelectCheck()) {
+                    appBySelect(obj);
+                    layer.close(index);
+                }
+            }, btn2: function (index, layero) {
+                $("#lzspbApp").empty();
+                $("#lzjjbApp").empty();
+                $("#lzclsApp").empty();
+                $("#jcldhtApp").empty();
+                layer.close(index);
+            }, cancel: function (index) {
+                $("#lzspbApp").empty();
+                $("#lzjjbApp").empty();
+                $("#lzclsApp").empty();
+                $("#jcldhtApp").empty();
+                layer.close(index);
+            }
+        });
+    }
+
+    function appBySelectCheck() {
+        var flag = true;
+        var text = $('#appOpinionsApp').val();
+        if (text == '') {
+            layer.msg("审批意见不能为空！", {
+                anim: 6
+            });
+            flag = false;
+            return flag;
+        }
+        return flag;
+    }
+
+    function editBySelect(obj) {
+        console.log(JSON.stringify($.fn.serializeObject($("#addshowEditForm"))));
+        $.ajax({
+            url: "${ctx}/hqclcf/hqclcfLeave/edit",
+            type: "POST",
+            data: {"data": JSON.stringify($.fn.serializeObject($("#addshowEditForm")))},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    layer.msg("修改成功", {icon: 6});
+                    obj.update({});
+                } else {
+                    layer.msg("修改失败：" + data.msg, {icon: 5});
+                }
+            }
+        });
+        table.reload('id', {
+            url: '${ctx}/hqclcf/hqclcfLeave/list'
+        });
+    }
+
+    function appBySelect(obj) {
+        $.ajax({
+            url: "${ctx}/hqclcf/hqclcfLeave/app",
+            type: "POST",
+            data: {"data": JSON.stringify($.fn.serializeObject($("#addshowAppForm")))},
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    layer.msg("审批成功", {icon: 6});
+                    obj.update({});
+                } else {
+                    layer.msg("审批失败：" + data.msg, {icon: 5});
+                }
+            }
+        });
+        table.reload('id', {
+            url: '${ctx}/hqclcf/hqclcfLeave/list'
+        });
+    }
+
+    function delById(obj) {
+        var data = obj.data;
+        layer.confirm('真的要删除这一行吗？', function (index) {
+            $.ajax({
+                url: "${ctx}/hqclcf/hqclcfLeave/del",
+                type: "POST",
+                data: {"data": JSON.stringify(data)},
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        layer.msg("删除失败:" + data.msg, {icon: 5});
+                    } else {
+                        obj.del();
+                        layer.close(index);
+                        layer.msg("删除成功", {icon: 6});
+                    }
+                }
+            });
+            table.reload('id', {
+                url: '${ctx}/hqclcf/hqclcfLeave/list'
+            });
+        })
+    }
+
+    function openDeduct() {
+        layer.open({
+            type: 1,
+            title: ['<b>离职淘汰新增</b>', 'font-size:15px;text-align:center;'],
+            content: $('#deductDiv'),
+            area: ['750px', '550px'],
+            btnAlign: 'c',
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                if (validateFiled()) {
+                    submitaddLeave();
+                    $(':input', '#addshowForm')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
+                    layer.close(index);
+                }
+            }, btn2: function (index, layero) {
+                $('#addshowForm')[0].reset();
+                $('#lzspbFile').empty();
+                $('#lzjjbFile').empty();
+                $('#jcldhtFile').empty();
+                $('#lzclsFile').empty();
+                layer.close(index);
+            }, cancel: function (index) {
+                $('#addshowForm')[0].reset();
+                $('#lzspbFile').empty();
+                $('#lzjjbFile').empty();
+                $('#jcldhtFile').empty();
+                $('#lzclsFile').empty();
+                layer.close(index);
+            }
+        });
+    }
+
+    function resetFormData() {
+        $("#form")[0].reset();
+    }
+
+    function submitaddLeave() {
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfLeave/add',
+            data: {"data": JSON.stringify($.fn.serializeObject($("#addshowForm")))},
+            type: 'post',
+            async: false,
+            success: function (data) {
+                if (data.success) {
+                    layer.msg("新增成功", {icon: 6});
+                } else {
+                    layer.msg("新增失败：" + data.msg, {icon: 5});
+                }
+            }
+        });
+        table.reload('id', {
+            url: '${ctx}/hqclcf/hqclcfLeave/list'
+        });
+    }
+
+    function validateFiled() {
+        var flag = true;
+        $("#addshowForm").find('[id]').each(function () {
+            var idName = $(this).attr("id");
+            var val = $("#" + idName + "").val();
+            if ($(this).is('button')) {/!*去掉对上传按钮的验证*!/
+                return flag;
+            }
+            console.log("key:" + idName + "val:" + val);
+            if (val == '' && idName != 'remark') {
+                if (idName == 'empName') {
+                    layer.msg("员工姓名不能为空！", {
+                        anim: 6
+                    });
+                    flag = false;
+                    return flag;
+                } else if (idName == 'exitTime') {
+                    layer.msg("离职淘汰日期不能为空！", {
+                        anim: 6
+                    });
+                    flag = false;
+                    return flag;
+                } else if (idName == 'leavingReason') {
+                    layer.msg("离职淘汰原因不能为空！", {
+                        anim: 6
+                    });
+                    flag = false;
+                    return flag;
+                }
+            }
+        });
+        var lzspbFile = $('#lzspbAddInfo');
+        var lzjjbFile = $('#lzjjbAddInfo');
+        var jcldhtFile = $('#jcldhtAddInfo');
+        var lzclsFile = $('#lzclsAddInfo');
+        /!*检查上传文件*!/
+        if (lzspbFile == undefined || lzspbFile.text() == '') {
+            layer.msg("没有上传离职审批表", {
+                anim: 6
+            });
+            flag = false;
+            return flag;
+        } else if (lzjjbFile == undefined || lzjjbFile.text() == '') {
+            layer.msg("没有上传离职交接表", {
+                anim: 6
+            });
+            flag = false;
+            return flag;
+        } else if (jcldhtFile == undefined || jcldhtFile.text() == '') {
+            layer.msg("没有上传解除劳动合同协议书", {
+                anim: 6
+            });
+            flag = false;
+            return flag;
+        } else if (lzclsFile == undefined || lzclsFile.text() == '') {
+            layer.msg("没有上传离职承诺书", {
+                anim: 6
+            });
+            flag = false;
+            return flag;
+        }
+        return flag;
+    }
+    function loadEmpInfo() {
+        $.ajax({
+                url: '${ctx}/hqclcf/hqclcfLeave/queryLeaveEmpInfo.mvc', data: {
+                    empName: $('#empName').val(),
+                    empNo: $('#empNo').val()
+                },
+                type: 'post',
+                async: false,
+                success: function (str) {
+                    if (str.code == 200) {
+                        console.log(JSON.stringify(str));
+                        $('#empNo').val(str.EMP_NO);
+                        $('#empName').val(str.EMP_NAME);
+                        $('#deptNo').val(str.DEPT_NAME);
+                        $('#businessLineVal').val(str.BUSINESS_CODE);
+                        $('#businessLine').val(str.BUSINESS_LINE);
+                        $('#position').val(str.POS_NAME);
+                        $('#rank').val(str.RANKNAME);
+                        $('#rankVal').val(str.RANKNO);
+                        $('#post').val(str.POST_NAME);
+                        $('#entryTime').val(str.ENTER_DATE);
+                        $('#empSubject').val(str.EMP_SUBJECT_NAME);
+                        $('#empSubjectVal').val(str.EMP_SUBJECT);
+                        $('#deptNoVal').val(str.DEPT_NO);
+                        $('#positionVal').val(str.POS_CODE);
+                        $('#rankVal').val(str.RANKNO);
+                        $('#postVal').val(str.POST_NO);
+                    } else {
+                        layer.msg("无法查询到该用户信息!", {
+                            anim: 6
+                        });
+                    }
+                },
+                error: function (err) {
+                    layer.msg("无法查询到该用户信息!", {
+                        anim: 6
+                    });
+                }
+            }
+        );
+    };*/
+</script>
+</html>
+</@compress>

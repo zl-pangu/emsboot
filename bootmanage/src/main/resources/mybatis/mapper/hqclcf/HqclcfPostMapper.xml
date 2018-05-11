@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfPostMapper">
+    <resultMap id="hqclcfPostResultMap" type="com.zhph.model.hqclcf.HqclcfPost">
+        <id column="pri_number" property="priNumber" jdbcType="BIGINT" />
+        <result column="post_no" property="postNo" jdbcType="VARCHAR" />
+        <result column="post_name" property="postName" jdbcType="VARCHAR" />
+        <result column="dept_no" property="deptNo" jdbcType="VARCHAR" />
+        <result column="rank_no" property="rankNo" jdbcType="VARCHAR" />
+        <result column="post_pid" property="postPid" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="businessline" property="businessLine" jdbcType="INTEGER" />
+        <result column="createby" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="organizat" property="organizat" jdbcType="INTEGER" />
+    </resultMap>
+    <!--表中所有字段-->
+    <sql id="Base_Column_List">
+       pri_number,
+       post_no,
+       post_name,
+       businessline,
+       post_pid,
+       rank_no,
+       organizat,
+       status,
+       createby,
+       create_time,
+       dept_no,
+       description
+    </sql>
+    <!--部分字段-->
+    <sql id="Com_Column_List">
+        pri_number,
+        post_no,
+        post_name,
+        businessline,
+        dept_no,
+        rank_no,
+        post_pid,
+        organizat,
+        status,
+        createby,
+        create_time,
+        description
+    </sql>
+    <!--插入的实体对象值，允许为空-->
+    <sql id="Base_Column_Filed">
+        #{priNumber,jdbcType=BIGINT},
+        #{postNo,jdbcType=VARCHAR},
+        #{postName,jdbcType=VARCHAR},
+        #{businessLine,jdbcType=INTEGER},
+        #{deptNo,jdbcType=VARCHAR},
+        #{rankNo,jdbcType=BIGINT},
+        #{postPid,jdbcType=INTEGER},
+        #{organizat,jdbcType=INTEGER},
+        #{status,jdbcType=VARCHAR},
+        #{createBy,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{description,jdbcType=VARCHAR}
+    </sql>
+
+    <!--根据条件查询-->
+    <select id="queryAll" resultMap="hqclcfPostResultMap" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_POST
+        <include refid="Example_Where_Clause"/>
+        ORDER  BY pri_number DESC
+    </select>
+
+    <!--根据条件查询-->
+    <select id="queryByPostNo" resultMap="hqclcfPostResultMap" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_POST
+        where post_no = #{postNo,jdbcType=VARCHAR}
+        ORDER  BY pri_number DESC
+    </select>
+
+    <select id="queryLowerPost" parameterType="java.lang.Long" resultMap="hqclcfPostResultMap">
+        select
+        h.*
+        from hqclcf_post h
+        where h.pri_number != 1 and h.pri_number != #{id}
+        start with h.pri_number = #{id}
+        connect by prior h.pri_number = h.post_pid
+    </select>
+
+    <insert id="addPost" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        <selectKey resultType="Long" keyProperty="priNumber" order="BEFORE">
+            select sq_hqclcf_post.nextval as pri_number from dual
+        </selectKey>
+        insert into hqclcf_post( <include refid="Com_Column_List"/>)
+        VALUES(<include refid="Base_Column_Filed"/>)
+    </insert>
+
+    <update id="editPost" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        UPDATE HQCLCF_POST
+        SET
+        post_name=#{postName,jdbcType=VARCHAR},
+        rank_no=#{rankNo,jdbcType=VARCHAR},
+        post_pid=#{postPid,jdbcType=BIGINT},
+        STATUS=#{status,jdbcType=VARCHAR},
+        dept_no=#{deptNo,jdbcType=VARCHAR},
+        description=#{description,jdbcType=VARCHAR},
+        businessline=#{businessLine,jdbcType=INTEGER},
+        organizat=#{organizat,jdbcType=INTEGER}
+        WHERE post_no=#{postNo,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delById" parameterType="Object">
+        delete from  hqclcf_post where  pri_number=#{priNumber}
+    </delete>
+
+    <!--查询条件-->
+    <sql id="Example_Where_Clause">
+        <where>
+            <if test="priNumber != null and priNumber !='' or priNumber==0 ">
+                AND pri_number=#{priNumber}
+            </if>
+            <if test="postName!=null and postName !='' ">
+                AND post_name=#{postName}
+            </if>
+            <if test="rankNo!=null and rankNo !='' ">
+                AND rank_no=#{rankNo}
+            </if>
+            <if test="postPid !=null and postPid !='' ">
+                AND post_pid=#{postPid}
+            </if>
+            <if test="status!=null and status!='' ">
+                AND  status=#{status}
+            </if>
+            <if test="businessLine!=null and businessLine!='' ">
+                AND businessline=#{businessLine}
+            </if>
+            <if test="organizat!=null and organizat!='' ">
+                AND organizat=#{organizat}
+            </if>
+        </where>
+    </sql>
+
+    <!--根据岗位ID查询上级节点-->
+    <select id="queryUpperPidById" parameterType="Map" resultMap="hqclcfPostResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM hqclcf_post
+        <if test="pri_number!=null and pri_number !='' ">
+            where
+            pri_number NOT IN (1, #{pri_number})
+            START WITH pri_number = #{pri_number}
+            CONNECT BY PRIOR post_pid = pri_number
+        </if>
+    </select>
+
+    <!--根据岗位ID查询下级节点-->
+    <select id="queryLowerPidById" parameterType="Map" resultMap="hqclcfPostResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM hqclcf_post
+        <if test="post_pid!=null and post_pid !='' ">
+            where
+            pri_number NOT IN (1, #{post_pid})
+            START WITH post_pid = #{post_pid}
+            CONNECT BY PRIOR pri_number = post_pid
+        </if>
+    </select>
+
+
+    <select id="queryByPostId" resultMap="hqclcfPostResultMap" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HQCLCF_POST
+        <where>
+            <if test="status!=null and status!='' ">
+                AND STATUS=#{status}
+            </if>
+            <if test="postId!=null and postId!='' ">
+                AND pri_number = #{postId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
