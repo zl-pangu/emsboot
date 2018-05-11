@@ -1,78 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhph.mapper.cf.DaysNodeMapper">
-	<!-- 1、配置返回结果Map和参数Map -->
-	<resultMap type="com.zhph.model.cf.DaysNode" id="baseDaysNodeResultMap">
-		<id property="nodeId" column="NODE_ID"/>
-		<result property="treeId" column="TREE_ID"/>
-		<result property="nodeNo" column="NODE_NO"/>
-		<result property="nodeValue" column="NODE_VALUE"/>
-		<result property="keyId" column="KEY_ID"/>
-	</resultMap>
-	<resultMap type="com.zhph.model.cf.DaysNode" id="daysNodeResultMap" extends="baseDaysNodeResultMap">
-	</resultMap>
-	<parameterMap type="com.zhph.model.cf.DaysNode" id="daysNodeParameterMap">
-		<parameter property="nodeId" javaType="long" jdbcType="BIGINT"/>
-		<parameter property="treeId" javaType="string" jdbcType="VARCHAR"/>
-		<parameter property="nodeNo" javaType="string" jdbcType="VARCHAR"/>
-		<parameter property="nodeValue" javaType="string" jdbcType="VARCHAR"/>
-		<parameter property="keyId" javaType="long" jdbcType="BIGINT"/>
-	</parameterMap>
-
-	<!-- 2、各个SeqID -->
-	<insert id="save" parameterMap="daysNodeParameterMap">
-	<selectKey order="BEFORE" keyProperty="nodeId" resultType="long">SELECT SQ_SYS_NODE_DAYS.NEXTVAL FROM DUAL</selectKey>
-		INSERT INTO SYS_NODE_DAYS (NODE_ID, TREE_ID, NODE_NO, NODE_VALUE, KEY_ID) VALUES (
-			#{nodeId, jdbcType=BIGINT}, 
-			#{treeId, jdbcType=VARCHAR}, 
-			#{nodeNo, jdbcType=VARCHAR}, 
-			#{nodeValue, jdbcType=VARCHAR}, 
-			#{keyId, jdbcType=BIGINT}
-		)
-	</insert>
-	<select id="getById" resultMap="daysNodeResultMap" parameterType="string">
-		SELECT * FROM SYS_NODE_DAYS WHERE NODE_ID = #{value}
-	</select>
-	<select id="page" resultMap="daysNodeResultMap" parameterType="com.zhph.model.cf.DaysNode">
-		SELECT * FROM SYS_NODE_DAYS WHERE 1=1
-		<!-- 各种条件 --> 
-		<!--
-		<if test="deptName != null and deptName !='' ">
-			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
-		</if>
-		-->
-	</select>
-	<select id="getTotal" resultType="long" parameterType="com.zhph.model.cf.DaysNode">
-		SELECT COUNT(1) FROM SYS_NODE_DAYS WHERE 1=1
-		<!-- 各种条件 --> 
-		<!--
-		<if test="deptName != null and deptName !='' ">
-			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
-		</if>
-		-->
-	</select>
-	<delete id="deleteById" parameterType="long">
-		DELETE FROM SYS_NODE_DAYS WHERE NODE_ID = #{value}
-	</delete>
-	<delete id="deleteByKeyId" parameterType="long">
-		delete from SYS_NODE_DAYS where KEY_ID=#{value}
-	</delete>
-	<update id="edit" parameterType="com.zhph.model.cf.DaysNode">
-		UPDATE SYS_NODE_DAYS 
-		<!-- 各种更改的字段 --> 
-		<set>
-			<if test="treeId != null and treeId !='' ">
-				TREE_ID = #{treeId, jdbcType=VARCHAR}, 
-			</if>
-			<if test="nodeNo != null and nodeNo !='' ">
-				NODE_NO = #{nodeNo, jdbcType=VARCHAR}, 
-			</if>
-			<if test="nodeValue != null and nodeValue !='' ">
-				NODE_VALUE = #{nodeValue, jdbcType=VARCHAR}, 
-			</if>
-			<if test="keyId != null ">
-				KEY_ID = #{keyId, jdbcType=BIGINT}, 
-			</if>
-		</set>			WHERE NODE_ID = #{nodeId, jdbcType=BIGINT} 
-	</update>
-</mapper>
