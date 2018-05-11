@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.sys.SysDataMigratMapper">
+    <resultMap id="DeptResultMap" type="com.zhph.model.sys.SysDataMigratDept">
+        <id column="PRI_NUMBER" property="id" jdbcType="BIGINT"/>
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="PID" property="pid" jdbcType="BIGINT"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="UPDATOR" property="updator" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="midlleDeptResultMap" type="com.zhph.model.sys.SysMidlleDept">
+        <result column="OLD_DEPT_CODE" property="oldCode" jdbcType="VARCHAR"/>
+        <result column="NEW_DEPT_CODE" property="newId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <resultMap id="xjDeptResultMap" type="com.zhph.model.sys.SysOldXjDept">
+        <id column="PRI_NUMBER" property="id" jdbcType="BIGINT"/>
+        <result column="NO" property="no" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="DEPT_TYPE" property="deptType" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="PARENT_CODE" property="parentCode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="hqclcfDeptResultMap" type="com.zhph.model.hqclcf.HqclcfDept">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="DEPT_TYPE" property="deptType" jdbcType="VARCHAR"/>
+        <result column="PID" property="pid" jdbcType="BIGINT"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR"/>
+        <result column="UPDATOR" property="updator" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="BUSINESS_LINE" property="businessLine" jdbcType="INTEGER"/>
+        <result column="ORGANIZAT" property="organizat" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryNewXjDept" resultMap="hqclcfDeptResultMap">
+        SELECT*FROM NEWSALARYTEST.HQCLCF_DEPT
+        <where>
+            AND BUSINESS_LINE=2 AND id!=3
+        </where>
+    </select>
+
+    <select id="queryXddeptbyparms" resultMap="hqclcfDeptResultMap">
+        SELECT*FROM HQCLCF_DEPT
+        <where>
+            AND BUSINESS_LINE=3 AND  DEPT_TYPE=2
+        </where>
+    </select>
+
+    <update id="updateXjdeptPid" parameterType="com.zhph.model.hqclcf.HqclcfDept">
+        update NEWSALARYTEST.HQCLCF_DEPT SET PID=#{pid,jdbcType=BIGINT},STATUS=#{status,jdbcType=VARCHAR} WHERE  ID=#{id}
+    </update>
+
+    <select id="queryxjpidMap" resultType="java.util.Map">
+        SELECT A.ID,D.ID AS "PID",A.DEPT_CODE,B.NO,B.PARENT_CODE FROM NEWSALARYTEST.HQCLCF_DEPT A
+        LEFT JOIN NEWSALARYTEST.ZHPH_BASE_DEPT B ON A.DEPT_CODE=B.NO
+        LEFT JOIN(SELECT C.ID,C.DEPT_CODE FROM NEWSALARYTEST.HQCLCF_DEPT C
+        WHERE C.BUSINESS_LINE=2 AND C.id!=3)D ON B.PARENT_CODE=D.DEPT_CODE
+        WHERE  A.BUSINESS_LINE=2 AND A.id!=3 AND B.PARENT_CODE is NOT NULL
+    </select>
+
+    <select id="queryAllXjdept" resultMap="xjDeptResultMap">
+        SELECT *FROM  NEWSALARYTEST.ZHPH_BASE_DEPT
+    </select>
+
+    <select id="queryAll" resultMap="DeptResultMap">
+        SELECT *FROM  NEWSALARYTEST.ZHPH_HQ_DEPT
+    </select>
+
+    <select id="queryById" resultMap="DeptResultMap" parameterType="java.lang.Long">
+          SELECT *FROM  NEWSALARYTEST.ZHPH_HQ_DEPT WHERE PRI_NUMBER=#{id}
+    </select>
+
+    <insert id="addMiddleDept" parameterType="com.zhph.model.sys.SysMidlleDept">
+       INSERT INTO NEWSALARYTEST.SYS_MIDDLE_DEPT(OLD_DEPT_CODE,NEW_DEPT_CODE) VALUES(#{oldCode,jdbcType=VARCHAR},#{newId,jdbcType=BIGINT})
+    </insert>
+
+
+    <select id="queryXdArea" resultType="java.util.Map">
+       SELECT AREA_NO,AREA,COMPILE FROM NEWSALARYTEST.ZHPH_CREDIT_AREA_MANAGEMENT WHERE STATUS=1
+    </select>
+
+    <!--查询信贷的分公司和区域的对应关系-->
+    <select id="queryXdDqAndRegion" resultType="java.util.Map">
+      SELECT NO,NAME,REGION FROM NEWSALARYTEST.CRF_SALARY_P2P_ORG  WHERE STATUS=1 AND REGION IS NOT NULL GROUP BY NO,NAME,REGION
+    </select>
+
+
+    <!--查询信贷营业部一级和分公司的对应管理 排除了无区域的数据-->
+    <select id="queryXdYyb2Org" resultType="java.util.Map">
+        SELECT
+            ORG_NO,
+            NO,
+            NAME,
+            ORGANIZATION
+        FROM
+            NEWSALARYTEST.CRF_SALARY_P2P_DEPT dept
+        WHERE
+            NOT EXISTS (
+                SELECT
+                    NO
+                FROM
+                    NEWSALARYTEST.CRF_SALARY_P2P_ORG
+                WHERE
+                    status = 1
+                AND region IS NULL
+                AND dept.org_no = NO
+                GROUP BY
+                    NO
+            )
+        GROUP BY
+            ORG_NO,
+            NO,
+            NAME,
+            ORGANIZATION
+    </select>
+
+
+    <!--查询出信贷要生成的团队-->
+    <select id="generatedXdTeam" resultType="java.util.Map">
+        SELECT TEAM.TEAM_NO,TEAM.TEAM_NAME,TEAM.ORGANIZATION,K.DEPT_CODE,K.YYB_ID,K.ORG_ID FROM NEWSALARYTEST.CRF_SALARY_P2P_TEAM TEAM LEFT JOIN
+        (SELECT A.ID AS "YYB_ID",B.ID AS "ORG_ID",B.DEPT_CODE FROM(SELECT PID,ID FROM HQCLCF_DEPT WHERE BUSINESS_LINE=3 AND DEPT_TYPE=3 AND DEPT_NAME='销售部')A
+        LEFT JOIN (SELECT*FROM HQCLCF_DEPT WHERE BUSINESS_LINE=3) B ON A.PID=B.ID) K ON TEAM.ORG_NO=K.DEPT_CODE WHERE K.ORG_ID IS NOT NULL
+    </select>
+
+
+
+    <select id="queryOldPost" resultType="java.util.Map">
+          SELECT
+            A .PRI_NUMBER AS "POST_ID",
+            A .HQ_POSITION,
+            A .POST_NAME,
+            A .POST_NO,
+            A .STATUS,
+            A .SUP_HQPOST,
+            B.PRI_NUMBER AS "DEPT_ID",
+            B.DEPT_CODE,
+            C.ID
+        FROM
+            NEWSALARYTEST.ZHPH_HQ_POST A
+        LEFT JOIN NEWSALARYTEST.ZHPH_HQ_DEPT B ON A .HQ_DEPT = B.PRI_NUMBER
+        LEFT JOIN NEWSALARYTEST.HQCLCF_DEPT C ON B.DEPT_CODE=C.DEPT_CODE WHERE A.PRI_NUMBER!=1
+    </select>
+
+    <resultMap id="hqclcfPostResultMap" type="com.zhph.model.hqclcf.HqclcfPost">
+        <id column="pri_number" property="priNumber" jdbcType="BIGINT" />
+        <result column="post_no" property="postNo" jdbcType="VARCHAR" />
+        <result column="post_name" property="postName" jdbcType="VARCHAR" />
+        <result column="dept_no" property="deptNo" jdbcType="VARCHAR" />
+        <result column="rank_no" property="rankNo" jdbcType="VARCHAR" />
+        <result column="post_pid" property="postPid" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="businessline" property="businessLine" jdbcType="INTEGER" />
+        <result column="createby" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="organizat" property="organizat" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="queryPostIdWithOldId" resultType="java.util.Map">
+        SELECT A.PRI_NUMBER AS "ID",B.PRI_NUMBER AS "OLD_ID" FROM HQCLCF_POST A LEFT JOIN ZHPH_HQ_POST B ON A.POST_NO=B.POST_NO WHERE A.BUSINESSLINE=1 AND A.PRI_NUMBER!=4
+    </select>
+
+    <select id="queryAllPost" resultMap="hqclcfPostResultMap">
+        SELECT*FROM HQCLCF_POST A WHERE A.BUSINESSLINE=1 AND A.PRI_NUMBER!=4
+    </select>
+
+    <update id="updatePid" parameterType="com.zhph.model.hqclcf.HqclcfPost">
+        UPDATE HQCLCF_POST SET post_pid=#{postPid} WHERE pri_number=#{priNumber}
+    </update>
+
+    <!--消分的岗位查询-->
+    <select id="queryXfPost" resultType="java.util.Map">
+           SELECT
+        B.ID AS "DEPT_ID",
+        A.SUPERIOR_JOBNO,
+        A.job_no,
+        A.JOB,
+        A.rank_type,
+        A.status,
+        A.ORGANIZATION
+    FROM
+        NEWSALARYTEST.ZHPH_BASE_JOB A
+    LEFT JOIN NEWSALARYTEST.HQCLCF_DEPT B ON A.DEPT_NO=B.DEPT_CODE
+    </select>
+
+    <!--查询消分岗位父postNo和hqclcf—post里面的id对应关系-->
+    <select id="queryOldPostNo2newId" resultType="java.util.Map">
+        SELECT A.PRI_NUMBER AS "ID",A.POST_NO AS "CODE",B.SUPERIOR_JOBNO AS "P_CODE" FROM HQCLCF_POST A LEFT JOIN NEWSALARYTEST.ZHPH_BASE_JOB B ON A.POST_NO=B.JOB_NO WHERE A.BUSINESSLINE=2  AND A.PRI_NUMBER!=3
+    </select>
+
+    <!--查询全部工作地-->
+    <select id="queryOldWork" resultType="java.util.Map">
+       SELECT NO,NAME,STATUS,PROVINCE FROM SALARYUSER.ZHPH_BASE_ORG
+    </select>
+
+    <select id="queryXdWork" resultType="java.util.Map">
+     SELECT NO,NAME,STATUS,PROVINCE,CATEGORYNUM FROM CRF_SALARY_P2P_ORG
+    </select>
+
+    <select id="queryHqWork" resultType="java.util.Map">
+     SELECT NODE_NO,NODE_NAME  FROM NEWSALARYTEST.DIM_NODE  WHERE TREE_ID='WORKORGNO'
+    </select>
+
+    <select id="queryBank" resultType="java.util.Map">
+      SELECT BANK_CODE,BANK_NAME,BANK_FULL_NAME FROM ZHPH_XJ_BANK
+    </select>
+
+    <!--查询消分全部的员工-->
+    <select id="queryXfAllEmp" resultType="java.util.Map">
+       SELECT
+            A .PRI_NUMBER,
+            A .EMP_NO,
+            A .EMP_NAME,
+            A .REAL_NAME,
+            A .SEX,
+            A .MARRIAGE,
+            A .ID_TYPE,
+            A .ID_CARD,
+            A .MOBILE_PHONE,
+            A .FAMILY_PHONE,
+            A .EAMIL,
+            A .ADDR_POST,
+            A .EDU,
+            A .SCHOOL_GRADUATION,
+            A .SPECIALTY,
+            A .EDUCATION_WAY,
+            A .NATIVE_PLACE,
+            A .ADDR,
+            A .ENTER_DATE,
+            A .END_DATE_TRIAL,
+            A .WORK_ORG_NO,
+            A .SALARY_ORG_NO,
+            A .REGION_NAME,
+            A .REGION_NO,
+            A .ORG_NAME,
+            A .ORG_NO,
+            A .BUSINESS_NAME,
+            A .BUSINESS_NO,
+            A .TEAM_NAME,
+            A .TEAM_NO,
+            A .POSITION,
+            A .RANK_NO,
+            A .PF_BANK_CODE,
+            A .PF_BANK_NO,
+            A .PF_BANK_SUBBRANCH,
+            A .EMP_TYPE,
+            A .FULLTIME_BEGIN_DATE,
+            A .FULLTIME_END_DATE,
+            A .IS_AGREEMENT_SALARY,
+            A .AGREEMENT_SALARY,
+            A .TAX_NO,
+            A .RECOMMENDED_NAME,
+            A .RECOMMENDED_NO,
+            A .STATUS,
+            A .LEAVE_DATE,
+            A .TF_DATE,
+            A .COMMENTS,
+            A .CREATE_NAME,
+            A .CREATE_DATE,
+            A .MODIFY_NAME,
+            A .MODIFY_DATE,
+            A .APPROVAL_STATUS,
+            A .APPROVAL_REASON,
+            A .DEPT_CODE,
+            A .SUB_DATE,
+            A .EMP_SUBJECT,
+            A .ZH_ENTRYDATE,
+            A .ZH_QUITDATE,
+            A .HT_QUITDATE,
+            A .REGION,
+            A .BADCREDIT,
+            B.RANK_NO AS "ZW_CODE"
+        FROM
+            ZHPH_BASE_NEW_EMP_APPROVAL A
+        LEFT JOIN HQCLCF_POST B ON A.POSITION = B.POST_NO  WHERE A.APPROVAL_STATUS!='0'
+    </select>
+
+    <select id="queryXfFileInfo" resultType="java.util.Map">
+    SELECT
+        PRI_NUMBER,
+        EMP_NO,
+        EMP_NAME,
+        FILE_NAME,
+        FILE_EXTEND,
+        FILE_TYPE,
+        CREATE_NAME,
+        CREATE_DATE,
+        IS_VALID
+    FROM ZHPH_BASE_FILE_INFO
+    </select>
+
+    <select id="queryHqEmp" resultType="java.util.Map">
+        SELECT
+            A .PRI_NUMBER,
+            A .EMP_NO,
+            A .EMP_NAME,
+            C.DEPT_CODE,
+            B.HQ_POSITION,
+            A .SEX,
+            A .MARRIAGE,
+            A .NATIVE_TYPE,
+            A .ID_TYPE,
+            A .ID_CARD,
+            A .MOBILE_PHONE,
+            A .NATION,
+            A .EDU,
+            A .SCHOOL_GRADUATION,
+            A .SPECIALTY,
+            A .EDU_TYPE,
+            A .LX_ENTER_DATE,
+            A .ENTER_DATE,
+            A .TF_DATE,
+            A .WORK_ORG_NO,
+            A .CITY_LEVEL,
+            A .PF_BANK_CODE,
+            A .PF_BANK_NO,
+            A .OPEN_BANK_ORG,
+            A .PF_BANK_SUBBRANCH,
+            A .EMP_TYPE,
+            A .COMMENTS,
+            A .STATUS,
+            A .CREATOR,
+            A .UPDATOR,
+            A .CREATETIME,
+            A .UPDATETIME,
+            A .LEAVE_DATE,
+            A .POST_NO,
+            A .APPROVAL_STATUS,
+            A .APPROVAL_MARK,
+            A .RANK_NO,
+            A .BADCREDIT
+        FROM
+            ZHPH_HQ_EMP A
+        LEFT JOIN ZHPH_HQ_POST B ON A .POST_NO = B.POST_NO
+        LEFT JOIN ZHPH_HQ_DEPT C ON B.HQ_DEPT = C.PRI_NUMBER
+    </select>
+
+
+    <!--查询职级对应关系-->
+    <select id="queryRankByOldAndNew2Hr" resultType="java.util.Map">
+        SELECT OLD_RANK_NO,NEW_RANK_NO,REAL_RANK_NO FROM SYS_MID_RANK
+    </select>
+
+    <!--插入原始岗位信息-->
+    <insert id="addXdPostList" parameterType="com.zhph.model.sys.SysXdOldPost">
+        INSERT INTO SYS_XD_OLDPOST
+        (WORK_PLACE,
+        TEAM,
+        RANK_NAME,
+        POST_NO,
+        POST_NAME,
+        P_POSTNO,
+        P_POSTNAME)
+        VALUES (
+        #{workPlace,jdbcType=VARCHAR},
+        #{team,jdbcType=VARCHAR},
+        #{rankName,jdbcType=VARCHAR},
+        #{postNo,jdbcType=VARCHAR},
+        #{postName,jdbcType=VARCHAR},
+        #{pPostNo,jdbcType=VARCHAR},
+        #{pPostName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="queryListXdPost" resultType="java.util.HashMap">
+        SELECT*FROM SYS_XD_OLDPOST
+    </select>
+
+    <select id="generateXjAutoMeted" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_AUTO_ATTENDANCE_DATA_MOVE()} ]]>
+    </select>
+
+    <select id="generateXjPaidLeave" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_AUTO_PAID_LEAVE_MOVE()} ]]>
+    </select>
+
+    <select id="generateXjNodeDays" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_AUTO_NODE_DAYS_MOVE()} ]]>
+    </select>
+
+    <select id="generateXjVacatemanage" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_AUTO_VACA_DATA_MOVE()} ]]>
+    </select>
+
+    <select id="generateXjAbnormity" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_CARDABNORMITY_DATA_MOVE()} ]]>
+    </select>
+
+    <select id="generateXjTimestatistical" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_TO_ATTENDANCE_DATA_MOVES()} ]]>
+    </select>
+
+    <select id="generateXjEmpStatus" resultType="java.lang.Integer">
+        <![CDATA[ {call STP_AUTO_XJ_STATUS_DATA_MOVE()} ]]>
+    </select>
+
+    <insert id="generateXjAutoMetedWithRef" parameterType="string" >
+        INSERT INTO HQCLCF_EMP_GZYM_REF SELECT #{gzym},t.* FROM HQCLCF_EMP t
+    </insert>
+    <delete id="deleteHqclcfEmpBakByGzym" parameterType="string">
+        DELETE FROM HQCLCF_EMP_GZYM_REF WHERE GZYM=#{gzym}
+    </delete>
+
+</mapper>

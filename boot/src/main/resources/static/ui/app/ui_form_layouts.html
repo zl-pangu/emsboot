@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="renderer" content="webkit" /><!-- 让部分国产浏览器默认采用高速模式渲染页面 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>长虹[联合运营平台后台管理系统]</title>
+		<!-- 全局CSS 开始-->
+		<link href="../css/global/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/global/font-awesome.min.css" rel="stylesheet" />
+		<link href="../css/global/simple-line-icons.css" rel="stylesheet" />
+		<link href="../css/global/animate.css" rel="stylesheet">
+		<link href="../css/global/style.css" rel="stylesheet">
+		<link href="../js/plugins/pace/pace.css" rel="stylesheet">
+		<!-- 全局CSS 结束-->
+		<!-- 页面CSS 开始-->
+		<!-- 页面CSS 结束-->
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="../js/bootstrap/html5shiv.min.js"></script>
+		<script src="../js/bootstrap/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="wrapper wrapper-content animated fadeInUp">
+			<div class="row page-heading">
+				<h4><i class="fa fa-flask"></i>  UI组件 / 表单布局</h4>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#tab-1">基本布局</a></li>
+						<li class=""><a data-toggle="tab" href="#tab-2">两行布局</a></li>
+						<li class=""><a data-toggle="tab" href="#tab-3">两行label水平布局</a></li>
+						<li class=""><a data-toggle="tab" href="#tab-4">行分割线</a></li>
+						<li class=""><a data-toggle="tab" href="#tab-5">边框</a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="tab-1" class="tab-pane active">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>底部提交表单</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#" class="form-horizontal">
+										<div class="form-body">
+											<div class="form-group">
+												<label class="col-md-3 control-label">Text</label>
+												<div class="col-md-4">
+													<input type="text" class="form-control input-sm" placeholder="Enter text">
+													<span class="help-block">
+													A block of help text. </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Email Address</label>
+												<div class="col-md-4">
+													<div class="input-group">
+														<span class="input-group-addon input-sm">
+														<i class="fa fa-envelope"></i>
+														</span>
+														<input type="email" class="form-control input-sm" placeholder="Email Address">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Password</label>
+												<div class="col-md-4">
+													<div class="input-group">
+														<input type="password" class="form-control input-sm" placeholder="Password">
+														<span class="input-group-addon input-sm">
+														<i class="fa fa-user"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Left Icon</label>
+												<div class="col-md-4">
+													<div class="input-icon">
+														<i class="fa fa-bell-o"></i>
+														<input type="text" class="form-control input-sm" placeholder="Left icon">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Right Icon</label>
+												<div class="col-md-4">
+													<div class="input-icon right">
+														<i class="fa fa-microphone"></i>
+														<input type="text" class="form-control input-sm" placeholder="Right icon">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Input With Spinner</label>
+												<div class="col-md-4">
+													<input type="password" class="form-control spinner input-sm" placeholder="Password">
+												</div>
+											</div>
+											<div class="form-group last">
+												<label class="col-md-3 control-label">Static Control</label>
+												<div class="col-md-4">
+													<span class="form-control-static">
+													email@example.com </span>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-9">
+													<button type="submit" class="btn btn-sm btn-primary">提  交</button>
+													<button type="button" class="btn btn-sm btn-default">取  消</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>顶部提交表单</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#" class="form-horizontal">
+										<div class="form-actions top">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-9">
+													<button type="submit" class="btn btn-sm btn-primary">提  交</button>
+													<button type="button" class="btn btn-sm btn-default">取  消</button>
+												</div>
+											</div>
+										</div>
+										<div class="form-body">
+											<div class="form-group">
+												<label class="col-md-3 control-label">Text</label>
+												<div class="col-md-4">
+													<input type="text" class="form-control input-sm" placeholder="Enter text">
+													<span class="help-block">
+													A block of help text. </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Email Address</label>
+												<div class="col-md-4">
+													<div class="input-group">
+														<span class="input-group-addon input-sm">
+														<i class="fa fa-envelope"></i>
+														</span>
+														<input type="email" class="form-control input-sm" placeholder="Email Address">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Password</label>
+												<div class="col-md-4">
+													<div class="input-group">
+														<input type="password" class="form-control input-sm" placeholder="Password">
+														<span class="input-group-addon input-sm">
+														<i class="fa fa-user"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Left Icon</label>
+												<div class="col-md-4">
+													<div class="input-icon">
+														<i class="fa fa-bell-o"></i>
+														<input type="text" class="form-control input-sm" placeholder="Left icon">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Right Icon</label>
+												<div class="col-md-4">
+													<div class="input-icon right">
+														<i class="fa fa-microphone"></i>
+														<input type="text" class="form-control input-sm" placeholder="Right icon">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-3 control-label">Input With Spinner</label>
+												<div class="col-md-4">
+													<input type="password" class="form-control spinner input-sm" placeholder="Password">
+												</div>
+											</div>
+											<div class="form-group last">
+												<label class="col-md-3 control-label">Static Control</label>
+												<div class="col-md-4">
+													<span class="form-control-static">
+													email@example.com </span>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div id="tab-2" class="tab-pane">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>两行表单布局</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#">
+										<div class="form-body">
+											<h5 class="form-section">个人信息</h5>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label">First Name</label>
+														<input type="text" id="firstName" class="form-control input-sm" placeholder="Chee Kin">
+														<span class="help-block">
+														This is inline help </span>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group has-error">
+														<label class="control-label">Last Name</label>
+														<input type="text" id="lastName" class="form-control input-sm" placeholder="Lim">
+														<span class="help-block">
+														This field has error. </span>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label">Gender</label>
+														<select class="form-control input-sm">
+															<option value="">Male</option>
+															<option value="">Female</option>
+														</select>
+														<span class="help-block">
+														Select your gender </span>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label">Date of Birth</label>
+														<input type="text" class="form-control input-sm" placeholder="dd/mm/yyyy">
+													</div>
+												</div>
+											</div>
+											<h5 class="form-section">地址信息</h5>
+											<div class="row">
+												<div class="col-md-12 ">
+													<div class="form-group">
+														<label>Street</label>
+														<input type="text" class="form-control input-sm">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label>City</label>
+														<input type="text" class="form-control input-sm">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label>State</label>
+														<input type="text" class="form-control input-sm">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label>Post Code</label>
+														<input type="text" class="form-control input-sm">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label>Country</label>
+														<select class="form-control input-sm">
+															<option value="">option1</option>
+															<option value="">option2</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions right">
+											<button type="button" class="btn btn-sm btn-default">取  消</button>
+											<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> 保  存</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div id="tab-3" class="tab-pane">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>两行表单label水平布局</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#" class="form-horizontal">
+										<div class="form-body">
+											<h5 class="form-section">个人信息</h5>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-sm-3">First Name</label>
+														<div class="col-sm-9">
+															<input type="text" id="firstName" class="form-control input-sm" placeholder="Chee Kin">
+															<span class="help-block">
+															This is inline help </span>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group has-error">
+														<label class="control-label col-sm-3">Last Name</label>
+														<div class="col-sm-9">
+															<input type="text" id="lastName" class="form-control input-sm" placeholder="Lim">
+															<span class="help-block">
+															This field has error. </span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-sm-3">Gender</label>
+														<div class="col-sm-9">
+															<select class="form-control input-sm">
+																<option value="">Male</option>
+																<option value="">Female</option>
+															</select>
+															<span class="help-block">
+															Select your gender </span>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-sm-3">Date of Birth</label>
+														<div class="col-sm-9">
+															<input type="text" class="form-control input-sm" placeholder="dd/mm/yyyy">
+														</div>
+													</div>
+												</div>
+											</div>
+											<h5 class="form-section">地址信息</h5>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Address 1</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control input-sm">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Address 2</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control input-sm">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">City</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control input-sm">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">State</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control input-sm">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Post Code</label>
+														<div class="col-md-9">
+															<input type="text" class="form-control input-sm">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group">
+														<label class="control-label col-md-3">Country</label>
+														<div class="col-md-9">
+															<select class="form-control input-sm">
+																<option>Country 1</option>
+																<option>Country 2</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="row">
+														<div class="col-md-offset-3 col-md-9">
+															<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> 保  存</button>
+															<button type="button" class="btn btn-sm btn-default">取  消</button>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6">
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div id="tab-4" class="tab-pane">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>行分割线</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#" class="form-horizontal form-row-seperated">
+										<div class="form-body">
+											<div class="form-group">
+												<label class="control-label col-md-3">First Name</label>
+												<div class="col-md-9">
+													<input type="text" placeholder="small" class="form-control input-sm input-large">
+													<span class="help-block">
+													This is inline help </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Last Name</label>
+												<div class="col-md-9">
+													<input type="text" placeholder="medium" class="form-control input-sm input-large">
+													<span class="help-block">
+													This is inline help </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Gender</label>
+												<div class="col-md-9">
+													<select class="form-control input-sm input-large">
+														<option value="">Male</option>
+														<option value="">Female</option>
+													</select>
+													<span class="help-block">
+													Select your gender. </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Date of Birth</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large" placeholder="dd/mm/yyyy">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Street</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">City</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">State</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Post Code</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group last">
+												<label class="control-label col-md-3">Country</label>
+												<div class="col-md-9">
+													<select class="form-control input-sm input-large">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-9">
+													<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Edit</button>
+													<button type="button" class="btn btn-sm btn-default">Cancel</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div id="tab-5" class="tab-pane">
+							<div class="ibox">
+								<div class="ibox-title">
+									<h5><i class="fa fa-sliders"></i>边框</h5>
+								</div>
+								<div class="ibox-content form">
+									<form action="#" class="form-horizontal form-bordered form-label-stripped">
+										<div class="form-body">
+											<div class="form-group">
+												<label class="control-label col-md-3">First Name</label>
+												<div class="col-md-9">
+													<input type="text" placeholder="small" class="form-control input-sm input-large">
+													<span class="help-block">
+													This is inline help </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Last Name</label>
+												<div class="col-md-9">
+													<input type="text" placeholder="medium" class="form-control input-sm input-large">
+													<span class="help-block">
+													This is inline help </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Gender</label>
+												<div class="col-md-9">
+													<select class="form-control input-sm input-large">
+														<option value="">Male</option>
+														<option value="">Female</option>
+													</select>
+													<span class="help-block">
+													Select your gender. </span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Date of Birth</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large" placeholder="dd/mm/yyyy">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Street</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">City</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">State</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-3">Post Code</label>
+												<div class="col-md-9">
+													<input type="text" class="form-control input-sm input-large">
+												</div>
+											</div>
+											<div class="form-group last">
+												<label class="control-label col-md-3">Country</label>
+												<div class="col-md-9">
+													<select class="form-control input-sm input-large">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="form-actions">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="row">
+														<div class="col-md-offset-3 col-md-9">
+															<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> Submit</button>
+															<button type="button" class="btn btn-sm btn-default">Cancel</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 全局js 开始-->
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap/bootstrap.min.js"></script>
+		<script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script src="../js/custom/custom.js"></script>
+		<script src="../js/plugins/pace/pace.min.js"></script>
+		<!-- 全局js 结束-->
+		<!-- 页面js 开始-->
+		<!-- iframeResizer -->
+		<!-- <script src="../js/plugins/iframeResizer/iframeResizer.contentWindow.min.js"></script> -->
+		<!-- 页面js 结束-->
+	</body>
+</html>

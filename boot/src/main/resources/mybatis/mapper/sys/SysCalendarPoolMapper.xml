@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.sys.SysCalendarPoolMapper">
+	<!-- 1、配置返回结果Map和参数Map -->
+	<resultMap type="com.zhph.model.sys.SysCalendarPool" id="baseSysCalendarPoolResultMap">
+		<id property="cldDate" column="CLD_DATE"/>
+		<result property="cldDay" column="CLD_DAY"/>
+		<result property="cldMonth" column="CLD_MONTH"/>
+		<result property="cldYear" column="CLD_YEAR"/>
+		<result property="week" column="WEEK"/>
+		<result property="lastWkDt" column="LAST_WK_DT"/>
+		<result property="nextWkDt" column="NEXT_WK_DT"/>
+		<result property="cldFlg" column="CLD_FLG"/>
+		<result property="ifLastWorkDay" column="IF_LAST_WORK_DAY"/>
+	</resultMap>
+	<resultMap type="com.zhph.model.sys.SysCalendarPool" id="sysCalendarPoolResultMap" extends="baseSysCalendarPoolResultMap">
+	</resultMap>
+	<!-- <parameter property="deptId" javaType="string" jdbcType="VARCHAR"/> -->
+	<parameterMap type="com.zhph.model.sys.SysCalendarPool" id="sysCalendarPoolParameterMap">
+		<parameter property="cldDate" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="cldDay" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="cldMonth" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="cldYear" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="week" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="lastWkDt" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="nextWkDt" javaType="int" jdbcType="BIGINT"/>
+		<parameter property="cldFlg" javaType="string" jdbcType="CHAR"/>
+		<parameter property="ifLastWorkDay" javaType="string" jdbcType="CHAR"/>
+	</parameterMap>
+
+	<!-- 2、各个SeqID -->
+	<insert id="insert" parameterMap="sysCalendarPoolParameterMap">
+		INSERT INTO SYS_CALENDAR_POOL (CLD_DATE, CLD_DAY, CLD_MONTH, CLD_YEAR, WEEK, LAST_WK_DT, NEXT_WK_DT, CLD_FLG, IF_LAST_WORK_DAY) VALUES (
+			#{cldDate, jdbcType=BIGINT}, 
+			#{cldDay, jdbcType=BIGINT}, 
+			#{cldMonth, jdbcType=BIGINT}, 
+			#{cldYear, jdbcType=BIGINT}, 
+			#{week, jdbcType=BIGINT}, 
+			#{lastWkDt, jdbcType=BIGINT}, 
+			#{nextWkDt, jdbcType=BIGINT}, 
+			#{cldFlg, jdbcType=CHAR}, 
+			#{ifLastWorkDay, jdbcType=CHAR}
+		)
+	</insert>
+	<!-- 判断不可重复的属性是否已经存在，这里默认只判断deptName属性，具体的业务再进行修改添加 -->
+	<!--
+	<select id="isExists" resultType="integer" parameterMap="sysCalendarPoolParameterMap">
+		SELECT COUNT(1) FROM SYS_CALENDAR_POOL WHERE DEPT_NAME=#{deptName}
+		<if test="deptId != null and deptId !='' ">
+			<![CDATA[ AND DEPT_ID <> #{deptId, jdbcType=VARCHAR} ]]>
+		</if>
+	</select>
+	-->
+	<select id="getById" resultMap="sysCalendarPoolResultMap" parameterType="string">
+		SELECT * FROM SYS_CALENDAR_POOL WHERE CLD_DATE = #{value}
+	</select>
+	<select id="queryByCondtion" resultMap="sysCalendarPoolResultMap" parameterType="map">
+		SELECT * FROM SYS_CALENDAR_POOL  WHERE 1=1
+			<if test="cldMonth != null">
+				 AND CLD_MONTH = #{cldMonth, jdbcType=BIGINT}
+			</if>
+			<if test="cldYear != null ">
+				 AND CLD_YEAR = #{cldYear, jdbcType=BIGINT}
+			</if>
+			<if test="cldDate!= null ">
+				 AND CLD_DATE = #{cldDate, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateStart != null ">
+				 AND CLD_DATE &gt;= #{cldDateStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateEnd != null ">
+				 AND CLD_DATE &lt;= #{cldDateEnd, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayStart != null ">
+				 AND CLD_DAY &gt;= #{cldDayStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayEnd != null ">
+				 AND CLD_DAY &lt;= #{cldDayEnd, jdbcType=BIGINT}
+			</if>
+			ORDER BY CLD_DATE ASC
+		<!-- 各种条件 --> 
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	
+	<select id="page" resultMap="sysCalendarPoolResultMap" parameterType="com.zhph.model.sys.SysCalendarPool">
+		SELECT * FROM SYS_CALENDAR_POOL  WHERE 1=1
+			<if test="cldMonth != null">
+				 AND CLD_MONTH = #{cldMonth, jdbcType=BIGINT}
+			</if>
+			<if test="cldYear != null ">
+				 AND CLD_YEAR = #{cldYear, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayStart != null ">
+				 AND CLD_DAY &gt;= #{cldDayStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayEnd != null ">
+				 AND CLD_DAY &lt;= #{cldDayEnd, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateStart != null ">
+				 AND CLD_DATE &gt;= #{cldDateStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateEnd != null ">
+				 AND CLD_DATE &lt;= #{cldDateEnd, jdbcType=BIGINT}
+			</if>
+		<!-- 各种条件 --> 
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	<select id="getTotal" resultType="long" parameterType="com.zhph.model.sys.SysCalendarPool">
+		SELECT COUNT(1) FROM SYS_CALENDAR_POOL WHERE 1=1
+			<if test="cldMonth != null">
+				 AND CLD_MONTH = #{cldMonth, jdbcType=BIGINT}
+			</if>
+			<if test="cldYear != null ">
+				 AND CLD_YEAR = #{cldYear, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayStart != null ">
+				 AND CLD_DAY &gt;= #{cldDayStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayEnd != null ">
+				 AND CLD_DAY &lt;= #{cldDayEnd, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateStart != null ">
+				 AND CLD_DATE &gt;= #{cldDateStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateEnd != null ">
+				 AND CLD_DATE &lt;= #{cldDateEnd, jdbcType=BIGINT}
+			</if>			
+		<!-- 各种条件 --> 
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	<delete id="deleteByCondition" parameterType="map">
+		DELETE FROM SYS_CALENDAR_POOL WHERE 1=1
+			<if test="cldMonth != null">
+				 AND CLD_MONTH = #{cldMonth, jdbcType=BIGINT}
+			</if>
+			<if test="cldYear != null ">
+				 AND CLD_YEAR = #{cldYear, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateStart != null ">
+				 AND CLD_DATE &gt;= #{cldDateStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDateEnd != null ">
+				 AND CLD_DATE &lt;= #{cldDateEnd, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayStart != null ">
+				 AND CLD_DAY &gt;= #{cldDayStart, jdbcType=BIGINT}
+			</if>
+			<if test="cldDayEnd != null ">
+				 AND CLD_DAY &lt;= #{cldDayEnd, jdbcType=BIGINT}
+			</if>			
+	</delete>
+	<update id="update" parameterType="com.zhph.model.sys.SysCalendarPool">
+		UPDATE SYS_CALENDAR_POOL 
+		<!-- 各种更改的字段 --> 
+		<set>
+			<if test="cldDay != null ">
+				CLD_DAY = #{cldDay, jdbcType=BIGINT}, 
+			</if>
+			<if test="cldMonth != null ">
+				CLD_MONTH = #{cldMonth, jdbcType=BIGINT}, 
+			</if>
+			<if test="cldYear != null  ">
+				CLD_YEAR = #{cldYear, jdbcType=BIGINT}, 
+			</if>
+			<if test="week != null ">
+				WEEK = #{week, jdbcType=BIGINT}, 
+			</if>
+			<if test="lastWkDt != null ">
+				LAST_WK_DT = #{lastWkDt, jdbcType=BIGINT}, 
+			</if>
+			<if test="nextWkDt != null ">
+				NEXT_WK_DT = #{nextWkDt, jdbcType=BIGINT}, 
+			</if>
+			<if test="cldFlg != null and cldFlg !='' ">
+				CLD_FLG = #{cldFlg, jdbcType=CHAR}, 
+			</if>
+			<if test="ifLastWorkDay != null and ifLastWorkDay !='' ">
+				IF_LAST_WORK_DAY = #{ifLastWorkDay, jdbcType=CHAR}, 
+			</if>
+		</set>			WHERE CLD_DATE = #{cldDate, jdbcType=BIGINT} 
+	</update>
+	
+	<!-- 新增的方法，未经过测试，暂无用处 -->
+	<select id="findLastWorkDays"  resultMap="sysCalendarPoolResultMap" parameterType="com.zhph.model.sys.SysCalendarPool">
+		SELECT CLD_MONTH,MAX(CLD_DATE) as CLD_DATE FROM SYS_CALENDAR_POOL 
+		WHERE CLD_DATE&gt;=#{startDate, jdbcType=BIGINT} 
+		AND CLD_DATE&lt;=#{endDate, jdbcType=BIGINT} 
+		AND CLD_FLG=#{cldFlg, jdbcType=CHAR} GROUP BY CLD_MONTH
+	</select>
+<!-- 新增的方法，未经过测试，暂无用处 -->
+	<update id="markAsLastWorkDay" parameterType="map">
+	UPDATE SYS_CALENDAR_POOL SET IF_LAST_WORK_DAY = #{ifLastWorkDay,
+	jdbcType=CHAR}
+	WHERE CLD_DATE IN 
+	<foreach collection="ids" close=")" separator="," open="()"
+		item="id">#{id, jdbcType=BIGINT} </foreach>
+	</update>	
+</mapper>

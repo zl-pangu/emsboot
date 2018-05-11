@@ -1,0 +1,504 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <title>工作地设置</title>
+        <style>
+            #searchForm .layui-form-switch {
+                width: 50px !important;
+                margin-top: -8px !important;
+            }
+            .layui-btn-myBtn {
+                background-color: brown;
+            }
+            #searchForm .layui-form-onswitch {
+                border-color: #607D8B;
+                background-color: #607D8B;
+            }
+
+            .reason-class{
+                padding: 20px 100px;
+                font-size: 20px;
+                font-family: cursive;
+            }
+            .reason-class .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+                cursor: not-allowed;
+                background-color: white;
+                opacity: 1;
+            }
+            .layui-layer-loading .layui-layer-content {
+                left: 30%;
+                width: 100%;
+                height: 100px;
+            }
+        </style>
+        </head>
+<body >
+<div class="wrapper wrapper-content animated fadeInUp">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">基础管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+            <font>新增员工审批管理</font>
+        </li>
+    </ol>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="searchForm" class="layui-form" lay-filter="form">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!--员工编码-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工编码：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empNo" id="empNo" type="text" class="form-control input-sm" placeholder="员工编码">
+                                </div>
+                            </div>
+                        </div>
+                        <!--员工姓名-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empName" id="empName" type="text" class="form-control input-sm" placeholder="员工姓名">
+                                </div>
+                            </div>
+                        </div>
+                        <!--部门-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>部门：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="deptNo" id="deptNo" type="text" class="form-control input-sm" onclick="showTree()" readonly placeholder="部门">
+                                    <input type="hidden" id="deptHid" name="deptHid">
+                                    <div id="deptNoContent" style="width:100%;height:260px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                        <ul id="deptNoTree" class="ztree" style="margin-top:0;height:100%;width:100%;overflow: auto;"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--是否展示下级部门-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="layui-form-item">
+                                    <div class="col-lg-2 col-md-8 col-sm-8 col-xs-4 zh-form-lable" style="margin-left: 40px;">
+                                        <input type="checkbox" checked="" name="qx" lay-skin="switch" lay-filter="switchTest" lay-text="显示|隐藏">
+                                    </div>
+                                    <div class="col-lg-6 col-md-4 col-sm-4 col-xs-8 zh-form-content" style="margin-left:30px;padding:3px;">
+                                        <label>是否显示下级部门</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--状态-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                <label>审批状态：</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <select name="statusApp" id="statusApp" lay-search="">
+                                            <option></option>
+                                            <#list statusAppList as sa>
+                                                <option value="${sa.sysValue!}" >${sa.sysName!}</option>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <!--业务条线-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>业务条线：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <select name="businessLine" id="businessLine" lay-search=""  lay-filter="blSelect">
+                                                <option></option>
+                                                <#list  blselectList as bl>
+                                                    <#if !bl.flag>
+                                                        <option value="${bl.sysConfigType.sysValue!}" disabled>${bl.sysConfigType.sysName!}</option>
+                                                        <#else>
+                                                            <option value="${bl.sysConfigType.sysValue!}" >${bl.sysConfigType.sysName!}</option>
+                                                    </#if>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--工作地-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                <label>工作地：</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <select name="workOrgNo" id="workOrgNo" lay-search="">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <!--按钮-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <@auth url='/hqclcf/hqclcfempapv/list'>
+                                    <button lay-submit lay-filter="auditQuery"   class="btn btn-primary btn-sm" type="button" title="查询">
+                                        <i class="fa fa-search"></i>
+                                        <font>查询</font>
+                                    </button>
+                                     </@auth>
+                                  <@auth url='/hqclcf/hqclcfempapv/addInit'>
+                                    <button   class="btn btn-primary btn-sm" id="addEmpApvBtn" style="background-color: #FF5722" type="button" title="新增">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+                                        <font>新增</font>
+                                    </button>
+                                    </@auth>
+                                    <button   class="btn btn-primary btn-sm" id="clearBtn" style="background-color: #516d7b" type="button" title="清除">
+                                        <i class="layui-icon" style="font-size: 15px;">&#x1002;</i>
+                                        <font>清除</font>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--Grid-->
+        <div class="ibox-content">
+            <table class="layui-hide" id="empApvTable" lay-filter="tableFilter"></table>
+        </div>
+    </div>
+</div>
+</body>
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3//jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/PCASClass.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/custom/luhmCheck.js"></script>
+    <script type="text/html" id="tableRowNumTpl">
+        {{ d.LAY_TABLE_INDEX+1}}
+    </script>
+    <script type="text/html" id="tableRowOperationTpl">
+        {{#  if(d.statusApp == '1'){ }}
+        <@auth url='/hqclcf/hqclcfempapv/detail'>
+        <a class="layui-btn layui-btn-radius layui-btn-normal layui-btn-xs"  lay-event="detail">查看详情</a>
+        </@auth>
+        {{#  } else if(d.statusApp == '2'){ }}
+        <@auth url='/hqclcf/hqclcfempapv/showReason'>
+        <a class="layui-btn layui-btn-radius layui-btn-xs layui-btn-myBtn"  lay-event="lookReason">查看理由</a>
+        </@auth>
+        <@auth url='/hqclcf/hqclcfempapv/editInit'>
+        <a class="layui-btn layui-btn-radius layui-btn-xs"  lay-event="edit">编辑</a>
+        </@auth>
+        {{#  } else if(d.statusApp == '3'){ }}
+        <@auth url='/hqclcf/hqclcfempapv/editInit'>
+        <a class="layui-btn layui-btn-radius layui-btn-xs"  lay-event="edit">编辑</a>
+        </@auth>
+        {{#  } else if(d.statusApp == '4'){ }}
+        <@auth url='/hqclcf/hqclcfempapv/apvEmpInit'>
+        <a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-xs"  lay-event="apvEmp">审批</a>
+        </@auth>
+        <@auth url='/hqclcf/hqclcfempapv/del'>
+        <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="del">撤销</a>
+        </@auth>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="statusAppTpl">
+        {{#  if(d.statusApp == '1'){ }}
+        <label style="color:#1E9FFF">通过</label>
+        {{#  } else if(d.statusApp == '2'){ }}
+        <label style="color:brown">拒绝</label>
+        {{#  } else if(d.statusApp == '3'){ }}
+        <label style="color:#FF5722">撤销</label>
+        {{#  } else if(d.statusApp == '4'){ }}
+        <label style="color:#FFB800">未审批</label>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="businessLineListTpl">
+        {{#  layui.each(${businessLineListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.sysValue == d.businessLine){  }}
+        {{   item.sysName }}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/html" id="deptListTpl">
+        {{#  layui.each(${deptListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.deptCode == d.deptNo){  }}
+        {{   item.deptName }}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/html" id="workplacesetListTpl">
+        {{#  layui.each(${workplacesetListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.areaCode == d.workOrgNo && item.businessLine==d.businessLine){  }}
+        {{   item.area }}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/html" id="postListTpl">
+        {{#  layui.each(${postListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.postNo == d.post){  }}
+        {{   item.postName }}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/html" id="bussinListTpl">
+        {{#  layui.each(${bussinListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.posCode == d.position){  }}
+        {{   item.posName}}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/html" id="rankListTpl">
+        {{#  layui.each(${rankListTpl!}.obj, function(index, item){  }}
+        {{#  if(item.no == d.rank){  }}
+        {{   item.name }}
+        {{#  return true;  }}
+        {{#  } }}
+        {{#  });}}
+    </script>
+    <script type="text/javascript">
+        var table;
+        var form;
+        layui.use(['table','form'],function () {
+            table=layui.table;
+            form = layui.form;
+            form.render();
+            var loadIndex = layer.load(0);
+            table.render({
+                elem: '#empApvTable',
+                id: 'id',
+                url:'${ctx}/hqclcf/hqclcfempapv/list',
+                loading:true,
+                method:'post',
+                done:function(){
+                    layer.close(loadIndex);
+                },
+                text:{
+                    none:'暂无相关数据'
+                },
+                cols: [[
+                    {width:70,title:'序号',fixed:true,align:'center',templet:'#tableRowNumTpl'},
+                    {field:'deptNo',title: '部门',width:150,align:'center',templet:'#deptListTpl'},
+                    {field:'businessLine',title: '业务条线',width:150,align:'center',templet:'#businessLineListTpl'},
+                    {field:'workOrgNo',title: '工作地',width:150,align:'center',templet:'#workplacesetListTpl'},
+                    {field:'empNo',title: '员工编号',width:150,align:'center'},
+                    {field:'empName',title: '员工姓名',width:150,align:'center'},
+                    {field:'post',title: '岗位',width:150,align:'center',templet:'#postListTpl'},
+                    {field:'position',title: '职务',width:150,align:'center',templet:'#bussinListTpl'},
+                    {field:'rank',title: '职级',width:150,align:'center',templet:'#rankListTpl'},
+                    {field:'enterDate',title: '入职日期',width:150,align:'center'},
+                    {field:'leaveDate',title: '离职日期',width:150,align:'center'},
+                    {field:'statusApp',title: '审批状态',width:150,align:'center',templet:'#statusAppTpl'},
+                    {fixed:'right',title: '操作',width:170,align:'center',toolbar:'#tableRowOperationTpl'}
+                ]],
+                height : '500',
+                skin : 'row',
+                size:'sm',
+                even : true,
+                page : true,
+                limits : [ 10, 30, 50 ],
+                limit : 10
+            });
+            table.on('tool(tableFilter)',function (obj) {
+                var event=obj.event;
+                    if(event==='edit'){
+                        window.location.href="${ctx}/hqclcf/hqclcfempapv/editInit?id="+obj.data.id;
+                    }else if(event==='apvEmp'){
+                        window.location.href="${ctx}/hqclcf/hqclcfempapv/apvEmpInit?id="+obj.data.id;
+                    }else if(event==='lookReason'){
+                        console.log(obj.data);
+                        var reasonsApp = obj.data.reasonsApp;
+                        if(reasonsApp==null||reasonsApp==''){
+                            reasonsApp='无';
+                        }
+                        layer.open({
+                            type:1,
+                            title:['<b>提示信息</b>','font-size:15px;text-align:center;'],
+                            content:'<div class="reason-class" ">'+ reasonsApp +'</div>',
+                            area: ['450px', '200px'],
+                            btnAlign: 'c',
+                            btn: ['确定', '取消'],
+                            yes: function(index, layero){
+                                layer.close(index);
+                            },btn2: function(index, layero){
+                                layer.close(index);
+                            },cancel: function(index){
+                                layer.close(index);
+                            }
+                        });
+                    }else if(event==='detail'){
+                        window.location.href="${ctx}/hqclcf/hqclcfempapv/detail?id="+obj.data.id;
+                    }else if(event==='del'){
+                        $.ajax({
+                            url:'${ctx}/hqclcf/hqclcfempapv/del?id='+obj.data.id,
+                            type:'get',
+                            async:false,
+                            success:function (data) {
+                                if(data.code==200){
+                                    layer.msg("撤销成功", {icon: 6});
+                                    table.reload('id',{
+                                        url:'${ctx}/hqclcf/hqclcfempapv/list'
+                                    });
+                                }else{
+                                    layer.msg("撤销失败:"+data.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    }
+            });
+            form.on('submit(auditQuery)',function (data) {
+                table.reload('id',{
+                    where:data.field || {}
+                })
+            });
+            form.on('select(blSelect)', function(data){
+                        $("#workOrgNo").empty();
+                         if(data.value){
+                             var obj=new Object();
+                             obj.businessLine=data.value;
+                             $.ajax({
+                                 url:'${ctx}/sys/workplaceset/queryWorkPlaceByParam',
+                                 data:{"data":JSON.stringify(obj)},
+                                 type:'post',
+                                 async:false,
+                                 success:function (data) {
+                                     var html='<option></option>';
+                                     $.each(data,function (index,value) {
+                                         html+='<option value='+value.areaCode+'>'+value.area+'</option>'
+                                     });
+                                     $("#workOrgNo").append(html);
+                                     form.render();
+                                 }
+                             });
+                         }else{
+                             var html='<option></option>';
+                             $("#workOrgNo").append(html);
+                             form.render();
+                         }
+            });
+        });
+
+        $("#addEmpApvBtn").bind('click',function () {
+            window.location.href="${ctx}/hqclcf/hqclcfempapv/addInit";
+        });
+
+        $("#clearBtn").bind('click',function () {
+          $("#deptHid").val("");
+          $("#deptNo").val("");
+          $("#empName").val("");
+          $("#empNo").val("");
+          $("#workOrgNo").val("");
+          $("#statusApp").val("");
+          $("#businessLine").val("");
+          form.render();
+        });
+
+        var setting = {
+            async : {
+                dataFilter: function (id, pNode, res) {
+                    if (res.code == 200) {
+                        if (res && res.data)
+                            return res.data;
+                    } else {
+                        layer.alert("加载树失败："+res.msg, {
+                            icon : 5,
+                            title : "失败"
+                        });
+                        return [];
+                    }
+                },
+                enable: true,
+                url:"${ctx}/hqclcf/hqclcfdept/buildTreeByUserbL",
+                autoParam:["id"],
+                otherParam:{}
+            },
+            view: {
+                dblClickExpand: false,
+                showLine:true
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:"id",
+                    pIdKey:"pid"
+                }
+            },
+            callback: {
+                onAsyncSuccess:function (event, treeId, treeNode, msg) {
+                    treeObj.expandAll(true);
+                },
+                onClick:function (event, treeId, treeNode) {
+                    $("#deptHid").val(treeNode.id);
+                    $("#deptNo").val(treeNode.name);
+                }
+            }
+        };
+
+
+
+        function showTree() {
+            treeObj = $.fn.zTree.init($("#deptNoTree"), setting);
+            var deptOffset = $("#deptNo").offset();
+            $("#deptNoContent").css({
+                top: "28px"
+            }).slideDown("fast");
+
+            $("body").bind("mousedown",function onBodyDown(event) {
+                var length = $(event.target).parents("#deptNoTree").length;
+                var id = event.target.id;
+                if(!(length==1||(length==0&&id=='deptNoTree'))){
+                    $("#deptNoContent").fadeOut("fast");
+                    $("body").unbind("mousedown", onBodyDown);
+                }
+            });
+        }
+    </script>
+</html>
+</@compress>

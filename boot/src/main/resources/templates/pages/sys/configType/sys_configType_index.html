@@ -1,0 +1,264 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <title>数据字典</title>
+        </head>
+<body >
+<div class="wrapper wrapper-content animated fadeInUp">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">系统管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+            <font>数据字典</font>
+        </li>
+    </ol>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="searchForm" class="layui-form" lay-filter="form">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>字典编码：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="sysCode" id="sysCode" type="text" class="form-control input-sm" placeholder="字典编码">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>字典名字：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="sysName" id="sysName" type="text" class="form-control input-sm" placeholder="字典名字">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--按钮-->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+                                <div class="col-lg-10 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <button lay-submit lay-filter="queryList"   class="btn btn-primary btn-sm" type="button" title="查询">
+                                        <i class="fa fa-search"></i>
+                                        <font>查询</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="addconfigType()" style="background-color: #607d8b" type="button" title="新增">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+                                        <font>新增</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="resetVal()" style="background-color: #516d7b" type="button" title="清除">
+                                        <i class="layui-icon" style="font-size: 15px;">&#x1002;</i>
+                                        <font>清除</font>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--Grid-->
+        <div class="ibox-content">
+            <table class="layui-hide" id="configTypeTable" lay-filter="tableFilter"></table>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/html" id="tableRowNumTpl">
+    {{ d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="sysCodeTpl">
+    {{#  if(d.sysValue > 0 ){ }}
+    {{d.sysCode}}
+    {{#  } else{ }}
+    <div style="background-color: #b22f2238">{{d.sysCode}}</div>
+    {{#  } }}
+</script>
+<script type="text/html" id="tableRowOperationTpl">
+    <a class="layui-btn layui-btn-radius layui-btn-xs" style="background-color: #607d8b" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" style="background-color: #607d8b" lay-event="del">删除</a>
+</script>
+<script type="text/javascript">
+    var table;
+    var form;
+    var laydate;
+    var upload;
+    layui.use(['table','form','laydate'],function () {
+        table=layui.table;
+        form = layui.form;
+        laydate = layui.laydate;
+        upload = layui.upload;
+        form.render();
+        table.render({
+            elem: '#configTypeTable',
+            id: 'id',
+            url:'${ctx}/sys/configType/list',
+            loading:true,
+            method:'post',
+            cols: [[
+                {width:70,title:'序号',fixed:true,align:'center',templet:'#tableRowNumTpl'},
+                {field:'sysCode',title: '字典编码',width:200,align:'center',templet:'#sysCodeTpl'},
+                {field:'sysName',title: '字典名字',width:200,align:'center'},
+                {field:'sysValue',title: '字典值',width:200,align:'center'},
+                {field:'sort',title: '排序',width:200,align:'center'},
+                {field:'pId',title: '父ID',width:200,align:'center'},
+                {field:'pSysCode',title: '父编码',width:200,align:'center'},
+                {field:'description',title: '描述',width:200,align:'center'},
+                {fixed:'right',title: '操作',width:150,align:'center',toolbar:'#tableRowOperationTpl'}
+            ]],
+            height : '500',
+            skin : 'row',
+            size:'sm',
+            even : true,
+            page : true,
+            limits : [ 10, 30, 50 ],
+            limit : 10
+        });
+        table.on('tool(tableFilter)',function (obj) {
+            var event=obj.event;
+            if(event==='edit'){
+                layer.open({
+                    type: 2,
+                    title: ['<b>数据字典修改</b>', 'font-size:15px;text-align:center;'],
+                    content: ['${ctx}/sys/configType/editInit?id='+obj.data.id, 'no'],
+                    area: ['900px', '450px'],
+                    btnAlign: 'c',
+                    anim: 2,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        function submitEditCardForm(obj) {
+                            $.ajax({
+                                url:'${ctx}/sys/configType/edit',
+                                data:{"data":JSON.stringify(obj)},
+                                type:'post',
+                                async:false,
+                                success:function (data) {
+                                    if(data.code==200){
+                                        layer.msg("修改成功", {icon: 6});
+                                        setTimeout(
+                                            function() {
+                                                var url ="${ctx}/sys/configType/init.mvc";
+                                                window.location.href=url;
+                                            }, 800);
+                                    }else if(!data.success){
+                                        layer.msg("该信息已经录入："+data.msg, {icon: 5});
+                                    }else{
+                                        layer.msg("修改失败："+data.msg, {icon: 5});
+                                    }
+                                }
+                            });
+                        }
+                        if (iframeWin.validateEdit()) {
+                            var form = layer.getChildFrame('form', index);
+                            var obj = $.fn.serializeObject($(form));
+                            submitEditCardForm(obj);
+                            layer.close(index);
+                        }
+                    }, btn2: function (index, layero) {
+                        layer.close(index);
+                    }, cancel: function (index) {
+                        layer.close(index);
+                    }
+                });
+            }else if (event==='del'){
+                $.ajax({
+                    url:'${ctx}/sys/configType/del?id='+obj.data.id,
+                    type:'get',
+                    async:false,
+                    success:function (data) {
+                        if(data.code==200){
+                            layer.msg("删除成功", {icon: 6});
+                            setTimeout(
+                                function() {
+                                    var url ="${ctx}/sys/configType/init.mvc";
+                                    window.location.href=url;
+                                }, 1000);
+                        }else{
+                            layer.msg("删除失败:"+data.msg, {icon: 5});
+                        }
+                    }
+                });
+            }
+        });
+        form.on('submit(queryList)',function (data) {
+            table.reload('id',{
+                where:data.field || {}
+            });
+        });
+    });
+
+    function addconfigType() {
+        layer.open({
+            type: 2,
+            title: ['<b>数据字典新增</b>', 'font-size:15px;text-align:center;'],
+            content: ['${ctx}/sys/configType/pageJump.mvc?jumpType='+'add', 'no'],
+            area: ['900px', '450px'],
+            btnAlign: 'c',
+            anim: 2,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+
+                function submitAddConfigTypeForm(obj) {
+                    $.ajax({
+                        url:'${ctx}/sys/configType/add',
+                        data:{"data":JSON.stringify(obj)},
+                        type:'post',
+                        async:false,
+                        success:function (data) {
+                            if(data.code==200){
+                                layer.msg("新增成功", {icon: 6});
+                                setTimeout(
+                                    function() {
+                                        var url ="${ctx}/sys/configType/init.mvc";
+                                        window.location.href=url;
+                                    }, 1000);
+                            }else{
+                                layer.msg("新增失败："+data.msg, {icon: 5});
+                            }
+                        }
+                    });
+                }
+                if (iframeWin.validateAddConfigType()) {
+                    var form = layer.getChildFrame('form', index);
+                    var obj = $.fn.serializeObject($(form));
+                    submitAddConfigTypeForm(obj);
+                    layer.close(index);
+                }
+            }, btn2: function (index, layero) {
+                layer.close(index);
+            }, cancel: function (index) {
+                layer.close(index);
+            }
+        });
+    }
+    function resetVal() {
+        document.getElementById("searchForm").reset();
+    }
+</script>
+</html>
+</@compress>

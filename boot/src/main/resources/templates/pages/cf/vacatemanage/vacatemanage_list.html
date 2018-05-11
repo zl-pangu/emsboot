@@ -1,0 +1,1332 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="renderer" content="webkit" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<#include "/pages/common/head.html">
+		<title>请休假管理</title>
+	</head>
+<style>
+	#addshowForm .layui-inline{
+		width : 320px;
+		margin-left : 10px;
+		display: inline;
+	}
+	#addshowForm .layui-form-label{
+		width : 120px !important;
+	}
+	
+	#addshowForm .layui-form-item .layui-input-inline{
+	    width: 290px;
+	}
+
+	#addshowForm .layui-form-item{
+		margin-bottom : 0px;
+	}
+	#addshowEditForm  .layui-inline{
+		width : 320px;
+		margin-left : 10px;
+		display: inline;
+	}
+	#addshowEditForm  .layui-form-label{
+		width : 120px !important;
+	}
+
+	#addshowEditForm  .layui-form-item{
+		margin-bottom : 0px;
+	}
+	#addshowEditForm .layui-input:hover{
+		border-color: #ff706f !important;
+	}
+	#addshowForm .layui-input:hover {
+		border-color: #5bb730 !important;
+	}
+
+</style>
+<script type="text/javascript">
+</script>
+<body>
+<div class="wrapper wrapper-content animated fadeInUp">
+	<ol class="breadcrumb">
+		您的位置：
+		<li><a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a></li>
+		<li class="active">消分考勤管理</li>
+		<li class="active">
+			<i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+			<font>请休假管理</font>
+			<link rel="stylesheet" type="text/css" href="/ui/easyui-1.5.1/themes/insdep/easyui.css" >
+		</li>
+	</ol>
+	<div class="ibox float-e-margins">
+		<div class="ibox-content">
+			<form id="form" class="layui-form" lay-filter="form">
+				<div class="container-fluid">
+					<!--查询条件-->
+					<div class="row">
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>员工编号：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<input type="text" name="empNo" id="queryEmpNo" class="form-control input-sm" maxlength="50" style="" >
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>员工姓名：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<input type="text" name="empName" id="queryEmpName" class="form-control input-sm" maxlength="50" style="" >
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>大区：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<div class="layui-form-item">
+										<div class="layui-input-block">								
+											<select name="regionId" id="queryRegionId">
+												<option></option>
+												<#list dqList as dq >
+													<option value="${dq.id}">${dq.deptName!}</option>
+												</#list>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>分公司：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<select name="filialeId" id="queryFilialeId" >
+										<option></option>
+										<#list orgList as org>
+											<option value="${org.id}">${org.deptName!}</option>
+										</#list>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>营业部：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<select name="businessDeptId" id="queryBusinessDeptId" >
+										<option></option>
+										<#list salaList as sala>
+											<option value="${sala.id}">${sala.deptName!}</option>
+										</#list>
+									</select>
+								</div>																
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>职务：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<select name="rankType" id="queryRankType" >
+										<option></option>
+										<#list rankTypes as rankType>
+											<option value="${rankType.posCode}">${rankType.posName!}</option>
+										</#list>
+									</select>
+								</div>																
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">							
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>请假时间：</label>
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" name="startTime" id="queryStartTime" class="layui-input" placeholder="yyyy-MM-dd"   style="width: 120px;">
+									</div>
+									<div class="layui-input-inline">至</div>
+								<div class="layui-input-inline">
+									<input type="text" name="endTime" id="queryEndTime" class="layui-input" placeholder="yyyy-MM-dd"  style="width: 120px;">
+								</div>																
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">							
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>请假类型：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+								<div class="layui-form-item">
+										<div class="layui-input-block">
+									<select name="leaveType" id="queryLeaveType" >
+<!-- 										<option value="">---请选择---</option>
+										<option value="1">事假</option>
+										<option value="2">病假</option>
+										<option value="3">年休假</option>
+										<option value="4">婚假</option>
+										<option value="5">丧假</option>
+										<option value="6">工伤假</option>
+										<option value="7">陪产假</option>
+										<option value="8">产假</option>
+										//这一项是之间就注释掉的<option value="9">公休假</option>
+										<option value="10">产检假</option> -->
+										<option></option>
+										<#list leaveTypeList as lts>
+											<option value="${lts.sysValue}">${lts.sysName!}</option>
+										</#list>										
+									</select>
+									</div></div>
+								</div>																
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">							
+							<div class="row">								
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+									<label>状态：</label>
+								</div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<select name="status" id="queryStatus"  style="">
+										<option value="">---请选择---</option>
+<!-- 										<option value="1">未提交</option>
+										<option value="2">未审批</option>
+										<option value="3">通过</option>
+										<option value="4">拒绝</option> -->
+									</select>
+								</div>																
+							</div>														
+						</div>
+					</div>
+						<!--按钮-->
+					<!-- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0"> -->
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 zh-form-content">
+								<@auth url='/cf/vacatemanage/save'>
+								<button class="btn btn-primary btn-sm" type="button" title="新增" style="background-color: #21ba45" onclick="addFun()" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+									<font>新增</font>
+								</button>
+								</@auth>
+								<@auth url='/cf/vacatemanage/review'>
+								<button class="btn btn-primary btn-sm" type="button" title="审核" style="background-color: #fdb800" onclick="review('batch')" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+									<font>审核</font>
+								</button>
+								</@auth>
+								<@auth url='/cf/vacatemanage/unreview'>					
+								<button class="btn btn-primary btn-sm" type="button" title="反审核" style="background-color: red" onclick="unreview('batch')" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+									<font>反审核</font>
+								</button>
+								</@auth>
+								<@auth url='/cf/vacatemanage/exportExl'>		
+								<button class="btn btn-primary btn-sm"  title="导出" style="background-color: #009688" onclick="exportExl()" type="button" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+									<font>导出</font>
+								</button>
+								</@auth>
+								<button class="btn btn-primary btn-sm"  title="重置" style="background-color: #516d7b" onclick="reset()" type="button" >
+									<i class="layui-icon" style="font-size: 15px;">&#x1002;</i>
+									<font>重置</font>
+								</button>								
+								<button class="btn btn-primary btn-sm"  title="查询"  lay-submit lay-filter="queryBtn"  type="button" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe615;</i>
+									<font>查询</font>
+								</button>
+								<button class="btn btn-primary btn-sm"  type="button" title="生成维度表请休假时间" style="background-color: #5FB878;display: none;" onclick="generateSalary()" >
+									<i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+									<font>生成维度表请休假时间</font>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="ibox-content">
+				<table class="layui-hide" id="dataTable" lay-filter="tableFilter"></table>
+			</div>			
+			<!--Grid-->
+		</div>
+</div>
+<#include "/pages/common/foot.html" >	
+<script type="text/javascript" src="${ctx}/ui/easyui-1.5.1/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+function reset(){
+	$("#form").reset();
+}
+var table;
+var form;
+var laydate;
+var deptList = ${depts!};
+var depts = {};
+layui.each(deptList,function(i,item){
+	depts[item.id] = {'code':item.deptCode,'name':item.deptName};
+});
+var leaveTypes = {};
+layui.each($("#queryLeaveType option"), function(index, item){
+	if($(item).attr('value')){
+		leaveTypes[$(item).attr('value')] = $(item).html();
+	}
+});
+
+var statusSelectHtml = '';
+layui.use(['table','layer','form','laydate'],function(){
+	for(var item in dict.nomalApprStat){
+		statusSelectHtml += '<option value="'+dict.nomalApprStat[item].val+'">'+dict.nomalApprStat[item].desc+'</option>';
+	}
+	$("#queryStatus").append(statusSelectHtml);
+	
+	table=layui.table;
+	form = layui.form;
+	laydate = layui.laydate; 
+	layer = layui.layer;
+	laydate.render({elem:'#queryStartTime',type:'datetime',format:'yyyy-MM-dd HH'});
+	laydate.render({elem:'#queryEndTime',type:'datetime',format:'yyyy-MM-dd HH'});
+	/* $.getScript("/ui/js/custom/laydate1.js",function(){
+		laydate = laydate;
+		laydate({elem:'#queryEndTime',event:'focus',format:'YYYY-MM-DDhh',istime:true,onlyHour:true,istoday:false,festival:true,qsEnabledH:true,quickSelH:['09','12','13','18']});
+		laydate({elem:'#queryStartTime',event:'focus',format:'YYYY-MM-DDhh',istime:true,onlyHour:true,istoday:false,festival:true,qsEnabledH:true,quickSelH:['09','12','13','18']});
+		laydate.skin('molv');
+	}); */
+	/* 查询表单初始化操作 */
+	form.render();
+	/* 数据表格初始化 */
+	table.render({
+		elem: '#dataTable',
+        id: 'priNumber',
+		url:'${ctx}/cf/vacatemanage/list',
+        loading:true,
+        method:'post',
+		cols: [[
+			{width:80,fixed:true,title:'序号',align:'center',checkbox:true},
+			{field:'empNo',title: '员工编号',width:100,align:'center'},
+			{field:'empName',title: '员工姓名',width:100,align:'center'},
+			{field:'regionId',title: '大区',width:120,align:'center',templet:'#regionIdTpl'},
+			{field:'filialeId',title: '分公司',width:120,align:'center',templet:'#orgIdTpl'},
+			{field:'businessDeptId',title: '营业部',width:120,align:'center',templet:'#businessDeptIdTpl'},
+			{field:'teamId',title: '团队',width:120,align:'center',templet:'#teamIdTpl'},
+			{field:'leaveType',title: '请假类型',width:100,align:'center',templet:'#leaveTypeTpl'},
+			{field:'leaveInterval',title: '请假时间',width:200,align:'center'},
+			{field:'totalTime',title: '请假天数',width:80,align:'center'},
+			{field:'leaveReason',title: '请假原因',width:150,align:'center'},
+			{field:'status',title: '状态',width:80,align:'center',templet:'#statusTpl'},
+			{fixed:'right',title: '操作',width:250,align:'center',toolbar:'#tableRowOperationTpl'}
+		]],
+        height : '500',
+        skin : 'row',
+        size:'sm',
+        even : true,
+        page : true,
+        limits : [ 10, 30, 50 ],
+        limit : 10
+	});/*end table.render */
+	
+	/* for search */
+    form.on('submit(queryBtn)',function (data) {
+        table.reload('priNumber',{
+            where:data.field || {}
+        });
+    });/* form.on */
+
+    
+    table.on('tool(tableFilter)', function(obj){ 
+    	var event=obj.event;
+		if(event==='edit'){/* 修改 */
+			editFun(obj);
+		}else if(event==='del'){/* 删除 */
+			deleteFun('simple',obj);
+		}else if(event==='approve'){/* 审核 */
+			review('simple',obj);
+		}else if(event==='reApprove'){/* 反审核 */
+			unreview('simple',obj);
+		}else if(event==='cancel'){/* 撤销 */
+			cancelFun('simple',obj);
+		}else if(event==='submit'){/* 提交 */
+			submitFun('simple',obj);
+		}else if(event==='details'){/* 详细信息 */
+			detail(obj);
+		}
+	});/* table.on */
+	
+});/* end layui.use */
+
+function exportExl(){
+	window.location = '${ctx}/cf/vacatemanage/exportExl?' + $("#form").serialize();
+}
+
+/* 审核 */
+function review(type,obj){
+	var records = [];
+	if(type == 'batch'){
+		var checkStatus = table.checkStatus('priNumber'); 
+		records = checkStatus.data;
+	}else{
+		records.push(obj.data);
+	}
+	if(records.length==0){
+		layer.msg("温馨提示：请选择至少一条数据！" ,{icon:2});
+		return;
+	}
+	var dateStr = '';/* 用于验证的时间 */
+	var ids=[];/* 提交审核 */
+	for(var i=0;i<records.length;i++){
+		dateStr += records[i].dateofLeave;
+		if(i != records.length-1)	dateStr += ",";
+		if(records[i].status != dict.nomalApprStat["waiting_approve"].val ){
+			layer.msg("选中的数据中,第"+(i+1)+"条数据的状态不是待审核状态,不能审核！",{icon:2});
+			return;
+		}
+		ids.push(records[i].priNumber);
+	}
+	var flag = $.checkTimeLock('${ctx}',dateStr,function(data){
+		if(data.success){
+			return true;
+		}else{
+			layer.msg("考勤排班里面已经锁定"+data.msg+"月份的数据，不能进行审核！如果要审核请先解锁",{icon:2});
+			return false;
+		}
+	});
+	if(!flag)return ;
+	/* 打开审核界面 */
+	var openLayer = layer.open({
+        type:1,
+        title:['<b>请休假审核</b>','font-size:15px;text-align:center;'],
+        content: $('#vacatemanageApprove'),
+        area: ['500px', '300px'],
+        zIndex:10000,
+        btnAlign: 'c',
+        btn: ['提交','取消'],
+        yes: function(index, layero){
+        	if($("#approveStatus").val() == '4' ){
+        		if($("#approveAuditOpinion").val() == null || $("#approveAuditOpinion").val() == ''){
+        			layer.msg("请输入审核意见！",{icon:2});
+        		}
+        	}
+        	flag = doReview(ids);
+        	layer.close(openLayer);
+        },btn2: function(index, layero){
+            layer.close(index);
+        },cancel: function(index){
+            layer.close(index);
+        },success:function(){
+        	$("#approveAuditOpinion").val('');
+        	$("#approveStatus").val('');
+        	$("#approveStatus").append(statusSelectHtml);
+        }
+	});/*End layer.open */
+}
+function doReview(ids){
+	var opener = layer.load();
+	var flag = false;
+	$.ajax({
+		type : 'POST',
+    	url : '${ctx}/cf/vacatemanage/review',
+    	data: {ids:JSON.stringify(ids),status:$("#approveStatus").val(),auditOpinion:$("#approveAuditOpinion").val()},
+    	dataType : "json",
+    	async : false,
+    	error:function(){
+    		layer.close(opener);
+    	},
+    	success : function(data) {
+    		layer.close(opener);
+    		if(data.success){
+    			layer.msg('审核成功！',{icon:1});
+    			flag = true;
+    		}else{
+    			layer.msg('审核失败！',{icon:2});
+    			flag = false;
+    		}
+    	}
+	});
+    table.reload('priNumber', {
+        url: '${ctx}/cf/vacatemanage/list'
+    });
+	return flag;
+}
+
+/* 反审核 */
+function unreview(type,obj){
+	layer.confirm('确定要对选择的请休假数据进行反审核吗?',{icon: 3, title:'提示'}, function(index){
+		
+		var records = [];
+		if(type == 'batch'){
+			var checkStatus = table.checkStatus('priNumber'); 
+			records = checkStatus.data;
+		}else{
+			records.push(obj.data);
+		}
+		if(records.length==0){
+			layer.msg("温馨提示：请选择至少一条数据！" ,{icon:2});
+			return;
+		}
+		var dateStr = '';/* 用于验证的时间 */
+		var ids=[];/* 提交审核 */
+		for(var i=0;i<records.length;i++){
+			dateStr += records[i].dateofLeave;
+			if(i != records.length-1)	dateStr += ",";
+			if(records[i].status != dict.nomalApprStat["approve_pass"].val ){
+				layer.msg("选中的数据中,第"+(i+1)+"条数据的状态不是通过,不能反审核！",{icon:2});
+				return;
+			}
+			ids.push(records[i].priNumber);
+		}
+		var flag = $.checkTimeLock('${ctx}',dateStr,function(data){
+			if(data.success){
+				return true;
+			}else{
+				layer.msg("考勤排班里面已经锁定"+data.msg+"月份的数据，不能进行反审核！如果要审核请先解锁",{icon:2});
+				return false;
+			}
+		});
+		if(!flag)return ;
+		/* 调接口处理 */
+		var opener = layer.load();
+		$.ajax({
+			type : 'POST',
+	    	url : '${ctx}/cf/vacatemanage/unreview',
+	    	data: {ids:JSON.stringify(ids)},
+	    	dataType : "json",
+	    	async : true,
+	    	error:function(){
+	    		layer.close(opener);
+	    	},
+	    	success : function(data) {
+	    		layer.close(opener);
+	    		if(data.success){
+	    			layer.msg('反审核成功！',{icon:1});
+	    		}else{
+	    			layer.msg('反审核失败！',{icon:2});
+	    		}
+	    	}
+		});
+	    table.reload('priNumber', {
+	        url: '${ctx}/cf/vacatemanage/list'
+	    });
+	});/* end layer.confirm */
+}
+	
+/** *提交 */
+function submitFun(type,obj){
+	layer.confirm('确定要对选择的请休假数据进行提交吗?',{icon: 3, title:'提示'}, function(index){
+		var records = [];
+		if(type == 'batch'){
+			var checkStatus = table.checkStatus('priNumber'); 
+			records = checkStatus.data;
+		}else{
+			records.push(obj.data);
+		}
+		if(records.length==0){
+			layer.msg("温馨提示：请选择至少一条数据！" ,{icon:2});
+			return;
+		}
+		var dateStr = '';/* 用于验证的时间 */
+		var ids=[];/* 提交审核 */
+		for(var i=0;i<records.length;i++){
+			dateStr += records[i].dateofLeave;
+			if(i != records.length-1)	dateStr += ",";
+			if(records[i].status != dict.nomalApprStat["not_commit"].val && records[i].status != dict.nomalApprStat["approve_refuse"].val ){
+				layer.msg("选中的数据中,第"+(i+1)+"条数据的状态不是未提交或者未通过,不能提交申请！",{icon:2});
+				return;
+			}
+			ids.push(records[i].priNumber);
+		}
+		var flag = $.checkTimeLock('${ctx}',dateStr,function(data){
+			if(data.success){
+				return true;
+			}else{
+				layer.msg("考勤排班里面已经锁定"+data.msg+"月份的数据，不能进行提交申请！如果要提交申请请先解锁",{icon:2});
+				return false;
+			}
+		});
+		if(!flag)return ;
+		/* 调接口处理 */
+		var opener = layer.load();
+		$.ajax({
+			type : 'POST',
+	    	url : '${ctx}/cf/vacatemanage/submitDatas',
+	    	data: {ids:JSON.stringify(ids)},
+	    	dataType : "json",
+	    	async : true,
+	    	error:function(){
+	    		layer.close(opener);
+	    	},
+	    	success : function(data) {
+	    		layer.close(opener);
+	    		if(data.success){
+	    			layer.msg('提交申请成功！',{icon:1});
+	    		}else{
+	    			layer.msg('提交申请失败！',{icon:2});
+	    		}
+	    	}
+		});
+	    table.reload('priNumber', {
+	        url: '${ctx}/cf/vacatemanage/list'
+	    });
+	});/* end layer.confirm */
+}
+
+
+/** *删除 */
+function deleteFun(type,obj){
+	layer.confirm('确定要对选择的请休假数据进行删除吗?',{icon: 3, title:'提示'}, function(index){
+		var records = [];
+		if(type == 'batch'){
+			var checkStatus = table.checkStatus('priNumber'); 
+			records = checkStatus.data;
+		}else{
+			records.push(obj.data);
+		}
+		if(records.length==0){
+			layer.msg("温馨提示：请选择至少一条数据！" ,{icon:2});
+			return;
+		}
+		var dateStr = '';/* 用于验证的时间 */
+		var ids=[];/* 提交审核 */
+		for(var i=0;i<records.length;i++){
+			dateStr += records[i].dateofLeave;
+			if(i != records.length-1)	dateStr += ",";
+			if(records[i].status != dict.nomalApprStat["not_commit"].val && records[i].status != dict.nomalApprStat["approve_refuse"].val ){
+				layer.msg("选中的数据中,第"+(i+1)+"条数据的状态不是未提交或者未通过,不能删除！",{icon:2});
+				return;
+			}
+			ids.push(records[i].priNumber);
+		}
+		var flag = $.checkTimeLock('${ctx}',dateStr,function(data){
+			if(data.success){
+				return true;
+			}else{
+				layer.msg("考勤排班里面已经锁定"+data.msg+"月份的数据，不能进行删除！如果要删除申请请先解锁",{icon:2});
+				return false;
+			}
+		});
+		if(!flag)return ;
+		/* 调接口处理 */
+		var opener = layer.load();
+		$.ajax({
+			type : 'POST',
+	    	url : '${ctx}/cf/vacatemanage/delete',
+	    	data: {ids:ids.join(',')},
+	    	dataType : "json",
+	    	async : true,
+	    	error:function(){
+	    		layer.close(opener);
+	    	},
+	    	success : function(data) {
+	    		layer.close(opener);
+	    		if(data.success){
+	    			layer.msg('删除申请成功！',{icon:1});
+	    		}else{
+	    			layer.msg('删除申请失败！',{icon:2});
+	    		}
+	    	}
+		});
+	    table.reload('priNumber', {
+	        url: '${ctx}/cf/vacatemanage/list'
+	    });
+	});/* end layer.confirm */
+}
+
+/** *撤销 */
+function cancelFun(type,obj){
+	layer.confirm('确定要对选择的请休假数据进行撤销吗?',{icon: 3, title:'提示'}, function(index){
+		var records = [];
+		if(type == 'batch'){
+			var checkStatus = table.checkStatus('priNumber'); 
+			records = checkStatus.data;
+		}else{
+			records.push(obj.data);
+		}
+		if(records.length==0){
+			layer.msg("温馨提示：请选择至少一条数据！" ,{icon:2});
+			return;
+		}
+		var dateStr = '';/* 用于验证的时间 */
+		var ids=[];/* 提交审核 */
+		for(var i=0;i<records.length;i++){
+			dateStr += records[i].dateofLeave;
+			if(i != records.length-1)	dateStr += ",";
+			if(records[i].status != dict.nomalApprStat["waiting_approve"].val ){
+				layer.msg("选中的数据中,第"+(i+1)+"条数据的状态不是待审核,不能撤销申请！",{icon:2});
+				return;
+			}
+			ids.push(records[i].priNumber);
+		}
+		var flag = $.checkTimeLock('${ctx}',dateStr,function(data){
+			if(data.success){
+				return true;
+			}else{
+				layer.msg("考勤排班里面已经锁定"+data.msg+"月份的数据，不能进行撤销申请！如果要撤销申请请先解锁",{icon:2});
+				return false;
+			}
+		});
+		if(!flag)return ;
+		/* 调接口处理 */
+		var opener = layer.load();
+		$.ajax({
+			type : 'POST',
+	    	url : '${ctx}/cf/vacatemanage/revoke',
+	    	data: {ids:JSON.stringify(ids)},
+	    	dataType : "json",
+	    	async : true,
+	    	error:function(){
+	    		layer.close(opener);
+	    	},
+	    	success : function(data) {
+	    		layer.close(opener);
+	    		if(data.success){
+	    			layer.msg('撤销申请成功！',{icon:1});
+	    		}else{
+	    			layer.msg('撤销申请失败！',{icon:2});
+	    		}
+	    	}
+		});
+	    table.reload('priNumber', {
+	        url: '${ctx}/cf/vacatemanage/list'
+	    });
+	});/* end layer.confirm */
+}
+	
+/* 修改 */
+function editFun(data) {
+	var obj = data.data;
+	var openLayer = layer.open({
+        type:1,
+        title:['<b>请休假修改</b>','font-size:15px;text-align:center;'],
+        content: $('#vacatemanageinfo'),
+        area: ['1000px', '550px'],
+        zIndex:10000,
+        btnAlign: 'c',
+        btn: ['保存','提交','取消'],
+        yes: function(index, layero){
+            if(formValidate()){
+            	$("#status").val(dict.nomalApprStat['not_commit'].val);
+            	if(submitNewForm(2,1,openLayer)){/*edit & save*/
+            		return true;
+            	}
+			}
+    		return false;
+        },btn2: function(index, layero){
+            if(formValidate()){
+            	$("#status").val(dict.nomalApprStat['waiting_approve'].val);
+            	if(submitNewForm(2,2,openLayer)){/*edit & submit*/
+            		return true;
+            	}
+            }
+        	return false;
+        },btn3: function(index, layero){
+            layer.close(index);
+        },cancel: function(index){
+            layer.close(index);
+        },success:function(){
+        	form.render(null, 'vacatemanageAdd');
+        	laydate.render({elem:'#vacateTime',type:'datetime',format:'yyyy-MM-dd HH',done: statisticsTotalday,range:true});
+			$('#empName').val(obj.empName);
+			$('#regionName').val(depts[obj.regionId]?depts[obj.regionId].name:'');
+			$('#filialeName').val(depts[obj.filialeId]?depts[obj.filialeId].name:'');
+			$('#businessDeptName').val(depts[obj.businessDeptId]?depts[obj.businessDeptId].name:'');
+			$('#teamName').val(depts[obj.teamId]?depts[obj.teamId].name:'');
+			$('#post').val(obj.postName);
+			$('#startTime').val(obj.startTime);
+			$('#endTime').val(obj.endTime);
+			$('#totalTime').val(obj.totalTime);
+			$('#totalday').val(obj.totalTime);
+			$('#leaveType').val(obj.leaveType);
+			$('#leaveReason').val(obj.leaveReason);
+			$('#leaveType').next().find('input')[0].value = leaveTypes[obj.leaveType];
+			$('#vacateTime').val(obj.startTime.substring(0,13)+' - ' + obj.endTime.substring(0,13));
+			$('#priNumber').val(obj.priNumber);
+			$("#empNo").data("row",{"empNo":obj.empNo});
+  			$('#empNo').val(obj.empNo);
+  			$('#empNo').attr('readonly',true);
+			if(dict.nomalApprStat['approve_refuse'].val == obj.status){
+				$("#auditOpinionDiv").show();
+			}else{
+				$("#auditOpinionDiv").hide();
+			}
+        }
+	});/*End layer.open */
+}/*End function editFun() */
+	
+	/* 新增 */
+	function addFun() {
+	var openLayer =	layer.open({
+            type:1,
+            title:['<b>请休假新增</b>','font-size:15px;text-align:center;'],
+            content: $('#vacatemanageinfo'),
+            area: ['1000px', '550px'],
+            zIndex:10000,
+            btnAlign: 'c',
+            btn: ['保存','提交', '取消'],
+            yes: function(index, layero){
+                if(formValidate()){
+                	$("#status").val(dict.nomalApprStat['not_commit'].val);
+                	if(submitNewForm(1,1,openLayer)){/*new & save*/
+                		return true;
+                	}
+				}
+                return false;
+            },btn2: function(index, layero){
+                if(formValidate()){
+                	$("#status").val(dict.nomalApprStat['waiting_approve'].val);
+                	if(submitNewForm(1,2,openLayer)){
+                		return true;
+                	}/*new & submit*/
+				}
+                return false;
+            },btn3: function(index, layero){
+                layer.close(index);
+            },cancel: function(index){
+                layer.close(index);
+            },success:function(){
+            	laydate.render({elem:'#vacateTime',type:'datetime',format:'yyyy-MM-dd HH',done: statisticsTotalday,range:true});
+            	$("#addshowForm")[0].reset();
+				$("#empNo").data("row",null);
+				$('#priNumber').val('');
+				$('#empNo').attr('readonly',false);
+	           	$('#empNo').combogrid({
+	           	    loadMsg: 'Loading···',
+	  				panelWidth: 720,
+	  				panelHeight:400,
+	  				delay: 1000,
+	  				mode: 'remote',
+	  				/* 需修改为当前模块的url */
+					url:'${ctx}/cf/vacatemanage/queryEmp',
+	  				idField: 'EMP_NO',
+	  				textField: 'EMP_NO',
+	  				method: 'POST',
+	  				striped : true,
+	  				rownumbers : true,
+	  				pagination : true,
+	  			    pageList : [10,50,100],
+	  				pageSize : 10, 
+	  				/* required:true, */
+	  				columns: [[
+	  					{field:'EMP_NO',title:'员工编号',width:100,sortable:true},
+	  			        {field:'EMP_NAME',title:'员工姓名',width:100,sortable:true},
+	  			        {field:'REGION_NAME',title:'大区',width:100,sortable:true},
+	  			        {field:'ORG_NAME',title:'分公司',width:100,sortable:true},
+	  			        {field:'BUSINESS_NAME',title:'营业部',width:80,sortable:true},
+	  			        {field:'TEAM_NAME',title:'团队',width:80,sortable:true},
+	  			        {field:'POST',title:'职务',width:130,sortable:true}
+	  				]],
+	  				onSelect: function(index, row){
+	  					$('#empNo').val(row.EMP_NO);
+	  					$('#empName').val(row.EMP_NAME);
+	  					$('#regionName').val(row.REGION_NAME);
+	  					$('#filialeName').val(row.ORG_NAME);
+	  					$('#businessDeptName').val(row.BUSINESS_NAME);
+	  					$('#teamName').val(row.TEAM_NAME);
+	  					$('#post').val(row.POST);
+	  					$("#empNo").data("row",row);
+	  				}
+	  			});
+	  		    /* End $('#empNo').combogrid */
+	           	$("#auditOpinionDiv").hide();
+            }
+		});/*End layer.open */
+	}/*End function addFun() */
+	
+	/*opType:1for add,2for update;saveType:1for save,2for submit*/
+	function submitNewForm(opType,saveType,openLayer){
+		var param = $.fn.serializeObject($("#addshowForm"));
+		var row = $("#empNo").data("row");
+		var flag = true;
+		if(row == null){
+			layer.msg('请选择员工！',{icon:2});
+			return false;
+		}
+		param.empNo = row.EMP_NO||row.empNo;
+		if(param.empNo == null){
+			layer.msg('未获取到员工编号！',{icon:2});
+			return false;
+		}
+		var promStr = (saveType==1)?'保存':'提交';
+		var loadLayer = layer.load();
+        $.ajax({
+            url: '${ctx}/cf/vacatemanage/save',
+            data: param,
+            type: 'post',
+            async: false,
+            error:function(xhr,textStatus,errorThrown){
+				layer.msg('系统错误['+textStatus+']',{icon:2});
+				layer.close(loadLayer);
+				flag = false;
+            },
+            success: function (data) {
+				layer.close(loadLayer);
+                if (data.success) {
+                    layer.msg(promStr+"成功", {icon: 1});
+                    layer.close(openLayer);
+                    flag = true;
+                } else {
+                    layer.msg(promStr+"失败：" + data.msg, {icon: 2});
+                    flag = false;
+                }
+            }
+        });
+        table.reload('priNumber', {
+            url: '${ctx}/cf/vacatemanage/list'
+        });
+        return flag;
+	}
+	
+	/* 表单验证 */
+	 function formValidate(){
+	    	var empNo=$('#empNo').val(); 
+	    	var vacateTime=$('#vacateTime').val();
+	   		var leaveType=$('#leaveType').val();
+	    	var totalday=$('#totalday').val();
+	    	if(empNo=="" && $('#empNo').data('row') == null){/* 员工信息 */
+	    		layer.msg("请选择员工信息！",{icon: 2});
+	    		return false;
+	    	}
+	    	if(vacateTime==""){/* 请假起始时间 */
+	    		layer.msg("请假时间不能为空！",{icon: 2});
+	    		return false;
+	    	}
+	    	if(leaveType==""){/* 请假类型 */
+	    		layer.msg("请假类型不能为空！",{icon: 2});
+	    		return false;
+	    	}
+	    	if(totalday==""){/* 请假天数 */
+	    		layer.msg("请假天数不能为空！",{icon: 2});
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	
+	function statisticsTotalday(value, date, endDate){
+		/* 选择日期完毕的回调 */
+		var startTime = value.substring(0,13);
+		var endTime = value.substring(16,29);
+		var rows = $('#empNo').data('row');
+		/*var grid = $('#empNo').combogrid('grid');
+		var rows = grid.datagrid('getSelected'); 获取选择的行 */
+		var empNo = null;
+		if (rows != null) {
+			empNo = rows.EMP_NO||rows.empNo;
+		}
+		var loadLayer = layer.load();
+		$.ajax({
+			type : 'POST',
+			url : '${ctx}/cf/vacatemanage/statisticsTotalday',
+			data : {
+				startTime : startTime,
+				endTime : endTime,
+				empNo : empNo,
+				priNumber:$("#priNumber").val()
+			},
+			dataType : "json",
+			async : true,
+            error:function(xhr,textStatus,errorThrown){
+				layer.msg('系统错误['+textStatus+']',{icon:2});
+				layer.close(loadLayer);
+			},
+			success : function(data) {
+				layer.close(loadLayer);
+				if (data.success) {
+					$('#totalday').val(data.totalday);
+					$('#totalTime').val(data.totalday);
+					$("#startTime").val(startTime);
+					$("#endTime").val(endTime);	
+				} else {
+					if (data.reset == "1") {
+						layer.msg(data.msg, {icon:2});
+					} else if (data.reset == "3") {
+						$('#vacateTime').val("");
+						$('#totalday').val(0);
+					} else {
+						$('#vacateTime').val("");
+						layer.msg(data.msg, {icon:2});
+					}
+				}
+			}
+		});
+	}
+	
+	
+	/* 详情 */
+	function detail(data) {
+		var obj = data.data;
+		var openLayer = layer.open({
+	        type:1,
+	        title:['<b>请休假详情</b>','font-size:15px;text-align:center;'],
+	        content: $('#vacatemanageDetail'),
+	        area: ['1000px', '550px'],
+	        zIndex:10000,
+	        btnAlign: 'c',
+	        btn: ['返回'],
+	        yes: function(index, layero){
+	            layer.close(openLayer);
+	        },cancel: function(index){
+	            layer.close(index);
+	        },success:function(){
+				$('#empNameView').val(obj.empName);
+				$('#regionNameView').val(depts[obj.regionId]?depts[obj.regionId].name:'');
+				$('#filialeNameView').val(depts[obj.filialeId]?depts[obj.filialeId].name:'');
+				$('#businessDeptNameView').val(depts[obj.businessDeptId]?depts[obj.businessDeptId].name:'');
+				$('#teamNameView').val(depts[obj.teamId]?depts[obj.teamId].name:'');
+				$('#postView').val(obj.postName);
+				$('#totaldayView').val(obj.totalTime);
+				$('#leaveReasonView').val(obj.leaveReason);
+				$('#auditOpinionView').val(obj.auditOpinion);
+				$('#leaveTypeView').next().find('input')[0].value = leaveTypes[obj.leaveType];
+				$('#vacateTimeView').val(obj.startTime.substring(0,13)+' - ' + obj.endTime.substring(0,13));
+				$('#empNoView').val(obj.empNo);
+				if(dict.nomalApprStat['approve_refuse'].val == obj.status){
+					$("#auditOpinionDetailDiv").show();
+				}else{
+					$("#auditOpinionDetailDiv").hide();
+				}
+	        }
+		});/*End layer.open */
+	}/*End function editFun() */
+	
+</script>
+<!-- 新增win -->
+	<div id="vacatemanageinfo" class="ibox-content form"  lay-filter="vacatemanageAdd" style="display: none;">
+		<div class="form-body">
+			<div class="container-fluid">
+				<div class="row layui-form">
+					<form id="addshowForm">
+						<input type="hidden" id="totalTime" name="totalTime"> 
+						<input type="hidden" id="priNumber" name="priNumber"> 
+						<input type="hidden" id="status" name="status"> 
+						<div class="layui-form-item">
+							<div class="layui-inline ">
+								<label class="layui-form-label" style="width: auto;">员工编号</label>
+								<div class="layui-input-inline">
+									<input type="text" name="empNo" class="layui-input" id="empNo"   />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px">*</span>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">员工姓名</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="empName" readonly="readonly" name="empName" />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">大区</label>
+								<div class="layui-input-inline">
+									<input type="text" name="regionName" id="regionName" class="layui-input" readonly="readonly" />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">分工司</label>
+								<div class="layui-input-inline">
+									<input type="text" name="filialeName" id="filialeName"  class="layui-input" readonly="readonly" />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">营业部</label>
+								<div class="layui-input-inline">
+									<input type="text" name="businessDeptName" id="businessDeptName" class="layui-input" readonly="readonly" />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">团队</label>
+								<div class="layui-input-inline">
+									<input type="text" name="teamName" id="teamName" class="layui-input" readonly="readonly" />
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">职务</label>
+								<div class="layui-input-inline">
+									<input type="text" name="post" id="post" class="layui-input" readonly="readonly">
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假类型</label>
+								<div class="layui-input-inline">
+									<select name="leaveType" id="leaveType" lay-search="">
+										<option></option> 
+										<#list leaveTypeList as le>
+										<option value="${le.sysValue!}">${le.sysName!}</option>
+										</#list>
+									</select>
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px">*</span>
+							</div>							
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假时间</label>
+								<div class="layui-input-inline" style="display: -webkit-inline-box">
+									<input type="text" name="vacateTime" id="vacateTime"  style="" class="layui-input" readonly="readonly" placeholder="yyyy-MM-dd HH - yyyy-MM-dd HH" />
+									<!-- <div style="padding: 0 5px">至</div>
+									<input type="text"  style="width: 133px;" name="endTime" id="endTime" class="layui-input" readonly="readonly" placeholder="yyyy-MM-dd HH" /> -->
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px">*</span>
+								<input type="hidden" name="startTime" id="startTime"  />
+								<input type="hidden" name="endTime" id="endTime"  />
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假天数</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="totalday" name="totalday" placeholder="" readonly="readonly"  />
+								</div>
+							</div>							
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假原因</label>
+								<div class="layui-input-inline">
+									<textarea style="resize: none;" rows="6" cols="99" placeholder="请输入请假的原因" id="leaveReason" name="leaveReason" class="textarea easyui-validatebox" maxlength="200" data-options="validType:'length[0,500]'"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" id="auditOpinionDiv">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">审核意见</label>
+								<div class="layui-input-inline">
+									<textarea style="resize: none;" rows="6" cols="99" placeholder="" id="auditOpinion" name="auditOpinion" class="textarea easyui-validatebox" data-options="validType:'length[0,500]'" readonly="readonly"></textarea>
+								</div>
+								<span style="color: red;float: left;padding: 9px 0px;width: 5.5px"></span>
+							</div>
+						</div>						
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="vacatemanageDetail" class="ibox-content form" style="display: none;">
+		<div class="form-body">
+			<div class="container-fluid">
+				<div class="row layui-form">
+					<form id="addshowForm">
+						<div class="layui-form-item">
+							<div class="layui-inline ">
+								<label class="layui-form-label" style="width: auto;">员工编号</label>
+								<div class="layui-input-inline">
+									<input type="text" name="empNo" class="layui-input" id="empNoView"  disabled="disabled"  />
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">员工姓名</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="empNameView" readonly="readonly" name="empName"  disabled="disabled"  />
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">大区</label>
+								<div class="layui-input-inline">
+									<input type="text" name="regionName" id="regionNameView" class="layui-input" disabled="disabled" />
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">分工司</label>
+								<div class="layui-input-inline">
+									<input type="text" name="filialeName" id="filialeNameView"  class="layui-input" disabled="disabled" />
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">营业部</label>
+								<div class="layui-input-inline">
+									<input type="text" name="businessDeptName" id="businessDeptNameView" class="layui-input" disabled="disabled" />
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">团队</label>
+								<div class="layui-input-inline">
+									<input type="text" name="teamName" id="teamNameView" class="layui-input" disabled="disabled" />
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">职务</label>
+								<div class="layui-input-inline">
+									<input type="text" name="post" id="postView" class="layui-input" disabled="disabled" >
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假类型</label>
+								<div class="layui-input-inline">
+									<select name="leaveType" id="leaveTypeView" lay-search="" disabled="disabled" >
+										<option></option> 
+										<#list leaveTypeList as le>
+										<option value="${le.sysValue!}">${le.sysName!}</option>
+										</#list>
+									</select>
+								</div>
+							</div>							
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假时间</label>
+								<div class="layui-input-inline" style="display: -webkit-inline-box">
+									<input type="text" name="vacateTime" id="vacateTimeView"  style="" class="layui-input" disabled="disabled" placeholder="yyyy-MM-dd HH - yyyy-MM-dd HH" />
+									<!-- <div style="padding: 0 5px">至</div>
+									<input type="text"  style="width: 133px;" name="endTime" id="endTime" class="layui-input" disabled="disabled" placeholder="yyyy-MM-dd HH" /> -->
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假天数</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="totaldayView" name="totalday" placeholder="" disabled="disabled"  />
+								</div>
+							</div>							
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">请假原因</label>
+								<div class="layui-input-inline">
+									<textarea style="resize: none;" rows="6" cols="99" placeholder="请输入请假的原因" id="leaveReasonView" name="leaveReason" class="textarea easyui-validatebox" data-options="validType:'length[0,500]'"  disabled="disabled" ></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" id="auditOpinionDetailDiv">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">审核意见</label>
+								<div class="layui-input-inline">
+									<textarea style="resize: none;" rows="6" cols="99" placeholder="" id="auditOpinionView" name="auditOpinion" class="textarea easyui-validatebox" data-options="validType:'length[0,500]'" disabled="disabled" ></textarea>
+								</div>
+							</div>
+						</div>						
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="vacatemanageApprove" class="ibox-content form" style="display: none;">
+		<div class="form-body">
+			<div class="container-fluid">
+				<div class="row layui-form">
+					<form id="addshowForm">
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">审批结果</label>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+									<select name="status" id="approveStatus"  style="">
+										<option value="3">通过</option>
+										<option value="4">不通过</option>
+									</select>
+							</div>
+						</div>
+						<div class="layui-form-item" id="auditOpinionDiv">
+							<div class="layui-inline">
+								<label class="layui-form-label" style="width: auto;">审核意见</label>
+								<div class="layui-input-inline">
+									<textarea style="resize: none;" rows="6" cols="41" placeholder="" id="approveAuditOpinion" name="auditOpinion" class="textarea easyui-validatebox" maxlength="200" data-options="validType:'length[0,500]'" ></textarea>
+								</div>
+							</div>
+						</div>						
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/html" id="tableRowNumTpl">
+        {{ d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="regionIdTpl">
+<!--	    {{#  layui.each($("#queryRegionId option"), function(index, item){  }}-->
+<!--		{{#  if($(item).attr('value') == d.regionId){  }} -->
+<!--		{{   $(item).html() }} -->
+<!--		{{#  return true;  }}-->
+<!--		{{#  } }}-->
+<!--		{{#  });}} -->
+		{{ depts[d.regionId]?depts[d.regionId].name:'' }}
+		
+</script>
+<script type="text/html" id="orgIdTpl">
+<!--		{{#  layui.each($("#queryFilialeId option"), function(index, item){  }}-->
+<!--		{{#  if($(item).attr('value') == d.filialeId){  }}-->
+<!--		{{   $(item).html() }}-->
+<!--		{{#  return true;  }}-->
+<!--		{{#  } }}-->
+<!--		{{#  });}}-->
+		{{ depts[d.filialeId]?depts[d.filialeId].name:'' }}
+</script>
+<script type="text/html" id="businessDeptIdTpl">
+<!--		{{#  layui.each($("#queryBusinessDeptId option"), function(index, item){  }}-->
+<!--		{{#  if($(item).attr('value') == d.businessDeptId){  }}-->
+<!--		{{   $(item).html() }}-->
+<!--		{{#  return true;  }}-->
+<!--		{{#  } }}-->
+<!--		{{#  });}}-->
+		{{ depts[d.businessDeptId]?depts[d.businessDeptId].name:'' }}
+</script>
+<script type="text/html" id="teamIdTpl">
+<!--		{{#  layui.each(${depts!}, function(index, item){  }}-->
+<!--		{{#  if(item.id == d.teamId){  }}-->
+<!--		{{   item.deptName }}-->
+<!--		{{#  return true;  }}-->
+<!--		{{#  } }}-->
+<!--		{{#  });}}-->
+		{{ depts[d.teamId]?depts[d.teamId].name:'' }}
+</script>
+<script type="text/html" id="leaveTypeTpl">
+		{{#  layui.each($("#queryLeaveType option"), function(index, item){  }}
+		{{#  if($(item).attr('value') == d.leaveType){  }}
+		{{   $(item).html() }}
+		{{#  return true;  }}
+		{{#  } }}
+		{{#  });}}
+</script>
+<script type="text/html" id="statusTpl">
+        {{# var stat = {"1":"<font color='blue'>未提交</font>","2":"<font color='gray'>未审批</font>","3":"<font color='green'>通过</font>","4":"<font color='red' >拒绝</font>"}; }}
+		{{stat[d.status] }}
+</script>
+<script type="text/html" id="tableRowOperationTpl">
+		 {{#  if(d.status == '1' || d.status == '4'){ }} <!--未提交，未通过-->
+		<@auth url='/cf/vacatemanage/save'>
+		<a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-xs"  lay-event="edit">修改</a>
+		</@auth>
+		<@auth url='/cf/vacatemanage/submitDatas'>
+		<a class="layui-btn layui-btn-radius layui-btn-xs"  lay-event="submit">提交</a>
+		</@auth>
+		<@auth url='/cf/vacatemanage/delete'>
+		<a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</@auth>
+		{{#  } }}<!--  -->
+		{{#  if(d.status == '2'){ }}<!--未审批	-->
+		<@auth url='/cf/vacatemanage/revoke'>
+		<a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-xs"  lay-event="cancel">撤销</a>
+		</@auth>
+		<@auth url='/cf/vacatemanage/review'>
+		<a class="layui-btn layui-btn-radius layui-btn-xs"  lay-event="approve">审核</a>
+		</@auth>
+		{{#  } }}<!--  -->
+		{{#  if(d.status == '3'){ }}<!--通过-->
+		<@auth url='/cf/vacatemanage/unreview'>
+		<a class="layui-btn layui-btn-radius layui-btn-warm layui-btn-xs"  lay-event="reApprove">反审核</a>
+		</@auth>
+		{{#  } }}
+		<@auth url='/cf/vacatemanage/detail'>
+		<a class="layui-btn layui-btn-radius layui-btn-normal layui-btn-xs" lay-event="details">详细信息</a>
+		</@auth>
+</script>
+</body>
+</html>
+</@compress>

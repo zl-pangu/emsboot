@@ -1,0 +1,235 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+<title>用户管理</title>
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/global/animate.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/global/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/global/font-awesome.min.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/global/simple-line-icons.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/global/style.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/plugins/grid/bsgrid.all.min.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/plugins/iCheck/icheck.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/plugins/validform/style.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/plugins/zTree_v3/zTreeStyle/zTreeStyle.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/css/vendor.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/jquery-easyui-1.3.3/themes/default/easyui.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/jquery-easyui-1.3.3/themes/icon.css" />
+  <link rel="stylesheet" type="text/css" href="${ctx}/ui/js/plugins/fancybox/jquery.fancybox.css" />
+ <!-- <link rel="stylesheet" type="text/css" href="${ctx}/ui/js/plugins/layui/css/layui.css" />-->
+</head>
+<body style="padding: 0px; margin: 0px;">
+  <div class="wrapper wrapper-content" style="height: 800px">
+    <ol class="breadcrumb">
+      您的位置：
+      <li>
+        <a href="/index.html">主页</a>
+      </li>
+      <li class="active">系统管理</li>
+      <li class="active">用户管理</li>
+    </ol>
+    <div class="container">
+      <form id="search_form" role="form" class="form-inline">
+        <div class="form-body">
+          <div class="form-group">
+            <input name="userName" type="text" class="form-control input-sm" placeholder="登录名" />
+            <input name="fullName" type="text" class="form-control input-sm" placeholder="姓名" />
+            <input name="empNo" type="text" class="form-control input-sm" placeholder="工号" />
+            <select name="isEnable" class="form-control input-sm" style="width: 170px;">
+              <option value="">--状态--</option>
+              <option value="1">有效</option>
+              <option value="0">无效</option>
+            </select>
+            <@auth url='/sys/user/queryAll'>
+            <button type="button" onclick="doSearch()" class="btn btn-sm btn-primary">
+              <i class="fa fa-search"></i>
+              <font>搜 索</font>
+            </button>
+            </@auth>
+            <button type="reset" class="btn btn-sm mls">重 置</button>
+          </div>
+        </div>
+      </form>
+      <div class="grid_wrapper" style="margin-top: 20px;">
+        <div class="mbm">
+          <@auth url='/sys/user/saveAdd'>
+          <button type="button" class="btn btn-sm btn-primary" onclick="openDetailWin('add');">
+            <i class="fa fa-file-o"></i>
+            新增用户
+          </button>
+          </@auth>
+        </div>
+        <table id="user_table" class="table-condensed table-bordered table-striped table-hover">
+          <tr>
+            <th w_index="userName" w_tip="true" width="15%">登录名</th>
+            <th w_index="fullName" w_tip="true" width="15%">姓名</th>
+            <th w_index="empNo" w_tip="true" width="15%">工号</th>
+            <th w_index="teleNum" w_tip="true" width="20%">电话</th>
+            <th w_index="mobile" w_tip="true" width="20%">手机</th>
+            <th w_index="email" w_tip="true" width="20%">E-mail</th>
+            <th w_render="isEnableRender" w_tip="true">状态</th>
+            <th w_render="operateRender" width="30%" w_align="left">操作</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/vendor/modernizr.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/vendor.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/grid/grid.zh-CN.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/grid/bsgrid.all.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/validform/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+
+<!--[if lt IE 9]>
+<script src="${ctx}/ui/js/bootstrap/html5shiv.min.js"></script>
+<script src="${ctx}/ui/js/bootstrap/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+    $(function() {
+        $('input.i-checks').iCheck({
+            checkboxClass : 'icheckbox',
+            radioClass : 'iradio'
+        });
+    });
+</script>
+<script type="text/javascript">
+	$(function() {
+		window.gridObj = initGrid();
+	});
+
+	function initGrid() {
+		return $.fn.bsgrid.init('user_table', {
+			dataType : "json",
+			dataTrim : true,
+			url : '${ctx}/sys/user/queryAll',
+			pageSizeSelect : true,
+			stripeRows : true,
+			otherParames : $("#search_form").serializeArray(),
+			pageSize : 10
+		});
+	}
+
+	function doSearch() {
+		gridObj.options.otherParames = $("#search_form").serializeArray();
+		gridObj.gotoPage(1);
+	}
+
+	function isEnableRender(record, rowIndex, colIndex, options) {
+		var v = record.isEnable;
+		var c = "";
+		if (v == 1)
+			c += "<span class='label label-success'>有效</a>";
+		else if (v == 0)
+			c += "<span class='label label-danger'>无效</a>";
+		else
+			c += v;
+		return c;
+	}
+
+	function operateRender(record, rowIndex, colIndex, options) {
+		var c = "";
+          <@auth url='/sys/user/show'>
+		c += "<a href='javascript:openDetailWin(\"show\", \"" + record.id + "\", \"" + record.fullName + "\");' class='btn btn-success btn-xs mhx width35'>详情</a>";
+         </@auth>
+		if (record.isSuperAdmin != 1) {
+			<@auth url='/sys/user/saveEdit'>
+			c += "<a href='javascript:openDetailWin(\"edit\", \"" + record.id + "\", \"" + record.fullName + "\");' class='btn btn-primary btn-xs mhx width35'>修改</a>";
+			</@auth><@auth url='/sys/user/deletes'>
+			c += "<a href='javascript:deleteUser(\"" + record.id + "\", \"" + record.fullName + "\");' class='btn btn-danger btn-xs mhx width35'>删除</a>";
+			</@auth>
+		}
+		return c;
+	}
+
+	function deleteUsers(ids) {
+		$.ajax({
+			url : '${ctx}/sys/user/deletes',
+			type : 'post',
+			dataType : 'json',
+			data : {
+				ids : ids
+			},
+			cache : false,
+			beforeSend : function(xhr) {
+			},
+			success : function(res) {
+				if (res.code == 200) {
+					doSearch();
+					if (res.msg)
+						index = layer.msg(res.msg, {
+							time : 1000
+						});
+				} else {
+					var msg = res.msg ? "[" + res.code + "]" + res.msg : "删除失败！";
+					layer.msg(msg, {
+						time : 1000
+					});
+				}
+			},
+			error : function(xhr, errorType, errorInfo) {
+				var res = xhr.responseJSON;
+				var msg = res.msg ? "[" + res.code + "]" + res.msg : "请求错误！";
+				layer.msg(msg, {
+					time : 2000
+				});
+			},
+			complete : function(xhr, ts) {
+			}
+		});
+	}
+
+	function deleteUser(id, name) {
+		layer.msg("确定要删除该用户[" + name + "]吗？", {
+			time : 0,
+			btn : [ '确定', '取消' ],
+			yes : function(index) {
+				deleteUsers(id);
+				layer.close(index);
+			}
+		});
+	}
+
+	function openDetailWin(type, id, name) {
+		var options = {
+			type : 2,
+			area : [ '900px', '750px' ],
+			skin : 'layui-layer-rim',
+			anim : 1,
+            btnAlign: 'c',
+			resize : true,
+			maxmin : true
+		};
+		var title = "<font >text</font>";
+		var url = "${ctx}/sys/user/detail?type=" + type;
+		if (type == "show") {
+			options.title = title.replace("text", "用户详情 - " + name);
+			options.content =  url + "&id=" + id ;
+			options.btn = [ "关闭" ];
+		} else if (type == "edit") {
+			options.title = title.replace("text", "编辑用户 - " + name);
+			options.content = url + "&id=" + id;
+			options.btn = [ "保存", "关闭" ];
+			options.yes = function(index, layero) {
+				layero.find("iframe")[0].contentWindow.save();
+			};
+		} else if (type == "add") {
+			options.title = title.replace("text", "添加用户");
+			options.content =  url ;
+			options.btn = [ "保存", "关闭" ];
+			options.yes = function(index, layero) {
+				layero.find("iframe")[0].contentWindow.save();
+			};
+		}
+		layer.open(options);
+	}
+</script>
+</html>
+</@compress>

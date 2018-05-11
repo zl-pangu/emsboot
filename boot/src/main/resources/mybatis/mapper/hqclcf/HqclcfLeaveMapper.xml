@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfLeaveMapper">
+    <resultMap id="hqclcfLeaveMap" type="com.zhph.model.hqclcf.HqclcfLeave">
+        <id column="PRI_NUMBER" property="priNumber" jdbcType="BIGINT"/>
+        <result column="EMP_NO" property="empNo" jdbcType="VARCHAR"/>
+        <result column="EMP_NAME" property="empName" jdbcType="VARCHAR"/>
+        <result column="EMP_SUBJECT" property="empSubject" jdbcType="VARCHAR"/>
+        <result column="DEPT_NO" property="deptNo" jdbcType="VARCHAR"/>
+        <result column="BUSINESS_LINE" property="businessLine" jdbcType="BIGINT"/>
+        <result column="POST" property="post" jdbcType="VARCHAR"/>
+        <result column="POSITION" property="position" jdbcType="VARCHAR"/>
+        <result column="RANK" property="rank" jdbcType="VARCHAR"/>
+        <result column="ENTRY_TIME" property="entryTime" jdbcType="TIMESTAMP"/>
+        <result column="EXIT_TIME" property="exitTime" jdbcType="TIMESTAMP"/>
+        <result column="GZYM" property="gzYm" jdbcType="VARCHAR"/>
+        <result column="EXIT_TIME" property="exitTimeMin" jdbcType="TIMESTAMP"/>
+        <result column="EXIT_TIME" property="exitTimeMax" jdbcType="TIMESTAMP"/>
+        <result column="LEAVING_REASON" property="leavingReason" jdbcType="VARCHAR"/>
+        <result column="APP_STATUS" property="appStatus" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="APP_OPINIONS" property="appOpinions" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="CREATE_NAME" property="createName" jdbcType="VARCHAR"/>
+        <result column="UPDATE_NAME" property="updateName" jdbcType="VARCHAR"/>
+        <result column="APPROVER_NAME" property="approverName" jdbcType="VARCHAR"/>
+        <result column="APPROVER_TIME" property="approverTime" jdbcType="TIMESTAMP"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR"/>
+        <result column="POST_NAME" property="postName" jdbcType="VARCHAR"/>
+        <result column="POSI_NAME" property="positionName" jdbcType="VARCHAR"/>
+        <result column="RANK_NAME" property="rankName" jdbcType="VARCHAR"/>
+        <result column="DEPT_PNAME" property="deptPname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllLeave" parameterType="com.zhph.model.hqclcf.HqclcfLeave" resultMap="hqclcfLeaveMap">
+       	select w.*,(select HDD.DEPT_NAME from HQCLCF_DEPT HDD WHERE HDD.ID = HD.PID)||'--'||HD.DEPT_NAME AS DEPT_PNAME
+        from HQCLCF_EMP_LEAVE w left join HQCLCF_DEPT HD ON w.Dept_No = HD.DEPT_CODE
+        <where>
+        1=1
+        <if test="priNumber!=null and priNumber!='' ">
+            AND w.PRI_NUMBER=#{priNumber}
+        </if>
+        <if test="empNo!=null and empNo!='' ">
+            AND w.EMP_NO LIKE CONCAT(CONCAT('%', #{empNo}),'%')
+        </if>
+        <if test="empName!=null and empName!='' ">
+            AND w.EMP_NAME LIKE CONCAT(CONCAT('%', #{empName}),'%')
+        </if>
+        <if test="gzYm!=null and gzYm!='' ">
+            AND w.GZYM=#{gzYm}
+        </if>
+        <if test="businessLine!=null and businessLine!='' ">
+            AND w.BUSINESS_LINE=#{businessLine}
+        </if>
+        <if test="exitTimeMin!=null ">
+            <![CDATA[	AND w.EXIT_TIME  >= #{exitTimeMin} ]]>
+        </if>
+        <if test="exitTimeMax!=null ">
+            <![CDATA[ AND w.EXIT_TIME  <= #{exitTimeMax} ]]>
+        </if>
+        <if test="appStatus!=null and appStatus!='' ">
+            AND w.APP_STATUS=#{appStatus}
+        </if>
+        <if test="status!=null and status!='' ">
+            AND w.STATUS=#{status}
+        </if>
+        <if test="exitTime!=null and exitTime!='' ">
+            AND w.EXIT_TIME=#{exitTime}
+        </if>
+        <if test="leavingReason!=null and leavingReason!='' ">
+            AND w.LEAVING_REASON=#{leavingReason}
+        </if>
+       <if test= "showChild==1 and deptNo!=null and deptNo!='' ">
+           AND w.DEPT_NO IN(SELECT DEPT_CODE FROM HQCLCF_DEPT START WITH ID = #{deptNo} CONNECT BY PID = PRIOR ID)
+       </if>
+       
+         <if test= "deptNo!=null  and deptNo!='' and  showChild==null ">
+            AND w.DEPT_NO=(SELECT DEPT_CODE FROM HQCLCF_DEPT WHERE ID=#{deptNo})
+       	</if>
+       	
+            <if test="loginUserId!=null and loginUserId!='' ">
+             AND EXISTS (
+                SELECT
+                A .dept_code
+                FROM
+                HQCLCF_DEPT A
+                INNER JOIN SYS_USER_DEPTAUTH_REF B ON A . ID = B.DEPT_ID
+                WHERE
+                B.user_id =  #{loginUserId}
+                AND A .dept_code = w.DEPT_NO
+                GROUP BY
+                A .dept_code
+                )
+            </if>
+        
+        
+        ORDER BY w.STATUS ,w.APP_STATUS DESC,w.CREATE_DATE DESC,w.UPDATE_DATE
+   
+   
+   </where>
+    </select>
+
+    <delete id="delById" parameterType="java.lang.Long">
+        delete from HQCLCF_EMP_LEAVE
+        where PRI_NUMBER = #{priNumber,jdbcType=BIGINT}
+    </delete>
+
+    <update id="updateById" parameterType="com.zhph.model.hqclcf.HqclcfLeave">
+		UPDATE HQCLCF_EMP_LEAVE l
+		SET
+		l.EXIT_TIME=#{exitTime,jdbcType=TIMESTAMP},
+		l.LEAVING_REASON=#{leavingReason,jdbcType=VARCHAR},
+		l.REMARK=#{remark,jdbcType=VARCHAR},
+		l.UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP},
+		l.UPDATE_NAME=#{updateName,jdbcType=VARCHAR}
+		WHERE l.PRI_NUMBER= #{priNumber,jdbcType=BIGINT}
+	</update>
+
+    <update id="appById" parameterType="com.zhph.model.hqclcf.HqclcfLeave">
+		UPDATE HQCLCF_EMP_LEAVE l
+		SET
+		l.APP_STATUS=#{appStatus,jdbcType=VARCHAR},
+		l.STATUS=#{status,jdbcType=VARCHAR},
+		l.REMARK=#{remark,jdbcType=VARCHAR},
+		l.APP_OPINIONS=#{appOpinions,jdbcType=VARCHAR},
+		l.APPROVER_NAME=#{approverName,jdbcType=VARCHAR},
+		l.APPROVER_TIME=#{approverTime,jdbcType=TIMESTAMP}
+		WHERE l.PRI_NUMBER= #{priNumber,jdbcType=BIGINT}
+	</update>
+    <insert id="addByObj" parameterType="com.zhph.model.hqclcf.HqclcfLeave">
+        <selectKey resultType="Long" keyProperty="priNumber" order="BEFORE">
+            SELECT SQ_HQCLCF_LEAVE_SET.NEXTVAL AS ID FROM DUAL
+        </selectKey>
+        INSERT INTO HQCLCF_EMP_LEAVE (
+        PRI_NUMBER,
+        EMP_NO,
+        EMP_NAME,
+        DEPT_NO,
+        BUSINESS_LINE,
+        POSITION,
+        STATUS,
+        RANK,
+        POST,
+        ENTRY_TIME,
+        GZYM,
+        EMP_SUBJECT,
+        EXIT_TIME,
+        LEAVING_REASON,
+        CREATE_DATE,
+        CREATE_NAME,
+        REMARK,
+        DEPT_NAME,/*新增部门名称*/
+        POST_NAME,/*岗位名称*/
+        POSI_NAME,/*职务名称*/
+        RANK_NAME/*职级名称*/
+        )
+        VALUES
+        (SQ_HQCLCF_LEAVE_SET.NEXTVAL,#{empNo,jdbcType=VARCHAR},
+        #{empName,jdbcType=VARCHAR},#{deptNo,jdbcType=VARCHAR},
+        #{businessLine,jdbcType=BIGINT},#{position,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},
+        #{rank,jdbcType=VARCHAR},#{post,jdbcType=VARCHAR},
+        #{entryTime,jdbcType=TIMESTAMP},
+        #{gzYm,jdbcType=VARCHAR},
+        #{empSubject,jdbcType=VARCHAR},
+        #{exitTime,jdbcType=TIMESTAMP},#{leavingReason,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP},#{createName,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},#{deptName,jdbcType=VARCHAR},#{postName,jdbcType=VARCHAR},#{positionName,jdbcType=VARCHAR},
+        #{rankName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="queryFileMap" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT f.EMP_NO,t.SYS_CODE,f.FILE_NAME,f.FILE_TYPE
+        FROM HQCLCF_EMP_FILE f INNER JOIN
+        (SELECT *
+        FROM sys_config_type where SYS_CODE IN('lzspb','lzjjb','jcldht','lzcls')
+        <choose>
+            <when test="busLine!=null and busLine=='1'">
+                AND P_SYS_CODE='zb_file'
+            </when>
+            <when test="busLine!=null and busLine=='2'">
+                AND P_SYS_CODE='zf_file'
+            </when>
+            <when test="busLine!=null and busLine=='3'">
+                AND P_SYS_CODE='zd_file'
+            </when>
+        </choose>
+        ) t
+        ON f.FILE_TYPE = t.SYS_VALUE
+        WHERE f.EMP_NO = #{empNo}
+    </select>
+    
+    
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="hqclcfLeaveMap">
+        select
+        *
+        from HQCLCF_EMP_LEAVE
+        where PRI_NUMBER = #{priNumber,jdbcType=BIGINT}
+    </select>
+    
+     <select id="selectByEmpNo" parameterType="java.lang.String" resultMap="hqclcfLeaveMap">
+        
+        select
+        l.*
+        from HQCLCF_EMP_LEAVE l
+				join  HQCLCF_EMP e	on l.EMP_NO=e.EMP_NO
+        where
+		 e.status_app = '1' and e.status = '1'
+		and l.STATUS='1'
+		and l.EMP_NO = #{empNo,jdbcType=VARCHAR} 
+		 
+    </select>
+    
+    
+    <select id="queryEmpByworkNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select 
+        count (*) 
+        from SYS_CALENDAR_POOL t 
+        where t.cld_date =  #{leaveDate,jdbcType=VARCHAR} and CLD_FLG='0'
+    </select>
+
+
+</mapper>

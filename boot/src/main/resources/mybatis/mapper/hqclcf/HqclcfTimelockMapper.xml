@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.hqclcf.HqclcfTimelockMapper">
+	<!-- 1、配置返回结果Map和参数Map -->
+	<resultMap type="com.zhph.model.hqclcf.HqclcfTimelock" id="baseHqclcfTimelockResultMap">
+		<id property="year" column="YEAR"/>
+		<result property="month" column="MONTH"/>
+		<result property="isLock" column="IS_LOCK"/>
+		<result property="businessLine" column="BUSINESS_LINE"/>
+	</resultMap>
+	<resultMap type="com.zhph.model.hqclcf.HqclcfTimelock" id="hqclcfTimelockResultMap" extends="baseHqclcfTimelockResultMap">
+	</resultMap>
+	<!-- <parameter property="deptId" javaType="string" jdbcType="VARCHAR"/> -->
+	<parameterMap type="com.zhph.model.hqclcf.HqclcfTimelock" id="hqclcfTimelockParameterMap">
+		<parameter property="year" javaType="int" jdbcType="INTEGER"/>
+		<parameter property="month" javaType="int" jdbcType="INTEGER"/>
+		<parameter property="isLock" javaType="int" jdbcType="INTEGER"/>
+		<parameter property="businessLine" javaType="int" jdbcType="INTEGER"/>
+	</parameterMap>
+
+	<!-- 2、各个SeqID -->
+	<insert id="add" parameterMap="hqclcfTimelockParameterMap">
+		INSERT INTO HQCLCF_TIMELOCK (YEAR, MONTH, IS_LOCK, BUSINESS_LINE) VALUES (
+			#{year, jdbcType=INTEGER}, 
+			#{month, jdbcType=INTEGER}, 
+			#{isLock, jdbcType=INTEGER}, 
+			#{businessLine, jdbcType=INTEGER}
+		)
+	</insert>
+	<!-- 判断不可重复的属性是否已经存在，这里默认只判断deptName属性，具体的业务再进行修改添加 -->
+	<!--
+	<select id="isExists" resultType="integer" parameterMap="hqclcfTimelockParameterMap">
+		SELECT COUNT(1) FROM HQCLCF_TIMELOCK WHERE DEPT_NAME=#{deptName}
+		<if test="deptId != null and deptId !='' ">
+			<![CDATA[ AND DEPT_ID <> #{deptId, jdbcType=VARCHAR} ]]>
+		</if>
+	</select>
+	-->
+	<select id="getById" resultMap="hqclcfTimelockResultMap" parameterType="string">
+		SELECT * FROM HQCLCF_TIMELOCK WHERE YEAR = #{value}
+	</select>
+	<select id="queryByCondition" resultMap="hqclcfTimelockResultMap" parameterType="com.zhph.model.hqclcf.HqclcfTimelock">
+		SELECT * FROM HQCLCF_TIMELOCK WHERE 1=1
+		<!-- 各种条件 --> 
+		<if test="year != null ">
+			 AND YEAR=#{year}
+		</if>
+		<if test="month != null ">
+			 AND MONTH=#{month}
+		</if>
+		<if test="businessLine != null ">
+			 AND BUSINESS_LINE=#{businessLine}
+		</if>
+	</select>
+	<select id="getTotal" resultType="long" parameterType="com.zhph.model.hqclcf.HqclcfTimelock">
+		SELECT COUNT(1) FROM HQCLCF_TIMELOCK WHERE 1=1
+		<!-- 各种条件 --> 
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	<delete id="deleteById" parameterType="string">
+		DELETE FROM HQCLCF_TIMELOCK WHERE YEAR = #{value}
+	</delete>
+	<update id="edit" parameterType="com.zhph.model.hqclcf.HqclcfTimelock">
+		UPDATE HQCLCF_TIMELOCK 
+		<!-- 各种更改的字段 --> 
+		<set>
+			<if test="month != null and month !='' ">
+				MONTH = #{month, jdbcType=INTEGER}, 
+			</if>
+			<if test="isLock != null and isLock !='' ">
+				IS_LOCK = #{isLock, jdbcType=INTEGER}, 
+			</if>
+			<if test="businessLine != null and businessLine !='' ">
+				BUSINESS_LINE = #{businessLine, jdbcType=INTEGER}, 
+			</if>
+		</set>			WHERE YEAR = #{year, jdbcType=INTEGER} 
+	</update>
+</mapper>

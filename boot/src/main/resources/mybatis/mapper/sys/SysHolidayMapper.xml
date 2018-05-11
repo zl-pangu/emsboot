@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhph.mapper.sys.SysHolidayMapper">
+	<resultMap id="holidayResultMap" type="com.zhph.model.sys.SysHoliday">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="HOLIDAY_NAME" property="holidayName" jdbcType="VARCHAR" />
+		<result column="HOLIDAY_STARTDATE" property="holidayStartDate" jdbcType="TIMESTAMP" />
+		<result column="HOLIDAY_ENDDATE" property="holidayEndDate" jdbcType="TIMESTAMP" />
+		<result column="OFFLATER_DATE" property="offLaterDate" jdbcType="VARCHAR" />
+		<result column="IFAUTO" property="ifauto" jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="CREATE_NAME" property="createName" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		
+	</resultMap>
+
+	<select id="queryAllHoliday" parameterType="com.zhph.model.sys.SysHoliday" resultMap="holidayResultMap">
+		SELECT * FROM  SYS_HOLIDAY w
+		<where>
+			<if test="holidayName!=null and holidayName!='' ">
+				AND w.HOLIDAY_NAME like '%'||#{holidayName}||'%'
+			</if>
+			<if test="holidayStartDate!=null">
+				<![CDATA[ AND w.HOLIDAY_STARTDATE >= #{holidayStartDate} ]]> 
+			</if>
+			
+			<if test="holidayEndDate!=null">
+				<![CDATA[ AND w.HOLIDAY_ENDDATE <= #{holidayEndDate} ]]>   
+			</if>
+		</where>
+		ORDER BY w.ID DESC
+	</select>
+	
+	<select id="queryHolidayById" parameterType="com.zhph.model.sys.SysHoliday" resultMap="holidayResultMap">
+		SELECT * FROM  SYS_HOLIDAY w WHERE ID=#{id}
+	</select>
+
+	<insert id="insertData" parameterType="com.zhph.model.sys.SysHoliday">
+		INSERT INTO SYS_HOLIDAY(
+			ID,
+			HOLIDAY_NAME,
+			HOLIDAY_STARTDATE,
+			HOLIDAY_ENDDATE,
+			OFFLATER_DATE,
+			IFAUTO,
+			REMARK,
+			CREATE_NAME,
+			CREATE_DATE
+		)VALUES(
+			sys_guid(),
+			#{holidayName,jdbcType=VARCHAR},
+			#{holidayStartDate,jdbcType=TIMESTAMP},
+			#{holidayEndDate,jdbcType=TIMESTAMP},
+			#{offLaterDate,jdbcType=VARCHAR},
+			'0',
+			#{remark,jdbcType=VARCHAR},
+			#{createName,jdbcType=VARCHAR},
+			#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="updateById" parameterType="com.zhph.model.sys.SysHoliday">
+		UPDATE SYS_HOLIDAY W SET
+			w.HOLIDAY_NAME=#{holidayName,jdbcType=VARCHAR},
+			w.HOLIDAY_STARTDATE=#{holidayStartDate,jdbcType=TIMESTAMP},
+			w.HOLIDAY_ENDDATE=#{holidayEndDate,jdbcType=TIMESTAMP},
+			w.OFFLATER_DATE=#{offLaterDate,jdbcType=VARCHAR},
+			w.REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE w.ID=#{id}
+	</update>
+	
+	<delete id="delById" parameterType="Object">
+		DELETE FROM SYS_HOLIDAY WHERE ID=#{id}
+	</delete>
+	
+	<select id="checkIfExsits" parameterType="com.zhph.model.sys.SysHoliday" resultMap="holidayResultMap">
+		SELECT * FROM  SYS_HOLIDAY w 
+		<where>
+			<if test="id!=null and id!='' ">
+				AND w.ID != #{id}
+			</if>
+			<if test="holidayName!=null and holidayName!='' ">
+				AND w.HOLIDAY_NAME = #{holidayName}
+			</if>
+			<if test="holidayStartDate!=null">
+				<![CDATA[ AND w.HOLIDAY_STARTDATE = #{holidayStartDate} ]]> 
+			</if>
+			<if test="holidayEndDate!=null">
+				<![CDATA[ AND w.HOLIDAY_ENDDATE = #{holidayEndDate} ]]>   
+			</if>
+		</where>
+	</select>
+	
+</mapper>

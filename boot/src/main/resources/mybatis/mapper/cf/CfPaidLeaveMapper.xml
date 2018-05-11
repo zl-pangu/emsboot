@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cf.CfPaidLeaveMapper">
+	<!-- 1、配置返回结果Map和参数Map -->
+	<resultMap type="com.zhph.model.cf.CfPaidLeave" id="baseCfPaidLeaveResultMap">
+		<id property="priNumber" column="PRI_NUMBER"/>
+		<result property="gzym" column="GZYM"/>
+		<result property="paidLeaveDays" column="PAID_LEAVE_DAYS"/>
+		<result property="weekendPaidLeave" column="WEEKEND_PAID_LEAVE"/>
+		<result property="comments" column="COMMENTS"/>
+		<result property="createName" column="CREATE_NAME"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="updateName" column="UPDATE_NAME"/>
+		<result property="updateDate" column="UPDATE_DATE"/>
+	</resultMap>
+	<resultMap type="com.zhph.model.cf.CfPaidLeave" id="cfPaidLeaveResultMap" extends="baseCfPaidLeaveResultMap">
+	</resultMap>
+	<!-- <parameter property="deptId" javaType="string" jdbcType="VARCHAR"/> -->
+	<parameterMap type="com.zhph.model.cf.CfPaidLeave" id="cfPaidLeaveParameterMap">
+		<parameter property="priNumber" javaType="long" jdbcType="BIGINT"/>
+		<parameter property="gzym" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="paidLeaveDays" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="weekendPaidLeave" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="comments" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="createName" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="createDate" javaType="java.util.Date" jdbcType="DATE"/>
+		<parameter property="updateName" javaType="string" jdbcType="VARCHAR"/>
+		<parameter property="updateDate" javaType="java.util.Date" jdbcType="DATE"/>
+	</parameterMap>
+
+	<!-- 2、各个SeqID -->
+	<insert id="add" parameterMap="cfPaidLeaveParameterMap">
+		INSERT INTO CF_PAID_LEAVE (PRI_NUMBER, GZYM, PAID_LEAVE_DAYS, WEEKEND_PAID_LEAVE, COMMENTS, CREATE_NAME, CREATE_DATE, UPDATE_NAME, UPDATE_DATE) VALUES (
+			#{priNumber, jdbcType=BIGINT}, 
+			#{gzym, jdbcType=VARCHAR}, 
+			#{paidLeaveDays, jdbcType=VARCHAR}, 
+			#{weekendPaidLeave, jdbcType=VARCHAR}, 
+			#{comments, jdbcType=VARCHAR}, 
+			#{createName, jdbcType=VARCHAR}, 
+			#{createDate, jdbcType=DATE}, 
+			#{updateName, jdbcType=VARCHAR}, 
+			#{updateDate, jdbcType=DATE}
+		)
+	</insert>
+	<!-- 判断不可重复的属性是否已经存在，这里默认只判断deptName属性，具体的业务再进行修改添加 -->
+	<!--
+	<select id="isExists" resultType="integer" parameterMap="cfPaidLeaveParameterMap">
+		SELECT COUNT(1) FROM CF_PAID_LEAVE WHERE DEPT_NAME=#{deptName}
+		<if test="deptId != null and deptId !='' ">
+			<![CDATA[ AND DEPT_ID <> #{deptId, jdbcType=VARCHAR} ]]>
+		</if>
+	</select>
+	-->
+	<select id="getById" resultMap="cfPaidLeaveResultMap" parameterType="string">
+		SELECT * FROM CF_PAID_LEAVE WHERE PRI_NUMBER = #{value}
+	</select>
+	<select id="page" resultMap="cfPaidLeaveResultMap" parameterType="com.zhph.model.cf.CfPaidLeave">
+		SELECT * FROM CF_PAID_LEAVE WHERE 1=1
+		<!-- 各种条件 --> 
+		<if test="gzym !=null and gzym!=''">
+			AND GZYM=#{gzym}
+		</if>
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	<select id="getTotal" resultType="long" parameterType="com.zhph.model.cf.CfPaidLeave">
+		SELECT COUNT(1) FROM CF_PAID_LEAVE WHERE 1=1
+		<!-- 各种条件 --> 
+		<!--
+		<if test="deptName != null and deptName !='' ">
+			<![CDATA[ AND DEPT_NAME LIKE CONCAT(CONCAT('%', #{deptName}),'%')]]>
+		</if>
+		-->
+	</select>
+	<delete id="deleteById" parameterType="string">
+		DELETE FROM CF_PAID_LEAVE WHERE PRI_NUMBER = #{value}
+	</delete>
+	<update id="edit" parameterType="com.zhph.model.cf.CfPaidLeave">
+		UPDATE CF_PAID_LEAVE 
+		<!-- 各种更改的字段 --> 
+		<set>
+			<if test="gzym != null and gzym !='' ">
+				GZYM = #{gzym, jdbcType=VARCHAR}, 
+			</if>
+			<if test="paidLeaveDays != null and paidLeaveDays !='' ">
+				PAID_LEAVE_DAYS = #{paidLeaveDays, jdbcType=VARCHAR}, 
+			</if>
+			<if test="weekendPaidLeave != null and weekendPaidLeave !='' ">
+				WEEKEND_PAID_LEAVE = #{weekendPaidLeave, jdbcType=VARCHAR}, 
+			</if>
+			<if test="comments != null and comments !='' ">
+				COMMENTS = #{comments, jdbcType=VARCHAR}, 
+			</if>
+			<if test="createName != null and createName !='' ">
+				CREATE_NAME = #{createName, jdbcType=VARCHAR}, 
+			</if>
+			<if test="createDate != null and createDate !='' ">
+				CREATE_DATE = #{createDate, jdbcType=DATE}, 
+			</if>
+			<if test="updateName != null and updateName !='' ">
+				UPDATE_NAME = #{updateName, jdbcType=VARCHAR}, 
+			</if>
+			<if test="updateDate != null and updateDate !='' ">
+				UPDATE_DATE = #{updateDate, jdbcType=DATE}, 
+			</if>
+		</set>			WHERE PRI_NUMBER = #{priNumber, jdbcType=BIGINT} 
+	</update>
+</mapper>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="renderer" content="webkit" /><!-- 让部分国产浏览器默认采用高速模式渲染页面 -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>薪资服务系统</title>
+<!-- 全局CSS 开始-->
+<link href="../ui/css/global/bootstrap.min.css" rel="stylesheet" />
+<link href="../ui/css/global/font-awesome.min.css" rel="stylesheet" />
+<link href="../ui/css/global/simple-line-icons.css" rel="stylesheet" />
+<link href="../ui/css/global/animate.css" rel="stylesheet" />
+<link href="../ui/css/global/style.css" rel="stylesheet" />
+<link href="../ui/js/plugins/pace/pace.css" rel="stylesheet" />
+<!-- 全局CSS 结束-->
+<!-- 页面CSS 开始-->
+<link rel="stylesheet" href="../ui/css/plugins/grid/bsgrid.all.min.css" type="text/css" />
+<!-- 页面CSS 结束-->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="../ui/js/bootstrap/html5shiv.min.js"></script>
+<script src="../ui/js/bootstrap/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="ibox-content">
+	<form id="search_form" role="form" class="form-inline">
+		<div class="form-body">
+			<div class="form-group">
+				<input type="text" id="userName" name="userName" value="" class="form-control input-sm" placeholder="用户名称"/>
+				<input type="text" id="phone" name="phone" class="form-control input-sm" placeholder="电话"/>
+			</div>
+			<div class="form-group">
+				<button type="button" onclick="doSearch()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i>搜 索</button>
+				
+				<button type="reset" class="btn btn-sm mls">重 置</button>
+			</div>
+		</div>
+	</form>
+	<div class="grid_wrapper">
+		<div class="mbm">
+			<button id="insertSysUserBtn" type="button" class="btn btn-sm btn-primary" style="margin-top: 10px;"><i class="fa fa-file-o"></i>新增用户</button>
+		</div>
+		<table id="org_data_table" class="table-condensed table-bordered table-striped table-hover" style="table-layout: fixed;">
+			<tr>
+				<th w_index="empNo" width="10%">员工编号</th>
+				<th w_index="empName" w_tip="true" width="25%">员工姓名</th>
+				<th w_index="empSpell" w_tip="true" width="20%">电话</th>
+				<th w_index="eamil" w_tip="true" width="15%">状态</th>
+				<th w_render="operate" width="30%">操作</th>
+			</tr>
+		</table>
+	</div>
+</div>
+
+</body>
+
+<script src="../ui/js/jquery.min.js"></script>
+<script src="../ui/js/bootstrap/bootstrap.min.js"></script>
+<script src="../ui/js/plugins/grid/grid.zh-CN.js"></script>
+<script src="../ui/js/plugins/grid/bsgrid.all.min.js"></script> 
+<script type="text/javascript">
+var org_data_table = null;
+$(function(){
+	org_data_table = $.fn.bsgrid.init('org_data_table', {
+		url : '/emp/getAll',
+		pageSizeSelect: true,
+		stripeRows: true,
+		otherParames: $("#search_form").serializeArray(),
+		pageSize : 10
+	});
+});
+
+function doSearch() {
+	org_data_table.options.otherParames = $("#search_form").serializeArray();
+	org_data_table.gotoPage(1);
+}
+
+/** 操作扩展显示列 */
+function operate(record, rowIndex, colIndex, options) {
+	var detailHtml = "<a href='javascript:void(0);' onclick='' class='btn btn-success btn-xs mhx width35'>详情</a>";
+	var updateHtml = "<a href='javascript:void(0);' onclick='' class='btn btn-primary btn-xs mhx width35'>修改</a>";
+	var deleteHtml = "<a href='javascript:void(0);' onclick='' class='btn btn-danger btn-xs mhx width35'>删除</a>";
+	return detailHtml + updateHtml + deleteHtml;
+
+}
+
+$('#insertSysUserBtn').click(function() {
+	window.location.href = "/emp/forInsert";
+});
+
+</script>
+
+</html>

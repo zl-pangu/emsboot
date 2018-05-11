@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cl.ClAchieveDetailMapper">
+  <resultMap id="BaseResultMap" type="com.zhph.model.cl.ClAchieveDetail">
+    <id column="PRI_NUMBER" jdbcType="INTEGER" property="priNumber" />
+    <result column="LOAN_CONTRACT_NO" jdbcType="VARCHAR" property="loanContractNo" />
+    <result column="LOAN_NAME" jdbcType="VARCHAR" property="loanName" />
+    <result column="LOAN_AMOUNT" jdbcType="INTEGER" property="loanAmount" />
+    <result column="GRANT_LOAN_AMOUNT" jdbcType="INTEGER" property="grantLoanAmount" />
+    <result column="GRANT_LOAN_DATE" jdbcType="VARCHAR" property="grantLoanDate" />
+    <result column="PAY_DATE" jdbcType="VARCHAR" property="payDate" />
+    <result column="BUSINESS_MANAGER_NO" jdbcType="VARCHAR" property="businessManagerNo" />
+    <result column="TEAM_MANAGER_NO" jdbcType="VARCHAR" property="teamManagerNo" />
+    <result column="ORG_MANAGER_NO" jdbcType="VARCHAR" property="orgManagerNo" />
+    <result column="AREA_MANAGER_NO" jdbcType="VARCHAR" property="areaManagerNo" />
+    <result column="WF_EMP_NO" jdbcType="VARCHAR" property="wfEmpNo" />
+    <result column="XS_EMP_NO" jdbcType="VARCHAR" property="xsEmpNo" />
+    <result column="KF_EMP_NO" jdbcType="VARCHAR" property="kfEmpNo" />
+    <result column="BUSINESS_MANAGER_NAME" jdbcType="VARCHAR" property="businessManagerName" />
+    <result column="TEAM_MANAGER_NAME" jdbcType="VARCHAR" property="teamManagerName" />
+    <result column="ORG_MANAGER_NAME" jdbcType="VARCHAR" property="orgManagerName" />
+    <result column="AREA_MANAGER_NAME" jdbcType="VARCHAR" property="areaManagerName" />
+    <result column="WF_EMP_NAME" jdbcType="VARCHAR" property="wfEmpName" />
+    <result column="XS_EMP_NAME" jdbcType="VARCHAR" property="xsEmpName" />
+    <result column="KF_EMP_NAME" jdbcType="VARCHAR" property="kfEmpName" />
+    <result column="CUR_DEPT_NO" jdbcType="VARCHAR" property="curDeptNo" />
+    <result column="GZ_YM" jdbcType="VARCHAR" property="gzym" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATOR_NO" jdbcType="VARCHAR" property="creatorNo" />
+    <result column="CREATOR_NAME" jdbcType="VARCHAR" property="creatorName" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="MODIFIER_NO" jdbcType="VARCHAR" property="modifierNo" />
+    <result column="MODIFIER_NAME" jdbcType="VARCHAR" property="modifierName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PRI_NUMBER, LOAN_CONTRACT_NO, LOAN_NAME, LOAN_AMOUNT, GRANT_LOAN_AMOUNT, GRANT_LOAN_DATE, 
+    PAY_DATE, BUSINESS_MANAGER_NO, TEAM_MANAGER_NO, ORG_MANAGER_NO, AREA_MANAGER_NO, 
+    WF_EMP_NO, XS_EMP_NO, KF_EMP_NO, CUR_DEPT_NO, GZ_YM, CREATE_TIME, CREATOR_NO, 
+    UPDATE_TIME, MODIFIER_NO
+  </sql>
+  <delete id="deleteById" parameterType="long">
+    delete from CL_ACHIEVE_DETAIL
+    where PRI_NUMBER = #{priNumber,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.zhph.model.cl.ClAchieveDetail">
+    INSERT INTO CL_ACHIEVE_DETAIL (PRI_NUMBER, LOAN_CONTRACT_NO, LOAN_NAME, 
+      LOAN_AMOUNT, GRANT_LOAN_AMOUNT, GRANT_LOAN_DATE, 
+      PAY_DATE, BUSINESS_MANAGER_NO, TEAM_MANAGER_NO, 
+      ORG_MANAGER_NO, AREA_MANAGER_NO, WF_EMP_NO, 
+      XS_EMP_NO, KF_EMP_NO, CUR_DEPT_NO, GZ_YM, 
+      CREATE_TIME, CREATOR_NO, UPDATE_TIME, 
+      MODIFIER_NO)
+    VALUES (SQ_CL_ACIEVE_DEALIL_SET.NEXTVAL, #{loanContractNo,jdbcType=VARCHAR}, #{loanName,jdbcType=VARCHAR}, 
+      #{loanAmount,jdbcType=INTEGER}, #{grantLoanAmount,jdbcType=INTEGER}, #{grantLoanDate,jdbcType=VARCHAR}, 
+      #{payDate,jdbcType=VARCHAR}, #{businessManagerNo,jdbcType=VARCHAR}, #{teamManagerNo,jdbcType=VARCHAR}, 
+      #{orgManagerNo,jdbcType=VARCHAR}, #{areaManagerNo,jdbcType=VARCHAR}, #{wfEmpNo,jdbcType=VARCHAR}, 
+      #{xsEmpNo,jdbcType=VARCHAR}, #{kfEmpNo,jdbcType=VARCHAR}, #{curDeptNo,jdbcType=VARCHAR}, 
+      #{gzym,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creatorNo,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{modifierNo,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="com.zhph.model.cl.ClAchieveDetail">
+    update CL_ACHIEVE_DETAIL
+    <set>
+      <if test="loanContractNo != null">
+        LOAN_CONTRACT_NO = #{loanContractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loanName != null">
+        LOAN_NAME = #{loanName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmount != null">
+        LOAN_AMOUNT = #{loanAmount,jdbcType=INTEGER},
+      </if>
+      <if test="grantLoanAmount != null">
+        GRANT_LOAN_AMOUNT = #{grantLoanAmount,jdbcType=INTEGER},
+      </if>
+      <if test="grantLoanDate != null">
+        GRANT_LOAN_DATE = #{grantLoanDate,jdbcType=VARCHAR},
+      </if>
+      <if test="payDate != null">
+        PAY_DATE = #{payDate,jdbcType=VARCHAR},
+      </if>
+      <if test="businessManagerNo != null">
+        BUSINESS_MANAGER_NO = #{businessManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teamManagerNo != null">
+        TEAM_MANAGER_NO = #{teamManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgManagerNo != null">
+        ORG_MANAGER_NO = #{orgManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaManagerNo != null">
+        AREA_MANAGER_NO = #{areaManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wfEmpNo != null">
+        WF_EMP_NO = #{wfEmpNo,jdbcType=VARCHAR},
+      </if>
+      <if test="xsEmpNo != null">
+        XS_EMP_NO = #{xsEmpNo,jdbcType=VARCHAR},
+      </if>
+      <if test="kfEmpNo != null">
+        KF_EMP_NO = #{kfEmpNo,jdbcType=VARCHAR},
+      </if>
+      <if test="curDeptNo != null">
+        CUR_DEPT_NO = #{curDeptNo,jdbcType=VARCHAR},
+      </if>
+      <if test="gzym != null">
+        GZ_YM = #{gzym,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorNo != null">
+        CREATOR_NO = #{creatorNo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierNo != null">
+        MODIFIER_NO = #{modifierNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PRI_NUMBER = #{priNumber,jdbcType=INTEGER}
+  </update>
+  <select id="queryByPage" parameterType="com.zhph.model.cl.ClAchieveDetail" resultMap="BaseResultMap">
+	SELECT d.pri_number AS pri_number,
+	d.loan_contract_no AS loan_contract_no,
+	d.loan_name AS loan_name,
+	d.loan_amount AS loan_amount,
+	d.grant_loan_amount AS grant_loan_amount,
+	d.grant_loan_date AS grant_loan_date,
+	d.pay_date AS pay_date,
+	d.business_manager_no AS business_manager_no,
+	e1.emp_name AS business_manager_name,
+	d.team_manager_no AS team_manager_no,
+	e2.emp_name AS team_manager_name,
+	d.org_manager_no AS org_manager_no,
+	e3.emp_name AS org_manager_name,
+	d.area_manager_no AS area_manager_no,
+	e4.emp_name AS area_manager_name,
+	d.wf_emp_no AS wf_emp_no,
+	e5.emp_name AS wf_emp_name,
+	d.xs_emp_no AS xs_emp_no,
+	e6.emp_name AS xs_emp_name,
+	d.kf_emp_no AS kf_emp_no,
+	e7.emp_name AS kf_emp_name,
+	d.cur_dept_no AS cur_dept_no,
+	d.gz_ym AS gz_ym,
+	d.create_time AS create_time,
+	d.creator_no AS creator_no,
+	u1.FULL_NAME AS creator_name,
+	d.update_time AS update_time,
+	d.modifier_no AS modifier_no,
+	u2.FULL_NAME AS modifier_name,
+	(select TO_CHAR(wm_concat(dept_type||'='||dept_code||'='||dept_name)) from HQCLCF_DEPT
+	where dept_type
+	is not null and id !=1 start with ID=
+	(select ID from
+	hqclcf_dept temp where temp.dept_code=d.CUR_DEPT_NO)
+	CONNECT BY PRIOR PID =
+	ID) as deptInfo
+	FROM CL_ACHIEVE_DETAIL d
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e1
+	ON d.business_manager_no = e1.emp_no AND d.GZ_YM=e1.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e2
+	ON d.team_manager_no = e2.emp_no AND d.GZ_YM=e2.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e3
+	ON d.org_manager_no = e3.emp_no AND d.GZ_YM=e3.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e4
+	ON d.area_manager_no = e4.emp_no AND d.GZ_YM=e4.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e5
+	ON d.wf_emp_no = e5.emp_no AND d.GZ_YM=e5.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e6
+	ON d.xs_emp_no = e6.emp_no AND d.GZ_YM=e6.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e7
+	ON d.kf_emp_no = e7.emp_no AND d.GZ_YM=e7.GZYM
+	LEFT JOIN SYS_USER u1
+	ON u1.user_name = d.creator_no
+	LEFT JOIN SYS_USER u2
+	ON u2.user_name = d.modifier_no
+	WHERE 1 = 1 
+	<if test="priNumber != null">
+		   AND d.PRI_NUMBER = #{priNumber}
+	</if>
+	<if test="loanContractNo != null and loanContractNo !='' ">
+		   AND d.LOAN_CONTRACT_NO = #{loanContractNo}
+	</if>
+	<if test="loanName != null and loanName != '' ">
+		<![CDATA[  AND d.LOAN_NAME LIKE  CONCAT(CONCAT('%',#{loanName}),'%') ]]>
+	</if>
+    <if test="businessManagerNo != null and businessManagerNo != '' ">
+         AND d.BUSINESS_MANAGER_NO = #{businessManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teamManagerNo != null and teamManagerNo != '' ">
+         AND d.TEAM_MANAGER_NO = #{teamManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgManagerNo != null and orgManagerNo != '' ">
+        AND d.ORG_MANAGER_NO = #{orgManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaManagerNo != null and areaManagerNo != '' ">
+         AND d.AREA_MANAGER_NO = #{areaManagerNo,jdbcType=VARCHAR},
+      </if>
+	<if test="gzym != null and gzym != '' ">
+		   AND d.GZ_YM = #{gzym}
+	</if>
+	<if test="gzymMin != null and gzymMin != '' ">
+		  <![CDATA[ AND d.GZ_YM >=#{gzymMin}]]>
+	</if>
+	<if test="gzymMax != null and gzymMax != '' ">
+		 <![CDATA[ AND d.gz_ym <=#{gzymMax}]]>
+	</if>
+   	<if test="curDeptNo != null and curDeptNo !='' ">
+		  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=d.CUR_DEPT_NO START WITH ID=#{curDeptNo} CONNECT by PRIOR ID=PID)
+	</if>
+	<if test="deptNos !=null">
+			 and d.CUR_DEPT_NO in 
+			 <foreach collection="deptNos" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+	</if>
+	<if test="sort != null and order != null ">
+		    ORDER BY ${sort} ${order}
+	</if>
+	<if test="sort == null or order == null ">
+		 ORDER BY d.gz_ym DESC, <!-- d.area_no, o.name, dp.name, d.team_no,  -->e1.emp_name, d.pri_number 
+	</if>
+  </select>
+  <select id="queryPageCount" resultType="int" parameterType="com.zhph.model.cl.ClAchieveDetail">
+	SELECT  count(*) FROM CL_ACHIEVE_DETAIL d WHERE 1 = 1	
+	<if test="priNumber != null">
+		   AND d.PRI_NUMBER = #{priNumber}
+	</if>
+	<if test="loanContractNo != null and loanContractNo !='' ">
+		   AND d.LOAN_CONTRACT_NO = #{loanContractNo}
+	</if>
+	<if test="loanName != null and loanName != '' ">
+		<![CDATA[  AND d.LOAN_NAME LIKE  CONCAT(CONCAT('%',#{loanName}),'%') ]]>
+	</if>
+    <if test="businessManagerNo != null and businessManagerNo != '' ">
+         AND d.BUSINESS_MANAGER_NO = #{businessManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teamManagerNo != null and teamManagerNo != '' ">
+         AND d.TEAM_MANAGER_NO = #{teamManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgManagerNo != null and orgManagerNo != '' ">
+        AND d.ORG_MANAGER_NO = #{orgManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaManagerNo != null and areaManagerNo != '' ">
+         AND d.AREA_MANAGER_NO = #{areaManagerNo,jdbcType=VARCHAR},
+      </if>
+	<if test="gzym != null and gzym != '' ">
+		   AND d.GZ_YM = #{gzym}
+	</if>
+	<if test="gzymMin != null and gzymMin != '' ">
+		  <![CDATA[ AND d.GZ_YM >=#{gzymMin}]]>
+	</if>
+	<if test="gzymMax != null and gzymMax != '' ">
+		 <![CDATA[ AND d.gz_ym <=#{gzymMax}]]>
+	</if>
+   	<if test="curDeptNo != null and curDeptNo !='' ">
+		  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=d.CUR_DEPT_NO START WITH ID=#{curDeptNo} CONNECT by PRIOR ID=PID)
+	</if>	
+	<if test="deptNos !=null">
+			 and d.CUR_DEPT_NO in 
+			 <foreach collection="deptNos" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+	</if>
+	<if test="sort != null and order != null ">
+		 ORDER BY ${sort} ${order}
+	</if>
+	<if test="sort == null or order == null ">
+		 ORDER BY d.gz_ym DESC, <!-- d.area_no, o.name, dp.name, d.team_no,  e1.emp_name,--> d.pri_number 
+	</if>
+  </select>
+    <select id="queryByConditions" parameterType="com.zhph.model.cl.ClAchieveDetail" resultMap="BaseResultMap">
+	SELECT d.pri_number AS pri_number,
+	d.loan_contract_no AS loan_contract_no,
+	d.loan_name AS loan_name,
+	d.loan_amount AS loan_amount,
+	d.grant_loan_amount AS grant_loan_amount,
+	d.grant_loan_date AS grant_loan_date,
+	d.pay_date AS pay_date,
+	d.business_manager_no AS business_manager_no,
+	e1.emp_name AS business_manager_name,
+	d.team_manager_no AS team_manager_no,
+	e2.emp_name AS team_manager_name,
+	d.org_manager_no AS org_manager_no,
+	e3.emp_name AS org_manager_name,
+	d.area_manager_no AS area_manager_no,
+	e4.emp_name AS area_manager_name,
+	d.wf_emp_no AS wf_emp_no,
+	e5.emp_name AS wf_emp_name,
+	d.xs_emp_no AS xs_emp_no,
+	e6.emp_name AS xs_emp_name,
+	d.kf_emp_no AS kf_emp_no,
+	e7.emp_name AS kf_emp_name,
+	d.cur_dept_no AS cur_dept_no,
+	d.gz_ym AS gz_ym,
+	d.create_time AS create_time,
+	d.creator_no AS creator_no,
+	u1.FULL_NAME AS creator_name,
+	d.update_time AS update_time,
+	d.modifier_no AS modifier_no,
+	u2.FULL_NAME AS modifier_name,
+	(select TO_CHAR(wm_concat(dept_type||'='||dept_code||'='||dept_name)) from HQCLCF_DEPT
+	where dept_type
+	is not null and id !=1 start with ID=
+	(select ID from
+	hqclcf_dept temp where temp.dept_code=d.CUR_DEPT_NO)
+	CONNECT BY PRIOR PID =
+	ID) as deptInfo
+	FROM CL_ACHIEVE_DETAIL d
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e1
+	ON d.business_manager_no = e1.emp_no AND d.GZ_YM=e1.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e2
+	ON d.team_manager_no = e2.emp_no AND d.GZ_YM=e2.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e3
+	ON d.org_manager_no = e3.emp_no AND d.GZ_YM=e3.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e4
+	ON d.area_manager_no = e4.emp_no AND d.GZ_YM=e4.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e5
+	ON d.wf_emp_no = e5.emp_no AND d.GZ_YM=e5.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e6
+	ON d.xs_emp_no = e6.emp_no AND d.GZ_YM=e6.GZYM
+	LEFT JOIN HQCLCF_EMP_GZYM_REF e7
+	ON d.kf_emp_no = e7.emp_no AND d.GZ_YM=e7.GZYM
+	LEFT JOIN SYS_USER u1
+	ON u1.user_name = d.creator_no
+	LEFT JOIN SYS_USER u2
+	ON u2.user_name = d.modifier_no
+	WHERE 1 = 1	
+	<if test="priNumber != null">
+		   AND d.PRI_NUMBER = #{priNumber}
+	</if>
+	<if test="loanContractNo != null and loanContractNo !='' ">
+		   AND d.LOAN_CONTRACT_NO = #{loanContractNo}
+	</if>
+	<if test="loanName != null and loanName != '' ">
+		<![CDATA[  AND d.LOAN_NAME LIKE  CONCAT(CONCAT('%',#{loanName}),'%') ]]>
+	</if>
+    <if test="businessManagerNo != null and businessManagerNo != '' ">
+         AND d.BUSINESS_MANAGER_NO = #{businessManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teamManagerNo != null and teamManagerNo != '' ">
+         AND d.TEAM_MANAGER_NO = #{teamManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgManagerNo != null and orgManagerNo != '' ">
+        AND d.ORG_MANAGER_NO = #{orgManagerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="areaManagerNo != null and areaManagerNo != '' ">
+         AND d.AREA_MANAGER_NO = #{areaManagerNo,jdbcType=VARCHAR},
+      </if>
+	<if test="gzym != null and gzym != '' ">
+		   AND d.GZ_YM = #{gzym}
+	</if>
+	<if test="gzymMin != null and gzymMin != '' ">
+		  <![CDATA[ AND d.GZ_YM >=#{gzymMin}]]>
+	</if>
+	<if test="gzymMax != null and gzymMax != '' ">
+		 <![CDATA[ AND d.gz_ym <=#{gzymMax}]]>
+	</if>
+   	<if test="curDeptNo != null and curDeptNo !='' ">
+		  AND EXISTS (SELECT ID FROM HQCLCF_DEPT dept WHERE dept.DEPT_CODE=d.CUR_DEPT_NO START WITH ID=#{curDeptNo} CONNECT by PRIOR ID=PID)
+	</if>	
+	<if test="deptNos !=null">
+			 and d.CUR_DEPT_NO in 
+			 <foreach collection="deptNos" close=")" open="(" separator="," item="item">
+			 	#{item}
+			 </foreach>
+	</if>
+	<if test="sort != null and order != null ">
+		    ORDER BY ${sort} ${order}
+	</if>
+	<if test="sort == null or order == null ">
+		 ORDER BY d.gz_ym DESC, <!-- d.area_no, o.name, dp.name, d.team_no,  -->e1.emp_name, d.pri_number 
+	</if>
+  </select>
+  <delete id="deleteByGzym" parameterType="string">
+  	 DELETE FROM CL_ACHIEVE_DETAIL WHERE GZ_YM = #{value}
+  </delete>
+  <select id="queryById" parameterType="long" resultMap="BaseResultMap">
+  	 SELECT * FROM CL_ACHIEVE_DETAIL WHERE PRI_NUMBER = #{value}
+  </select>
+  
+  <select id="queryClAchieveDetailsFromBusinessDb" parameterType="string" resultMap="BaseResultMap">
+  	SELECT DISTINCT t.loan_contract_no AS loan_contract_no,	
+	                t.loan_name AS loan_name,	
+	                t.loan_amount AS loan_amount,	
+	                t.grant_loan_amount AS grant_loan_amount,	
+	                t.grant_loan_date AS grant_loan_date,	
+	                t.pay_date AS pay_date,	
+	                t.business_manager_no AS business_manager_no,	
+	                nvl((SELECT e2.emp_no	
+	                      FROM salaryuser.crf_salary_p2p_emp_backup e2	
+	                     WHERE e2.gzym = t.gz_ym	
+	                          /*AND e2.region = t.area_no*/	
+	                       AND e2.work_org_no = e1.work_org_no	
+	                       AND e2.dept_no = e1.dept_no	
+	                       AND e2.dept_no = 'DEPT_02'	
+	                       AND e2.team_no = e1.team_no	
+	                       AND e2.office_no = 'OFFICE02_12'	
+	                       AND e2.status != '2'	
+	                       AND rownum = 1),	
+	                    (SELECT e2.emp_no	
+	                       FROM salaryuser.crf_salary_p2p_emp_backup e2	
+	                      WHERE e2.gzym = t.gz_ym	
+	                           /*AND e2.region = t.area_no*/	
+	                        AND e2.work_org_no = e1.work_org_no	
+	                        AND e2.dept_no = e1.dept_no	
+	                        AND e2.dept_no = 'DEPT_02'	
+	                        AND e2.team_no = e1.team_no	
+	                        AND e2.office_no = 'OFFICE02_12'	
+	                        AND e2.status = '2'	
+	                        AND substr(e2.leave_date, 0, 7) = t.gz_ym	
+	                        AND rownum = 1)) AS team_manager_no,	
+	                nvl((SELECT e3.emp_no	
+	                      FROM salaryuser.crf_salary_p2p_emp_backup e3	
+	                     WHERE e3.gzym = t.gz_ym	
+	                          /*AND e3.region = t.area_no*/	
+	                       AND e3.work_org_no = e1.work_org_no	
+	                       AND e3.office_no IN ('OFFICE01_03', 'OFFICE01_04', 'OFFICE01_05', 'OFFICE01_06')	
+	                       AND e3.status != '2'	
+	                       AND rownum = 1),	
+	                    (SELECT e3.emp_no	
+	                       FROM salaryuser.crf_salary_p2p_emp_backup e3	
+	                      WHERE e3.gzym = t.gz_ym	
+	                           /*AND e3.region = t.area_no*/	
+	                        AND e3.work_org_no = e1.work_org_no	
+	                        AND e3.office_no IN ('OFFICE01_03', 'OFFICE01_04', 'OFFICE01_05', 'OFFICE01_06')	
+	                        AND e3.status = '2'	
+	                        AND substr(e3.leave_date, 0, 7) = t.gz_ym	
+	                        AND rownum = 1)) AS org_manager_no,	
+	                nvl((SELECT e4.emp_no	
+	                      FROM salaryuser.crf_salary_p2p_emp_backup e4	
+	                     WHERE e4.gzym = t.gz_ym	
+	                       AND e4.region = e1.region	
+	                       AND e4.office_no IN ('OFFICE01_07', 'OFFICE01_08')	
+	                       AND e4.status != '2'	
+	                       AND rownum = 1),	
+	                    (SELECT e4.emp_no	
+	                       FROM salaryuser.crf_salary_p2p_emp_backup e4	
+	                      WHERE e4.gzym = t.gz_ym	
+	                        AND e4.region = e1.region	
+	                        AND e4.office_no IN ('OFFICE01_07', 'OFFICE01_08')	
+	                        AND e4.status = '2'	
+	                        AND substr(e4.leave_date, 0, 7) = t.gz_ym	
+	                        AND rownum = 1)) AS area_manager_no,	
+	                t.wf_emp_no AS wf_emp_no,	
+	                t.xs_emp_no AS xs_emp_no,	
+	                t.kf_emp_no AS kf_emp_no,	
+	                e1.region AS area_no,	
+	                e1.work_org_no AS org_no,	
+	                e1.dept_no AS dept_no,	
+	                e1.team_no AS team_no,	
+	                t.gz_ym AS gz_ym	
+	  FROM ( /**老系统业绩明细**/	
+	        SELECT DISTINCT a.loan_contract_no    AS loan_contract_no,	
+	                         a.loan_name           AS loan_name,	
+	                         a.loan_amount         AS loan_amount,	
+	                         a.grant_loan_amount   AS grant_loan_amount,	
+	                         a.grant_loan_date     AS grant_loan_date,	
+	                         i.pay_date            AS pay_date,	
+	                         a.business_manager_no AS business_manager_no,	
+	                         c.business_manager_no AS wf_emp_no,	
+	                         a.sub_no              AS xs_emp_no,	
+	                         re.reception_no       AS kf_emp_no,	
+	                         i.gz_ym               AS gz_ym	
+	          FROM clspuser.crf_p2p_app_info a	
+	         INNER JOIN clspuser.crf_p2p_account_info i	
+	            ON i.loan_contract_no = a.loan_contract_no	
+	           AND i.service_line = 'XD'	
+	          LEFT JOIN clspuser.crf_p2p_door_check c	
+	            ON c.loan_contract_no = a.loan_contract_no	
+	          LEFT JOIN clspuser.crf_p2p_reception_info re	
+	            ON re.loan_contract_no = a.loan_contract_no	
+	         WHERE i.status != '6'	
+	           AND i.pay_status != '3'	
+	           AND i.from_flag = '0'	
+	           AND a.status != '7'	
+	           AND a.pay_status != '3'	
+	        UNION	
+	        /**新系统业绩明细**/	
+	        SELECT DISTINCT i.loan_contract_no    AS loan_contract_no,	
+	                         i.loan_name           AS loan_name,	
+	                         i.loan_amount         AS loan_amount,	
+	                         i.grant_loan_amount   AS grant_loan_amount,	
+	                         i.grant_loan_date     AS grant_loan_date,	
+	                         i.pay_date            AS pay_date,	
+	                         i.business_manager_no AS business_manager_no,	
+	                         wxk.wf_emp_no         AS wf_emp_no,	
+	                         wxk.xs_emp_no         AS xs_emp_no,	
+	                         wxk.kf_emp_no         AS kf_emp_no,	
+	                         i.gz_ym               AS gz_ym	
+	          FROM clspuser.crf_p2p_account_info i	
+	          LEFT JOIN (SELECT DISTINCT li.contract_no     AS loan_contract_no,	
+	                                     h.visi_user_number AS wf_emp_no,	
+	                                     li.fgs_user_id     AS xs_emp_no,	
+	                                     li.receptionist_no AS kf_emp_no	
+	                       FROM loanaudituser.zhph_loan_info li	
+	                       LEFT JOIN loanaudituser.zhph_verify_enter_house h	
+	                         ON li.client_id = h.client_id) wxk	
+	            ON wxk.loan_contract_no = i.loan_contract_no	
+	         WHERE i.status != '6'	
+	           AND i.service_line = 'XD'	
+	           AND i.pay_status != '3'	
+	           AND i.from_flag = '1') t	
+	  LEFT JOIN salaryuser.crf_salary_p2p_emp_backup e1	
+	    ON e1.emp_no = t.business_manager_no	
+	   AND e1.gzym = t.gz_ym	
+	 WHERE 1 = 1	
+	   AND t.gz_ym = #{value}
+	 ORDER BY t.gz_ym DESC,	
+	          e1.region,	
+	          e1.work_org_no,	
+	          e1.dept_no,	
+	          e1.team_no,	
+	          t.loan_contract_no	
+  </select>
+  
+  
+</mapper>

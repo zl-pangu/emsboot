@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <style>
+            #editshowForm .layui-inline{
+                width : 320px;
+                margin-left : 10px;
+                display: inline;
+            }
+            #editshowForm .layui-form-label{
+                width : 120px !important;
+                padding: 4px 15px;
+            }
+            #editshowForm .layui-required-span{
+                color: red;
+                float: left;
+                padding: 9px 0px;
+            }
+            #editshowForm .layui-form-item{
+                margin-bottom : 0px;
+            }
+            #editshowForm .layui-input:hover {
+                border-color: #ffa946 !important;
+            }
+            .layui-layer-hui .layui-layer-content {
+                padding: 7px 25px;
+                margin-top: 1px;
+                text-align: center;
+                background-color: black;
+            }
+        </style>
+        </head>
+        <link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+        <script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3//jquery-1.4.4.min.js"></script>
+        <script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+        <script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+        <script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+        <script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+        <script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+
+<body>
+<div class="wrapper wrapper-content animated fadeInUp" style="padding: 0px" >
+    <div class="container-fluid" style="padding: 0px;">
+        <div class="ibox-content form">
+                        <div class="form-body" style="height: 360px">
+                            <div class="container-fluid">
+                                <div class="row layui-form">
+                                    <form id="editshowForm">
+                                        <div class="layui-form-item">
+                                            <input type="hidden" id="id" name="id" value="${dept.id?c}">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">部门编码</label>
+                                                <div class="layui-input-inline">
+                                                    <input name="deptCode" id="deptCode" type="hidden" value="${dept.deptCode!}"/>
+                                                    <input type="text" value="${dept.deptCode!}" class="layui-input" style="background-color:#F8F8F8" disabled>
+                                                </div>
+                                                <span class="layui-required-span">*</span>
+                                            </div>
+
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" style="width: auto;">部门名称</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text"  name="deptName" id="deptName" value="${dept.deptName!}" class="layui-input">
+                                                </div>
+                                                <span class="layui-required-span" id="testID">*</span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">业务条线</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="businessLine" id="businessLine"  lay-filter="blSelect">
+                                                        <option></option>
+                                                        <#list  businessLineList as bl>
+                                                            <#if (dept.businessLine == bl.sysValue)>
+                                                                <option value="${bl.sysValue!}" selected>${bl.sysName!}</option>
+                                                                <#else>
+                                                                    <option value="${bl.sysValue!}">${bl.sysName!}</option>
+                                                            </#if>
+                                                        </#list>
+                                                    </select>
+                                                </div>
+                                                <span class="layui-required-span" >*</span>
+                                            </div>
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">部门类别</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="deptType" id="deptType">
+                                                        <option value=""></option>
+                                                            <#list  deptTypes as dt>
+                                                                <#if dept.deptType??>
+                                                                <#if (dept.deptType?number = dt.sysValue)>
+                                                                    <option value="${dt.sysValue!}" selected>${dt.sysName!}</option>
+                                                                    <#else>
+                                                                        <option value="${dt.sysValue!}">${dt.sysName!}</option>
+                                                                </#if>
+                                                                </#if>
+                                                            </#list>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline ">
+                                                <label  class="layui-form-label" style="width: auto;">上级部门</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="hidden" id="pid" name="pid" value="${superDept.id?c}">
+                                                    <input id="pidName" value="${superDept.deptName!}" class="layui-input" readonly   onclick="showActionTypeTree()" />
+                                                    <input type="hidden" id="actionTypeId"/>
+                                                </div>
+                                                <span class="layui-required-span" >*</span>
+                                                <div id="actionTreeContent"  style="width: 300px; border-radius:5px;display: none; z-index:9999;position: absolute; border: 1px #CCC solid; background-color:#f9f9f9;">
+                                                    <ul id="actionTypeTree"  class="ztree" style="margin-top:0;height: 200px;overflow: auto;"></ul>
+                                                </div>
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">状态</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="status" id="status" lay-filter="statusFilter">
+                                                        <option></option>
+                                                        <#if dept.status = '1'>
+                                                            <option value="1" selected>启用</option>
+                                                             <option value="0">禁用</option>
+                                                            <#else>
+                                                                <option value="1" >启用</option>
+                                                                <option value="0" selected>禁用</option>
+                                                        </#if>
+                                                    </select>
+                                                </div>
+                                                <span class="layui-required-span">*</span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">编制</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text"  name="organizat" id="organizat" value="${dept.organizat?c}" class="layui-input" >
+                                                </div>
+                                                <span class="layui-required-span">*</span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline ">
+                                                <label class="layui-form-label" style="width: auto;">备注</label>
+                                                <div class="layui-input-inline">
+                                                    <textarea placeholder="请输入备注内容"  class="layui-textarea" name="remark" style="width: 450px;" >${dept.remark!}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+       var val = $("#pid").val();
+        $('#actionTypeId').val(val);
+    });
+    var setting = {
+        view: {
+            dblClickExpand: false,
+            showLine:false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey:"id",
+                pIdKey:"pid"
+            }
+        },
+        callback: {
+            onClick:onClick
+        }
+    };
+
+    function onClick(e, treeId, treeNode) {
+        var nodes = ztreeObj.getSelectedNodes();
+        $("#pid").val(nodes[0].id);
+        $("#pidName").val("" + nodes[0].name + "");
+        $("#actionTypeId").val(treeNode.id);
+        $("#selectActionType").val(treeNode.text);
+    }
+
+    var table;
+    var form;
+    var ztreeObj;
+    layui.use(['table','form'],function () {
+        table=layui.table;
+        form = layui.form;
+        form.render();
+        form.on('select(blSelect)', function(data){
+            $("#deptType").empty();
+            if(data.value!=''){
+                $.ajax({
+                    url:'${ctx}/hqclcf/hqclcfdept/getDeptType',
+                    data:{"businessLine":data.value},
+                    type:'post',
+                    async:false,
+                    success:function (data) {
+                        var html='<option></option>';
+                        $.each(data,function (index,value) {
+                            html+='<option value='+value.sysValue+'>'+value.sysName+'</option>'
+                        });
+                        $("#deptType").append(html);
+                        form.render();
+                    }
+                });
+            }
+        });
+
+        form.on('select(statusFilter)', function(data){
+            var id=$("#id").val();
+                $.ajax({
+                    url:'${ctx}/hqclcf/hqclcfdept/checkDeptEnable',
+                    data:{"sl":data.value,"id":id},
+                    type:'post',
+                    async:false,
+                    success:function (data) {
+                        if(!data.success){
+                            layer.msg(data.msg,{
+                                anim:6,
+                            });
+                            $("#status").val("");
+                            form.render('select');
+                        }
+                    }
+                });
+        });
+    });
+
+    function showActionTypeTree() {
+        var obj =new Object();
+        obj.status='1';
+        obj.isSuperior='no';
+        $.ajax({
+            url: '${ctx}/hqclcf/hqclcfdept/tree',
+            type: 'POST',
+            dataType: "json",
+            data:{"data":JSON.stringify(obj)},
+            async: false,
+            success: function (data) {
+                ztreeObj = $.fn.zTree.init($("#actionTypeTree"), setting, data.data);
+                ztreeObj.expandAll(false);
+                var deptOffset = $("#pidName").offset();
+                $("#actionTreeContent").css({
+                    left: deptOffset.left - 680 + "px",
+                    top: deptOffset.top -61+ "px"
+                }).slideDown("fast");
+                var zTree = $.fn.zTree.getZTreeObj("actionTypeTree");
+                var node = zTree.getNodeByParam("id", $('#actionTypeId').val(), null);
+                zTree.selectNode(node);
+                $("body").bind("mousedown", onBodyDownByActionType);
+            }
+        });
+    }
+
+    /*
+     * Body鼠标按下事件回调函数
+     */
+    function onBodyDownByActionType(event) {
+        if (event.target.id.indexOf('switch') == -1&&event.target.id!='actionTypeTree') {
+            hideActionTypeMenu();
+        }
+    }
+    /*
+     * 隐藏点击事件Tree
+     */
+    function hideActionTypeMenu() {
+        $("#actionTreeContent").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDownByActionType);
+    }
+
+    /**
+     * 验证不能为空
+     */
+    function validateEditDept() {
+        var flag = true;
+        var re = /^[0-9]*[1-9][0-9]*$/ ;
+        if ( $("#deptName").val() == '') {
+            validateAddDeptTips('部门名字', '不能为空');
+            flag = false;
+            return flag;
+        }
+        var businessLine = $("#businessLine").val();
+        if (businessLine == '') {
+            validateAddDeptTips('业务条线', '不能为空');
+            flag = false;
+            return flag;
+        }
+        if ((businessLine == 2 || businessLine == 3) && $("#deptTypeAdd").val() == '') {
+            validateAddDeptTips('部门类别', '不能为空');
+            flag = false;
+            return flag;
+        }
+        if ($("#status").val() == '') {
+            validateAddDeptTips('状态', '不能为空');
+            flag = false;
+            return flag;
+        }
+        var organizat = $("#organizat").val();
+        if (organizat== '') {
+            validateAddDeptTips('编制', '不能为空');
+            flag = false;
+            return flag;
+        }
+        if(!re.test(organizat)){
+            validateAddDeptTips('编制', '必须为正整数');
+            flag = false;
+            return flag;
+        }
+        return flag;
+    }
+
+
+    function validateAddDeptTips(filedName,msg){
+        layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+            anim:6,
+        });
+    }
+</script>
+
+</html>

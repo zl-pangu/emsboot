@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhph.mapper.cl.ClFirstBeOverdueMapper">
+    <resultMap id="BaseResultMap" type="com.zhph.model.cl.ClFirstBeOverdue">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="LOAN_CONTRACT_NO" jdbcType="VARCHAR" property="loanContractNo" />
+        <result column="LOAN_NAME" jdbcType="VARCHAR" property="loanName" />
+        <result column="LOAN_AMOUNT" jdbcType="VARCHAR" property="loanAmount" />
+        <result column="GRANT_LOAN_AMOUNT" jdbcType="VARCHAR" property="grantLoanAmount" />
+        <result column="GRANT_LOAN_DATE" jdbcType="VARCHAR" property="grantLoanDate" />
+        <result column="PAY_DATE" jdbcType="VARCHAR" property="payDate" />
+        <result column="BUSINESS_MANAGER_NO" jdbcType="VARCHAR" property="businessManagerNo" />
+        <result column="BUSINESS_MANAGER_NAME" jdbcType="VARCHAR" property="businessManagerName" />
+        <result column="TEAM_MANAGER_NO" jdbcType="VARCHAR" property="teamManagerNo" />
+        <result column="TEAM_MANAGER_NAME" jdbcType="VARCHAR" property="teamManagerName" />
+        <result column="ORG_MANAGER_NO" jdbcType="VARCHAR" property="orgManagerNo" />
+        <result column="ORG_MANAGER_NAME" jdbcType="VARCHAR" property="orgManagerName" />
+        <result column="AREA_MANAGER_NO" jdbcType="VARCHAR" property="areaManagerNo" />
+        <result column="AREA_MANAGER_NAME" jdbcType="VARCHAR" property="areaManagerName" />
+        <result column="WF_EMP_NO" jdbcType="VARCHAR" property="wfEmpNo" />
+        <result column="WF_EMP_NAME" jdbcType="VARCHAR" property="wfEmpName" />
+        <result column="XS_EMP_NO" jdbcType="VARCHAR" property="xsEmpNo" />
+        <result column="XS_EMP_NAME" jdbcType="VARCHAR" property="xsEmpName" />
+        <result column="KF_EMP_NO" jdbcType="VARCHAR" property="kfEmpNo" />
+        <result column="KF_EMP_NAME" jdbcType="VARCHAR" property="kfEmpName" />
+        <result column="ORG_NO" jdbcType="VARCHAR" property="orgNo" />
+        <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName" />
+        <result column="DEPT_NO" jdbcType="VARCHAR" property="deptNo" />
+        <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName" />
+        <result column="TEAM_NO" jdbcType="VARCHAR" property="teamNo" />
+        <result column="TEAM_NAME" jdbcType="VARCHAR" property="teamName" />
+        <result column="BE_OVERDUE_NUM" jdbcType="VARCHAR" property="beOverdueNum" />
+        <result column="GZ_YM" jdbcType="VARCHAR" property="gzYm" />
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="CREATOR_NAME" jdbcType="VARCHAR" property="creatorName" />
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        s.ID,
+        s.LOAN_CONTRACT_NO,
+        s.LOAN_NAME,
+        s.LOAN_AMOUNT,
+        s.GRANT_LOAN_AMOUNT,
+        s.GRANT_LOAN_DATE,
+        s.PAY_DATE,
+        s.BUSINESS_MANAGER_NO,
+        s.BUSINESS_MANAGER_NAME,
+        s.TEAM_MANAGER_NO,
+        s.TEAM_MANAGER_NAME,
+        s.ORG_MANAGER_NO,
+        s.ORG_MANAGER_NAME,
+        s.AREA_MANAGER_NO,
+        s.AREA_MANAGER_NAME,
+        s.WF_EMP_NO,
+        s.WF_EMP_NAME,
+        s.XS_EMP_NO,
+        s.XS_EMP_NAME,
+        s.KF_EMP_NO,
+        s.KF_EMP_NAME,
+        s.ORG_NO,
+        s.ORG_NAME,
+        s.DEPT_NO,
+        s.DEPT_NAME,
+        s.TEAM_NO,
+        s.TEAM_NAME,
+        s.BE_OVERDUE_NUM,
+        s.GZ_YM,
+        s.CREATE_TIME,
+        s.CREATOR_NAME,
+        s.UPDATE_TIME,
+        s.UPDATE_NAME
+    </sql>
+    
+    <select id="queryAllFirstBeOverdue" resultMap="BaseResultMap">
+        select
+        DISTINCT
+        x.pri_number AS priNumber,
+        x.loan_contract_no AS loanContractNo,
+        x.loan_name  AS loanName,
+        x.business_manager_no AS businessManagerNo,
+        x.GRANT_LOAN_DATE AS grantLoanDate,
+        A .emp_name AS businessManagerName,
+        A.DEPT_NO as deptNo,
+        x.team_manager_no AS teamManagerNo,
+        b.emp_name AS teamManagerName,
+        x.org_manager_no AS orgManagerNo,
+        c.emp_name AS orgManagerName,
+        x.area_manager_no AS areaManagerNo,
+        D .emp_name AS areaManagerNo,
+        x.PAY_DATE AS payDate,
+        (l.OVERDUE_DAYS - 5) AS beOverdueNum,
+        x.loan_amount AS loanAmount,
+        x.grant_loan_amount AS grantLoanAmount,
+        c.WORK_ORG_NO AS orgNo,
+        x.gz_ym  AS gzYm
+        FROM
+        clspuser.zh_p2p_penalty_detail l
+        LEFT JOIN clspuser.crf_p2p_repay_info r ON l.loan_contract_no = r.LOAN_CONTRACT_NO
+        LEFT JOIN CL_ACHIEVE_DETAIL x ON l.LOAN_CONTRACT_NO = x.LOAN_CONTRACT_NO
+        LEFT JOIN HQCLCF_EMP A ON A .emp_no = x.business_manager_no
+        LEFT JOIN HQCLCF_EMP b ON b.emp_no = x.team_manager_no
+        LEFT JOIN HQCLCF_EMP c ON c.emp_no = x.org_manager_no
+        LEFT JOIN HQCLCF_EMP D ON D .emp_no = x.area_manager_no
+        WHERE
+        l.bill_term = '1'
+        AND l.DUETO_COMPANY_FEE != '0'
+        AND l.OVERDUE_END_DATE IS NULL
+        AND r.pay_date LIKE CONCAT(CONCAT('%', #{gzYm}),'%')
+    </select>
+    
+    
+    
+<select id="queryList" resultType="java.util.HashMap" parameterType="com.zhph.model.cl.ClFirstBeOverdue">
+        SELECT
+            ta.LOAN_CONTRACT_NO AS "loanContractNo",
+						ta.LOAN_NAME AS "loanName",
+						ta.BUSINESS_MANAGER_NAME AS "businessManagerName",
+						ta.BUSINESS_MANAGER_NO AS "businessManagerNo",
+						ta.TEAM_MANAGER_NAME AS "teamManagerName",
+						ta.TEAM_MANAGER_NO AS "teamManagerNo",
+						ta.ORG_MANAGER_NAME AS "orgManagerName",
+						ta.ORG_MANAGER_NO AS "orgManagerNo",
+						ta.ORG_MANAGER_NAME AS "areaManagerName",
+						ta.AREA_MANAGER_NO AS "areaManagerNo",
+						ta.PAY_DATE AS "payDate",
+						ta.BE_OVERDUE_NUM AS "beOverdueNum",
+						ta.LOAN_AMOUNT AS "loanAmount",
+						ta.GRANT_LOAN_AMOUNT AS "grantLoanAmount",
+						ta.ORG_NO AS "orgNo",
+						ta.GZ_YM AS "gzYm",
+            (
+                SELECT
+                    TO_CHAR (
+                        WM_CONCAT (DEPT_TYPE || '=' || DEPT_NAME)
+                    )
+                FROM
+                    HQCLCF_DEPT
+                WHERE
+                    DEPT_TYPE IS NOT NULL
+                AND ID != 1 START WITH ID = (
+                    SELECT
+                        ID
+                    FROM
+                        HQCLCF_DEPT TEMP
+                    WHERE
+                        TEMP.DEPT_CODE = TA.ORG_NO
+                ) CONNECT BY PRIOR PID = ID
+            ) AS "deptInfo"
+        FROM
+            CL_FIRST_OVERDUE_DETAIL ta
+            <where>
+            <if test="loanContractNo!=null and loanContractNo!='' ">
+                AND ta.LOAN_CONTRACT_NO LIKE CONCAT(CONCAT('%', #{loanContractNo}),'%')
+            </if>
+            <if test="loanName!=null and loanName!='' ">
+                AND ta.LOAN_NAME LIKE CONCAT(CONCAT('%', #{loanName}),'%')
+            </if>
+            <if test="businessManagerName!=null and businessManagerName!='' ">
+                AND ta.BUSINESS_MANAGER_NAME LIKE CONCAT(CONCAT('%', #{businessManagerName}),'%')
+            </if>
+            <if test="gzYm!=null and gzYm!='' ">
+                AND ta.GZ_YM=#{gzYm}
+            </if>
+        </where>
+    </select>
+    
+    <select id="queryClFirstBeOverdue"  parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from newsalaryuser.CL_FIRST_OVERDUE_DETAIL s
+        <where>
+            <if test="loanContractNo!=null and loanContractNo!='' ">
+                AND s.LOAN_CONTRACT_NO LIKE CONCAT(CONCAT('%', #{loanContractNo}),'%')
+            </if>
+            <if test="loanName!=null and loanName!='' ">
+                AND s.LOAN_NAME LIKE CONCAT(CONCAT('%', #{loanName}),'%')
+            </if>
+            <if test="businessManagerName!=null and businessManagerName!='' ">
+                AND s.BUSINESS_MANAGER_NAME(CONCAT('%', #{businessManagerName}),'%')
+            </if>
+            <if test="gzYm!=null and gzYm!='' ">
+                AND s.GZ_YM=#{gzYm}
+            </if>
+        </where>
+    </select>
+    
+    
+    <select id="queryAllFirstBeOverdueExl" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from newsalaryuser.CL_FIRST_OVERDUE_DETAIL s
+        <where>
+            <if test="loanContractNo!=null and loanContractNo!='' ">
+                AND s.LOAN_CONTRACT_NO LIKE CONCAT(CONCAT('%', #{loanContractNo}),'%')
+            </if>
+            <if test="loanName!=null and loanName!='' ">
+                AND s.LOAN_NAME LIKE CONCAT(CONCAT('%', #{loanName}),'%')
+            </if>
+            <if test="businessManagerName!=null and businessManagerName!='' ">
+                AND s.BUSINESS_MANAGER_NAME(CONCAT('%', #{businessManagerName}),'%')
+            </if>
+            <if test="gzYm!=null and gzYm!='' ">
+                AND s.GZ_YM=#{gzYm}
+            </if>
+        </where>
+    </select>
+   
+   
+   <insert id="insertSomething" parameterType="com.zhph.model.cl.ClOrgTask" >  
+       INSERT INTO CL_FIRST_OVERDUE_DETAIL (
+        s.ID,
+        s.LOAN_CONTRACT_NO,
+        s.LOAN_NAME,
+        s.LOAN_AMOUNT,
+        s.GRANT_LOAN_AMOUNT,
+        s.GRANT_LOAN_DATE,
+        s.PAY_DATE,
+        s.BUSINESS_MANAGER_NO,
+        s.BUSINESS_MANAGER_NAME,
+        s.TEAM_MANAGER_NO,
+        s.TEAM_MANAGER_NAME,
+        s.ORG_MANAGER_NO,
+        s.ORG_MANAGER_NAME,
+        s.AREA_MANAGER_NO,
+        s.AREA_MANAGER_NAME,
+        s.ORG_NO,
+        s.DEPT_NO,
+        s.BE_OVERDUE_NUM,
+        s.GZ_YM
+        )
+        SELECT  SQ_CL_FIRST_OVERDUE_SET.nextval ID,A.* FROM(
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            SELECT
+            #{item.loanContractNo,jdbcType=VARCHAR},
+            #{item.loanName,jdbcType=VARCHAR},
+            #{item.loanAmount,jdbcType=VARCHAR},
+            #{item.grantLoanAmount,jdbcType=VARCHAR},
+            #{item.grantLoanDate,jdbcType=VARCHAR},
+            #{item.payDate,jdbcType=VARCHAR},
+            #{item.businessManagerNo,jdbcType=VARCHAR},
+            #{item.businessManagerName,jdbcType=VARCHAR},
+            #{item.teamManagerNo,jdbcType=VARCHAR},
+            #{item.teamManagerName,jdbcType=VARCHAR},
+            #{item.orgManagerNo,jdbcType=VARCHAR},
+            #{item.orgManagerName,jdbcType=VARCHAR},
+            #{item.areaManagerNo,jdbcType=VARCHAR},
+            #{item.areaManagerName,jdbcType=VARCHAR},
+            #{item.orgNo,jdbcType=VARCHAR},
+            #{item.deptNo,jdbcType=VARCHAR},
+            #{item.beOverdueNum,jdbcType=VARCHAR},
+            #{item.gzYm,jdbcType=VARCHAR}
+            FROM dual
+        </foreach>
+        )A
+       
+	</insert>  
+   
+    
+    
+</mapper>

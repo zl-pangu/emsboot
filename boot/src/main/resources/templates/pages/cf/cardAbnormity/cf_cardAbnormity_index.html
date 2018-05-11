@@ -1,0 +1,511 @@
+<@compress single_line=true>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <#include "/pages/common/head.html" >
+        <title>打卡异常管理</title>
+        <style>
+           #searchForm .reason-class .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+                cursor: not-allowed;
+                background-color: white;
+                opacity: 1;
+            }
+        </style>
+        </head>
+<body >
+<div class="wrapper wrapper-content animated fadeInUp">
+    <ol class="breadcrumb">
+        您的位置：
+        <li>
+            <a href="/index.html"><i class="layui-icon" style="font-weight: bold;font-size:15px;">&#xe68e;</i>主页</a>
+        </li>
+        <li class="active">基础管理</li>
+        <li class="active">
+            <i class="layui-icon" style="font-weight: bold;font-size: 15px;">&#xe715;</i>
+            <font>打卡异常管理</font>
+        </li>
+    </ol>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="searchForm" class="layui-form" lay-filter="form">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!--员工编码-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工编码：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empNo" id="empNo" type="text" class="form-control input-sm" placeholder="员工编码">
+                                </div>
+                            </div>
+                        </div>
+                        <!--员工姓名-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>员工姓名：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <input name="empName" id="empName" type="text" class="form-control input-sm" placeholder="员工姓名">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--大区-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>大区：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <select name="region" id="region" lay-filter="regionFilter">
+                                                <option></option>
+                                                <#list dqList as dq >
+                                                    <option value="${dq.id}">${dq.deptName!}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>分公司：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <select name="filiale" id="filiale" lay-filter="filialeFilter">
+                                        <option></option>
+                                        <#list orgList as org>
+                                            <option value="${org.id}">${org.deptName!}</option>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                    <label>营业部：</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <select name="dept" id="dept" lay-filter="deptFilter" >
+                                        <option></option>
+                                        <#list salaList as sala>
+                                            <option value="${sala.id}">${sala.deptName!}</option>
+                                        </#list>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--职位-->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                <label>职务：</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <select name="jobNo" id="jobNo" lay-search="">
+                                            <option></option>
+                                            <#list rankTypes as rankType>
+                                                <option value="${rankType.posCode}">${rankType.posName!}</option>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--工资年月-->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 zh-form-lable">
+                                <label>工资年月：</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                <input name="gzYm" id="gzYm" type="text" value="${gzYm!}" class="layui-input input-sm" placeholder="工资年月">
+                            </div>
+                        </div>
+                    </div>
+                        <!--按钮-->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-offset-6 col-md-offset-4 col-sm-offset-0 col-xs-offset-0">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4 zh-form-lable"></div>
+                                <div class="col-lg-10 col-md-8 col-sm-8 col-xs-8 zh-form-content">
+                                    <button lay-submit lay-filter="queryList"   class="btn btn-primary btn-sm" type="button" title="查询">
+                                        <i class="fa fa-search"></i>
+                                        <font>查询</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="addCardAb()" style="background-color: #607d8b" type="button" title="新增">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe61f;</i>
+                                        <font>新增</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="importExl()" style="background-color: #607d8b" type="button" title="上传">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe62f;</i>
+                                        <font>上传</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="exportExl()" style="background-color: #607d8b" type="button" title="下载">
+                                        <i class="layui-icon" style="font-size: 15px;">&#xe601;</i>
+                                        <font>下载</font>
+                                    </button>
+                                    <button   class="btn btn-primary btn-sm" onclick="resetVal()" style="background-color: #516d7b" type="button" title="清除">
+                                        <i class="layui-icon" style="font-size: 15px;">&#x1002;</i>
+                                        <font>清除</font>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--Grid-->
+        <div class="ibox-content">
+            <table class="layui-hide" id="cardAbnormityTable" lay-filter="tableFilter"></table>
+        </div>
+    </div>
+</div>
+
+<div id="importExlDiv" class="wrapper wrapper-content animated fadeInUp" style="padding: 0px;display: none" >
+    <div class="container-fluid" style="padding: 0px;">
+        <div class="ibox-content form">
+            <div class="form-body" style="height: 100%;width: 100%">
+                <div class="container-fluid">
+                    <div class="row layui-form">
+                        <form id="addshowForm">
+                            <div class="layui-form-item" style="padding-left: 15%;padding-top: 8%;">
+                                    <label class="layui-form-label" style="width: auto;">导入文件</label>
+                                    <div class="layui-input-inline">
+                                        <button type="button" class="layui-btn layui-btn-sm" id="importCard">
+                                            <i class="layui-icon"></i>选择文件
+                                        </button>
+                                        <span class="layui-required-span" style="color: red">*</span>
+                                    </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <a href="${ctx}/exporTemp/打卡异常导入模板.xls" style="color: #00acee;padding-left: 32%!important;">打卡异常上传模板</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<link rel="stylesheet" href="${ctx}/ui/css/plugins/zTree_v3/metroStyle/metroStyle.css" type="text/css">
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3//jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="/ui/easyui-1.5.1/jquery.easyui-1.5.1.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/zTree_v3/jquery.ztree.exedit-3.5.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/PCASClass.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/ui/js/custom/luhmCheck.js"></script>
+    <script type="text/html" id="tableRowNumTpl">
+        {{ d.LAY_TABLE_INDEX+1}}
+    </script>
+<script type="text/html" id="tableRowOperationTpl">
+    <a class="layui-btn layui-btn-radius layui-btn-xs"  lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-radius layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+    <script type="text/javascript">
+        var table;
+        var form;
+        var laydate;
+        var upload;
+        var importIndex;
+        layui.use(['table','form','laydate','upload'],function () {
+            table=layui.table;
+            form = layui.form;
+            laydate = layui.laydate;
+             upload = layui.upload;
+            form.render();
+            table.render({
+                elem: '#cardAbnormityTable',
+                id: 'id',
+                url:'${ctx}/cf/cardAbnormity/list',
+                loading:true,
+                method:'post',
+                cols: [[
+                    {width:70,title:'序号',fixed:true,align:'center',templet:'#tableRowNumTpl'},
+                    {field:'gzYm',title: '年月',width:150,align:'center'},
+                    {field:'empNo',title: '员工编码',width:150,align:'center'},
+                    {field:'empName',title: '员工姓名',width:150,align:'center'},
+                    {field:'region',title: '大区',width:150,align:'center'},
+                    {field:'filiale',title: '分公司',width:150,align:'center'},
+                    {field:'dept',title: '营业部',width:150,align:'center'},
+                    {field:'team',title: '团队',width:150,align:'center'},
+                    {field:'jobNo',title: '职务',width:150,align:'center'},
+                    {field:'upWorkAbnormityNo',title: '上班打卡异常次数',width:150,align:'center'},
+                    {field:'offWorkAbnormityNo',title: '下班打卡异常次数',width:150,align:'center'},
+                    {field:'checkAbnormityNo',title: '抽查打卡异常次数',width:150,align:'center'},
+                    {field:'abnormityTotalNo',title: '异常打卡总次数',width:150,align:'center'},
+                    {field:'absenteeismNo',title: '旷工天数',width:150,align:'center'},
+                    {fixed:'right',title: '操作',width:150,align:'center',toolbar:'#tableRowOperationTpl'}
+                ]],
+                height : '500',
+                skin : 'row',
+                size:'sm',
+                even : true,
+                page : true,
+                limits : [ 10, 30, 50 ],
+                limit : 10
+            });
+            /*日期控件*/
+            laydate.render({
+                elem: '#gzYm',
+                theme: '#393D49',
+                type: 'month'
+            });
+            upload.render({
+                elem: '#importCard',
+                accept:'file',
+                exts: 'xls',
+                url: '${ctx}/cf/cardAbnormity/importExl',
+                done: function (res) {
+                console.log(res);
+                if(res.code==200){
+                    layer.close(importIndex);
+                    layer.msg("导入成功！", {icon: 6});
+                    setTimeout(
+                        function() {
+                            var url ="${ctx}/cf/cardAbnormity/init";
+                            window.location.href=url;
+                        }, 1000);
+                  }else{
+                    layer.tips(res.msg,'#importCard');
+                    }
+                },
+                error: function () {
+
+                }
+            });
+            form.on('submit(queryList)',function (data) {
+                table.reload('id',{
+                    where:data.field || {}
+                });
+            });
+            /*大区下拉*/
+            form.on('select(regionFilter)',function (data) {
+                selectThisval(data.value,1);
+            });
+           /* 分公司*/
+            form.on('select(filialeFilter)',function (data) {
+                selectThisval(data.value,2);
+            });
+           /* 营业部*/
+            form.on('select(deptFilter)',function (data) {
+                selectThisval(data.value,3);
+            });
+            table.on('tool(tableFilter)',function (obj) {
+                var event=obj.event;
+                if(event==='edit'){
+                    layer.open({
+                        type: 2,
+                        title: ['<b>打卡异常修改</b>', 'font-size:15px;text-align:center;'],
+                        content: ['${ctx}/cf/cardAbnormity/editInit?id='+obj.data.id, 'no'],
+                        area: ['900px', '450px'],
+                        btnAlign: 'c',
+                        anim: 2,
+                        btn: ['提交', '取消'],
+                        yes: function (index, layero) {
+                            var body = layer.getChildFrame('body', index);
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            function submitEditCardForm(obj) {
+                                $.ajax({
+                                    url:'${ctx}/cf/cardAbnormity/edit',
+                                    data:{"data":JSON.stringify(obj)},
+                                    type:'post',
+                                    async:false,
+                                    success:function (data) {
+                                        console.log(data);
+                                        if(data.code==200){
+                                            layer.msg("修改成功", {icon: 6});
+                                            setTimeout(
+                                                function() {
+                                                    var url ="${ctx}/cf/cardAbnormity/init.mvc";
+                                                    window.location.href=url;
+                                                }, 800);
+                                        }else if(!data.success){
+                                            layer.msg("该信息已经录入："+data.msg, {icon: 5});
+                                        }else{
+                                            layer.msg("修改失败："+data.msg, {icon: 5});
+                                        }
+                                    }
+                                });
+                            }
+                            if (iframeWin.validateAddCard()) {
+                                var form = layer.getChildFrame('form', index);
+                                var obj = $.fn.serializeObject($(form));
+                                submitEditCardForm(obj);
+                                layer.close(index);
+                            }
+                        }, btn2: function (index, layero) {
+                            layer.close(index);
+                        }, cancel: function (index) {
+                            layer.close(index);
+                        }
+                    });
+                }else if(event==='del'){
+                    $.ajax({
+                        url:'${ctx}/cf/cardAbnormity/del?id='+obj.data.id,
+                        type:'get',
+                        async:false,
+                        success:function (data) {
+                            if(data.code==200){
+                                layer.msg("删除成功", {icon: 6});
+                                table.reload('id',{
+                                    url:'${ctx}/cf/cardAbnormity/list'
+                                });
+                            }else{
+                                layer.msg("删除失败:"+data.msg, {icon: 5});
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        function exportExl() {
+            $( "#searchForm" ).submit();
+        }
+
+        $(function() {
+            $('#searchForm').form({
+                url : '${ctx}/cf/cardAbnormity/exportExl.mvc',
+                onSubmit : function() {
+                },
+                success : function(result) {
+                    result = $.parseJSON(result);
+                    if(result.code=500){
+                        layer.msg("导出失败："+result.msg, {icon: 5});
+                    }
+                }
+            });
+        });
+        
+        function selectThisval(obj,type) {
+            $.ajax({
+                url: '${ctx}/cf/cardAbnormity/buildDeptSelect',
+                type: 'POST',
+                dataType: "json",
+                async: false,
+                data:{"id":obj},
+                success: function (data) {
+                    switch(type){
+                        case 1:
+                            $("#filiale").val(data.orgId);
+                            $("#dept").val(data.saleId);
+                            break;
+                        case 2:
+                            $("#region").val("");
+                            $("#dept").val(data.saleId);
+                            break;
+                        case 3:
+                            $("#region").val("");
+                            $("#filiale").val("");
+                            break;
+                    }
+                    form.render("select");
+                }
+            });
+        }
+        
+        function addCardAb() {
+            layer.open({
+                type: 2,
+                title: ['<b>打卡异常新增</b>', 'font-size:15px;text-align:center;'],
+                content: ['${ctx}/cf/cardAbnormity/addInit.mvc', 'no'],
+                area: ['900px', '450px'],
+                btnAlign: 'c',
+                anim: 2,
+                btn: ['提交', '取消'],
+                yes: function (index, layero) {
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    function submitCardForm(obj) {
+                        $.ajax({
+                            url:'${ctx}/cf/cardAbnormity/add',
+                            data:{"data":JSON.stringify(obj)},
+                            type:'post',
+                            async:false,
+                            success:function (data) {
+                                if(data.code==200){
+                                    layer.msg("新增成功", {icon: 6});
+                                    setTimeout(
+                                        function() {
+                                            var url ="${ctx}/cf/cardAbnormity/init.mvc";
+                                            window.location.href=url;
+                                        }, 800);
+                                }else if(data.code==500){
+                                    layer.msg("新增失败："+data.msg, {icon: 5});
+                                }else{
+                                    layer.msg("该信息已经录入："+data.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    };
+                    if (iframeWin.validateAddCard()) {
+                        var form = layer.getChildFrame('form', index);
+                        var obj = $.fn.serializeObject($(form));
+                        submitCardForm(obj);
+                        layer.close(index);
+                    }
+                }, btn2: function (index, layero) {
+                    layer.close(index);
+                }, cancel: function (index) {
+                    layer.close(index);
+                }
+            });
+        }
+        
+        
+        function importExl() {
+            importIndex=layer.open({
+                type: 1,
+                title: ['<b>打卡异常导入</b>', 'font-size:15px;text-align:center;'],
+                content:  $('#importExlDiv'),
+                area: ['400px', '200px'],
+                closeBtn:1,
+                btnAlign: 'c',
+                anim: 2,
+                yes: function (index, layero) {
+
+                }, btn2: function (index, layero) {
+                    layer.close(index);
+                }, cancel: function (index) {
+                    layer.close(index);
+                }
+            });
+        }
+
+        function resetVal() {
+            document.getElementById("searchForm").reset();
+        }
+
+        function validateAddTips(filedName,msg){
+            layer.msg("<font style='color: paleturquoise'>"+filedName+"</font>"+msg+"",{
+                anim:6,
+            });
+        }
+    </script>
+</html>
+</@compress>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhph.mapper.cf.CfOfflaterSetMapper">
+  <resultMap id="cfOfflaterSetResultMap" type="com.zhph.model.cf.CfOfflaterSet">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="COS_MONTH" jdbcType="VARCHAR" property="cosMonth" />
+    <result column="COS_WORKDAY_DAYS" jdbcType="VARCHAR" property="cosWorkdayDays" />
+    <result column="COS_WEEKEND_DAYS" jdbcType="VARCHAR" property="cosWeekendDays" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="CREATE_NAME" jdbcType="VARCHAR" property="createName" />
+    <result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+    
+    <result column="COS_MONTH" jdbcType="VARCHAR" property="cosMonth_s" />
+    <result column="COS_MONTH" jdbcType="VARCHAR" property="cosMonth_e" />
+    <result column="RESULT" jdbcType="VARCHAR" property="result" />
+    
+  </resultMap>
+  
+  <select id="queryAllData" parameterType="com.zhph.model.cf.CfOfflaterSet" resultMap="cfOfflaterSetResultMap">
+		SELECT * FROM  CF_OFFLATER_SET C
+		<where>
+			<if test="cosMonth_s != null and cosMonth_s != '' ">
+				<![CDATA[ AND to_date(C.COS_MONTH,'yyyy-MM') >= to_date(#{cosMonth_s},'yyyy-MM')]]>
+			</if>
+			<if test="cosMonth_e != null and cosMonth_e != '' ">
+				<![CDATA[ AND to_date(C.COS_MONTH,'yyyy-MM') <= to_date(#{cosMonth_e},'yyyy-MM')]]>
+			</if>
+		</where>
+		ORDER BY C.COS_MONTH DESC
+	</select>
+	
+	<select id="queryDataById" parameterType="com.zhph.model.cf.CfOfflaterSet" resultMap="cfOfflaterSetResultMap">
+		SELECT * FROM  CF_OFFLATER_SET  WHERE ID=#{id}
+	</select>
+
+	<insert id="insertData" parameterType="com.zhph.model.cf.CfOfflaterSet">
+		INSERT INTO CF_OFFLATER_SET(
+			ID,
+			COS_MONTH,
+			COS_WORKDAY_DAYS,
+			COS_WEEKEND_DAYS,
+			REMARK,
+			CREATE_NAME,
+			CREATE_DATE
+		)VALUES(
+			sys_guid(),
+			#{cosMonth,jdbcType=VARCHAR},
+			#{cosWorkdayDays,jdbcType=VARCHAR},
+			#{cosWeekendDays,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{createName,jdbcType=VARCHAR},
+			#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="updateById" parameterType="com.zhph.model.cf.CfOfflaterSet">
+		UPDATE CF_OFFLATER_SET W SET
+			w.COS_MONTH=#{cosMonth,jdbcType=VARCHAR},
+			w.COS_WORKDAY_DAYS=#{cosWorkdayDays,jdbcType=VARCHAR},
+			w.COS_WEEKEND_DAYS=#{cosWeekendDays,jdbcType=VARCHAR},
+			w.REMARK=#{remark,jdbcType=VARCHAR}
+		WHERE w.ID=#{id}
+	</update>
+	
+	<delete id="delById" parameterType="Object">
+		DELETE FROM CF_OFFLATER_SET WHERE ID=#{id} 
+	</delete>
+	
+	<select id="ifCheckIn" parameterType="com.zhph.model.cf.CfOfflaterSet" resultMap="cfOfflaterSetResultMap">
+		SELECT * FROM  CF_OFFLATER_SET  C
+		<where>
+			<if test="id != null and id != '' ">
+				AND C.ID != #{id}
+			</if>
+			<if test="cosMonth != null and cosMonth != '' ">
+				AND C.COS_MONTH  = #{cosMonth}
+			</if>
+		</where> 
+	</select>
+	
+	<select id="checkWorkDayAndWeekDay" statementType="CALLABLE" parameterType="java.lang.String" resultType="string">  
+		<![CDATA[ {call STP_CHECK_WORDDAY_AND_WEEKDAY(#{cosMonth,mode=IN,jdbcType=VARCHAR},#{result,mode=OUT,jdbcType=VARCHAR})} ]]>   
+	</select>
+
+	<select id="queryDataByGzym" parameterType="java.lang.String" resultMap="cfOfflaterSetResultMap">
+		SELECT * FROM  CF_OFFLATER_SET C
+		<where>
+			<if test="gzym != null and gzym != '' ">
+				 AND C.COS_MONTH = #{gzym}
+			</if>
+		</where>
+		ORDER BY C.COS_MONTH DESC
+	</select>
+
+</mapper>
